@@ -1,0 +1,28 @@
+# ─── ML / Embeddings ─────────────────────────────────────────────────────────
+torch
+sentence-transformers
+# faiss-cpu and numpy removed — RAG now uses Supabase pgvector
+
+# ─── Web framework ───────────────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+httpx                   # async HTTP client (Supabase auth middleware)
+
+# ─── Config ───────────────────────────────────────────────────────────────────
+pydantic-settings       # Pydantic BaseSettings for centralised env config
+python-dotenv           # .env file loading (used by pydantic-settings)
+
+# ─── Local LLM (via Ollama) ──────────────────────────────────────────────────
+ollama
+
+# ─── Gemini fallback ─────────────────────────────────────────────────────────
+google-generativeai
+
+# Amazon Bedrock provider
+boto3
+
+# ─── Supabase (pgvector RAG + admin ops) ────────────────────────────────────
+supabase>=2.0.0
+
+# ─── Document ingestion (RAG over uploaded files) ────────────────────────────
+pypdf                   # PDF text extraction (pure Python, no system deps)

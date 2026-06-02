@@ -1,0 +1,94 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+
+# FastAPI server — generated/large artifacts (can be rebuilt)
+server/data/geas_tutor.db
+server/data/geas_tutor_new.db
+server/data/geas_tutor_bak_*.db
+server/data/faiss.index
+server/data/faiss_bak_*.index
+server/data/embeddings.npy
+server/data/embeddings_bak_*.npy
+server/data/faiss_question_ids.npy
+server/data/faiss_question_ids_bak_*.npy
+
+# Legacy local RAG seed data (production data lives in Supabase)
+server/Dataset/*.json
+
+# Python venv inside server/
+server/.venv/
+server/venv/
+
+# Backup folders (old location kept for safety)
+app/api/chat/_backup_*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Supabase local artifacts (keep migrations in repo)
+/supabase/*
+!/supabase/migrations/
+!/supabase/migrations/**

@@ -1,0 +1,21 @@
+[project]
+name = "geas-tutor-server"
+version = "4.0.0"
+requires-python = ">=3.10"
+dependencies = [
+    "torch",
+    "sentence-transformers",
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx",
+    "pydantic-settings",
+    "python-dotenv",
+    "ollama",
+    "google-generativeai",
+    "boto3",
+    "supabase>=2.0.0",
+    "pypdf",
+]
+
+[tool.setuptools]
+packages = ["ai", "rag", "scripts"]
