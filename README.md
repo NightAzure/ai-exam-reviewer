@@ -45,8 +45,8 @@ Built with Next.js, FastAPI, and Supabase. The AI runs on Qwen 2.5 14B locally (
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/NightAzure/test-ui.git
-cd test-ui
+git clone https://github.com/NightAzure/ai-exam-reviewer.git
+cd ai-exam-reviewer
 npm install
 ```
 
@@ -130,14 +130,6 @@ utils/supabase/   # Typed Supabase query helpers
 supabase/
   migrations/     # SQL migrations in order
 ```
-
----
-
-## Deployment
-
-See [docs/ADMIN_GUIDE.md](docs/ADMIN_GUIDE.md) for a full breakdown of deployment options, cost estimates, and a pre-launch checklist.
-
-Short version: Vercel (free) + Supabase Pro ($25/mo) + Gemini as primary AI runs the whole thing for under $30/month with no GPU required.
 
 ---
 
