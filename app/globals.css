@@ -130,7 +130,7 @@
   --shell-hover: oklch(1 0 0 / 7%);
   --shell-active: oklch(0.505 0.194 27.5 / 22%);
 
-  /* Assessment Card Gradients - Better contrast with #f2f6f7 background */
+  /* Assessment Card Gradients - Better contrast with the --page background */
   --gradient-blue-start: oklch(0.95 0.02 240);
   --gradient-blue-end: oklch(0.88 0.05 240);
   --gradient-green-start: oklch(0.95 0.02 150);
