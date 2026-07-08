@@ -67,13 +67,13 @@ export function NavigationProgress() {
       style={{ opacity: visible || progress > 0 ? 1 : 0 }}
     >
       <div
-        className="h-full bg-red-600"
+        className="h-full bg-brand"
         style={{
           width: `${progress}%`,
           transition: progress === 100
             ? "width 0.15s ease-out"
             : "width 0.08s linear",
-          boxShadow: "0 0 6px rgba(185,28,28,0.6)",
+          boxShadow: "0 0 6px oklch(0.505 0.194 27.5 / 60%)",
         }}
       />
     </div>

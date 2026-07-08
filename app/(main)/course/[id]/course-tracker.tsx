@@ -66,18 +66,18 @@ export default function CourseTracker({
   const topics = [...(course.topics ?? [])].sort((a, b) => a.progress - b.progress);
 
   return (
-    <Card className="border gap-2 border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
+    <Card className="border gap-2 border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Target className="w-5 h-5 text-primary" />
           <CardTitle className="text-base font-semibold m-0">Your Topics</CardTitle>
         </div>
-        <span className="text-xs text-gray-500">Weakest first</span>
+        <span className="text-xs text-muted-foreground">Weakest first</span>
       </div>
 
       <CardContent className="space-y-3 p-0">
         {topics.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 p-4 text-sm text-gray-500">
+          <div className="rounded-xl border border-dashed border-border bg-muted/50 p-4 text-sm text-muted-foreground">
             No topics available yet.
           </div>
         ) : (
@@ -94,7 +94,7 @@ export default function CourseTracker({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.32 }}
-                className="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
+                className="p-3 rounded-xl border border-border/60 bg-muted/50 hover:bg-muted transition cursor-pointer"
                 onClick={() => onTopicClick(topic.id)}
               >
                 <div className="flex items-start justify-between gap-4 mb-2">
@@ -108,15 +108,15 @@ export default function CourseTracker({
                       </span>
                     </div>
                     {topic.progress === 0 ? (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Take the diagnostic or try practice to create a baseline
                       </p>
                     ) : topic.progress < 75 && (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Try a quick practice session on this topic
                       </p>
                     )}
-                    <p className="text-[11px] text-gray-500 mt-1">
+                    <p className="text-[11px] text-muted-foreground mt-1">
                       {evidenceCount > 0
                         ? `${correctAnswers}/${evidenceCount} answers correct · ${formatLastPracticed(topic.lastPracticedAt)}`
                         : "No scored answers yet"}
@@ -128,7 +128,7 @@ export default function CourseTracker({
                 </div>
 
                 {/* Progress bar */}
-                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-3" aria-hidden>
+                <div className="w-full h-2 bg-border rounded-full overflow-hidden mb-3" aria-hidden>
                   <div
                     className={`${barColor} h-full rounded-full`}
                     style={{

@@ -67,7 +67,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
           {/* Left column */}
           <div className="space-y-5">
             {/* CourseTracker skeleton */}
-            <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-5 space-y-4">
+            <div className="rounded-2xl border border-border bg-card/90 shadow-sm p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Skeleton className="h-5 w-5 rounded" />
@@ -76,7 +76,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
                 <Skeleton className="h-3 w-24" />
               </div>
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="p-3 rounded-xl border border-gray-100 bg-gray-50 space-y-2">
+                <div key={i} className="p-3 rounded-xl border border-border/60 bg-muted/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-4 w-32" />
                     <Skeleton className="h-5 w-10 rounded-full" />
@@ -86,9 +86,9 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
               ))}
             </div>
             {/* Insights card skeleton */}
-            <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-              <div className="h-[3px] bg-gray-100" />
-              <div className="grid grid-cols-2 divide-x divide-gray-100">
+            <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+              <div className="h-[3px] bg-muted" />
+              <div className="grid grid-cols-2 divide-x divide-border/60">
                 <div className="p-4 space-y-2">
                   <Skeleton className="h-3 w-16" />
                   {Array.from({ length: 3 }).map((_, j) => (
@@ -102,7 +102,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
                   ))}
                 </div>
               </div>
-              <div className="px-4 py-2.5 border-t border-gray-100 bg-gray-50">
+              <div className="px-4 py-2.5 border-t border-border/60 bg-muted/50">
                 <Skeleton className="h-3 w-48" />
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
           {/* Right column */}
           <div className="space-y-6">
             {/* AI CTA skeleton */}
-            <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-5 space-y-3">
+            <div className="rounded-2xl border border-border bg-card/90 shadow-sm p-5 space-y-3">
               <Skeleton className="h-6 w-48" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-10 w-40 rounded-lg" />
@@ -120,7 +120,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
             <div className="space-y-4">
               <Skeleton className="h-10 w-full rounded-xl" />
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-gray-100 p-4 space-y-2">
+                <div key={i} className="rounded-xl border border-border/60 p-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-4 w-40" />
                     <Skeleton className="h-5 w-16 rounded-full" />
@@ -217,18 +217,18 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
             onValueChange={(v) => setActiveTab(v as "assessments" | "notes")}
             className="w-full"
           >
-            <TabsList className="grid grid-cols-2 w-full mb-5 rounded-xl bg-gray-100 p-1 h-auto">
+            <TabsList className="grid grid-cols-2 w-full mb-5 rounded-xl bg-muted p-1 h-auto">
               <TabsTrigger
                 value="assessments"
-                className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150
-                  data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+                className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150
+                  data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 Assessments
               </TabsTrigger>
               <TabsTrigger
                 value="notes"
-                className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150
-                  data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+                className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150
+                  data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 Notes
               </TabsTrigger>

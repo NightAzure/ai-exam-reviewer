@@ -58,7 +58,7 @@ export function ConfirmationDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-sm p-0 gap-0 overflow-hidden rounded-2xl border border-gray-200 shadow-lg">
+      <DialogContent className="max-w-sm p-0 gap-0 overflow-hidden rounded-2xl border border-border shadow-lg">
 
         {/* Icon + header */}
         <DialogHeader className="px-6 pt-6 pb-4 space-y-3">
@@ -68,11 +68,11 @@ export function ConfirmationDialog({
             </div>
           )}
           <div className="space-y-1">
-            <DialogTitle className="text-base font-semibold text-gray-900">
+            <DialogTitle className="text-base font-semibold text-foreground">
               {title}
             </DialogTitle>
             {description && (
-              <DialogDescription className="text-sm text-gray-500 leading-relaxed">
+              <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
                 {description}
               </DialogDescription>
             )}
@@ -81,14 +81,14 @@ export function ConfirmationDialog({
 
         {/* Warning items */}
         {warningItems && warningItems.length > 0 && (
-          <div className="mx-6 mb-4 rounded-xl border border-gray-200 bg-gray-50 p-3.5 space-y-2">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <div className="mx-6 mb-4 rounded-xl border border-border bg-muted/50 p-3.5 space-y-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               This will permanently remove
             </p>
             <ul className="space-y-1.5">
               {warningItems.map((item, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gray-400" />
+                <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-muted-foreground/50" />
                   {item}
                 </li>
               ))}
@@ -98,8 +98,8 @@ export function ConfirmationDialog({
 
         {/* Typed confirmation */}
         {requiresTypedConfirmation && (
-          <div className="mx-6 mb-4 space-y-2 rounded-xl border border-gray-200 bg-gray-50 p-3.5">
-            <Label htmlFor="confirmation-input" className="text-sm font-medium text-gray-700">
+          <div className="mx-6 mb-4 space-y-2 rounded-xl border border-border bg-muted/50 p-3.5">
+            <Label htmlFor="confirmation-input" className="text-sm font-medium text-foreground/80">
               {confirmationLabel ?? `Type "${confirmationValue}" to continue`}
             </Label>
             <Input
@@ -111,16 +111,16 @@ export function ConfirmationDialog({
               autoCapitalize="off"
               autoCorrect="off"
               spellCheck={false}
-              className="bg-white"
+              className="bg-background"
             />
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-muted-foreground/70">
               This confirmation is required because the action is permanent.
             </p>
           </div>
         )}
 
         {/* Footer */}
-        <DialogFooter className="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex flex-row gap-2 justify-end">
+        <DialogFooter className="px-6 py-4 border-t border-border/60 bg-muted/40 flex flex-row gap-2 justify-end">
           <Button
             variant="outline"
             size="sm"

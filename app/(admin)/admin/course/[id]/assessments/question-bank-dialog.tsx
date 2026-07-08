@@ -532,7 +532,7 @@ export function QuestionBankDialog({
           >
             <div className="flex gap-3 shrink-0">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
                 <Input
                   placeholder="Search questions, subjects, or topics…"
                   className="pl-10"
@@ -588,20 +588,20 @@ export function QuestionBankDialog({
 
             <div className="flex-1 overflow-y-auto space-y-3 min-h-[200px]">
               {bankLoading ? (
-                <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-500 py-12">
+                <div className="flex flex-col items-center justify-center h-full gap-3 text-muted-foreground py-12">
                   <Loader2 className="w-8 h-8 animate-spin text-admin-primary" />
                   <p className="text-sm">Loading questions…</p>
                 </div>
               ) : bankLoadError ? (
                 <div className="flex flex-col items-center justify-center h-full gap-3 p-6 text-center">
-                  <p className="text-sm font-medium text-gray-800">Couldn&apos;t load questions</p>
-                  <p className="text-sm text-gray-500 max-w-sm">Something went wrong on our end. Try again in a moment.</p>
+                  <p className="text-sm font-medium text-foreground">Couldn&apos;t load questions</p>
+                  <p className="text-sm text-muted-foreground max-w-sm">Something went wrong on our end. Try again in a moment.</p>
                   <Button variant="outline" size="sm" onClick={() => void refreshQuestions()}>
                     Retry
                   </Button>
                 </div>
               ) : paginatedQuestions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-gray-500 gap-2 py-8">
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-2 py-8">
                   <p className="text-sm">
                     {sourceList.length === 0
                       ? "No questions yet. Create your first question to get started."

@@ -176,16 +176,16 @@ export default function AssessmentPreviewSheet({
       case "disabled":
         return {
           icon: Clock,
-          color: "text-gray-600",
-          bgColor: "bg-gray-50 border-gray-200",
+          color: "text-muted-foreground",
+          bgColor: "bg-muted/50 border-border",
           badge: "Disabled",
           badgeVariant: "outline" as const,
         };
       default:
         return {
           icon: Clock,
-          color: "text-gray-600",
-          bgColor: "bg-gray-50 border-gray-200",
+          color: "text-muted-foreground",
+          bgColor: "bg-muted/50 border-border",
           badge: "Unknown",
           badgeVariant: "outline" as const,
         };

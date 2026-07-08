@@ -119,7 +119,7 @@ export function RandomQuestionsTab({
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold">Subject Selection</h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Add subjects and specify how many questions to randomly select from each
               </p>
             </div>
@@ -130,7 +130,7 @@ export function RandomQuestionsTab({
           </div>
 
           {subjectSelections.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-muted-foreground">
               No subjects added yet. Click &quot;Add Subject&quot; to begin.
             </div>
           ) : (

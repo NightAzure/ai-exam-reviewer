@@ -324,7 +324,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                       <Info className="w-4 h-4 text-blue-600 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">JSON Format Example</p>
-                        <pre className="text-xs bg-gray-50 p-3 rounded overflow-x-auto">
+                        <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
                           {jsonExample}
                         </pre>
                       </div>
@@ -368,7 +368,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                       <Info className="w-4 h-4 text-blue-600 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">CSV Format Example</p>
-                        <pre className="text-xs bg-gray-50 p-3 rounded overflow-x-auto">
+                        <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
                           {csvExample}
                         </pre>
                       </div>
@@ -397,7 +397,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                       <Info className="w-4 h-4 text-blue-600 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">Text Format Example</p>
-                        <pre className="text-xs bg-gray-50 p-3 rounded overflow-x-auto">
+                        <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
                           {textExample}
                         </pre>
                       </div>

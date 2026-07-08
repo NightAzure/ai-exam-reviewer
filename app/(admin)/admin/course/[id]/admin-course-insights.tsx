@@ -40,14 +40,14 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
         </Alert>
       )}
 
-      <Card className="border border-green-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-5">
+      <Card className="border border-green-200 rounded-2xl bg-card shadow-sm hover:shadow-md transition p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="bg-green-500/10 p-2 rounded-lg">
             <UserCheck className="w-5 h-5 text-green-600" />
           </div>
           <div className="flex-1">
-            <h3 className="text-base font-semibold text-gray-900">Student Status Overview</h3>
-            <p className="text-xs text-gray-500">Performance distribution across course</p>
+            <h3 className="text-base font-semibold text-foreground">Student Status Overview</h3>
+            <p className="text-xs text-muted-foreground">Performance distribution across course</p>
           </div>
           {isLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
         </div>
@@ -91,14 +91,14 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
         </div>
       </Card>
 
-      <Card className="border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-5">
+      <Card className="border border-border rounded-2xl bg-card shadow-sm hover:shadow-md transition p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="bg-primary/10 p-2 rounded-lg">
             <TrendingUp className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-gray-900">Recent Activity</h3>
-            <p className="text-xs text-gray-500">Latest student interactions</p>
+            <h3 className="text-base font-semibold text-foreground">Recent Activity</h3>
+            <p className="text-xs text-muted-foreground">Latest student interactions</p>
           </div>
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto">
@@ -111,11 +111,11 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
               <div key={`${activity.student}-${idx}`} className="flex items-start gap-3 p-3 rounded-xl bg-blue-50/50 hover:bg-blue-50 transition-colors border border-blue-100">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-900">
+                  <p className="text-sm text-foreground">
                     <span className="font-semibold text-primary">{activity.student}</span>{" "}
-                    <span className="text-gray-600">{activity.action}</span>
+                    <span className="text-muted-foreground">{activity.action}</span>
                   </p>
-                  <p className="text-xs text-gray-400 mt-0.5">{activity.time}</p>
+                  <p className="text-xs text-muted-foreground/70 mt-0.5">{activity.time}</p>
                 </div>
               </div>
             ))

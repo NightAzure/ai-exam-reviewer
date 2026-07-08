@@ -236,7 +236,7 @@ export function AssessmentBuilderDialog({
       <Card key={question.id} className={`border-l-4 ${isComplete ? 'border-l-admin-primary' : 'border-l-orange-500'}`}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <GripVertical className="w-5 h-5 text-gray-400 mt-2 cursor-move shrink-0" />
+            <GripVertical className="w-5 h-5 text-muted-foreground/70 mt-2 cursor-move shrink-0" />
             <div className="flex-1 min-w-0">
               {/* Question Header */}
               <div className="flex items-center justify-between gap-4 mb-3">
@@ -244,14 +244,14 @@ export function AssessmentBuilderDialog({
                   className="flex-1 flex items-center gap-3 cursor-pointer"
                   onClick={() => toggleQuestion(question.id)}
                 >
-                  <span className="font-semibold text-gray-900">Question {index + 1}</span>
+                  <span className="font-semibold text-foreground">Question {index + 1}</span>
                   {!isComplete && (
                     <Badge className="text-xs bg-orange-100 text-orange-700">
                       Incomplete
                     </Badge>
                   )}
                   {question.text && !isExpanded && (
-                    <span className="text-sm text-gray-600 truncate">
+                    <span className="text-sm text-muted-foreground truncate">
                       {question.text.substring(0, 60)}{question.text.length > 60 ? '...' : ''}
                     </span>
                   )}
@@ -322,7 +322,7 @@ export function AssessmentBuilderDialog({
                 <Label className="text-sm font-semibold">Answer Options *</Label>
                 {question.options?.map((option, idx) => (
                     <div key={idx} className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-gray-500 w-6 flex-shrink-0">
+                      <span className="text-sm font-medium text-muted-foreground w-6 flex-shrink-0">
                         {String.fromCharCode(65 + idx)}.
                       </span>
                       <Input
@@ -476,7 +476,7 @@ export function AssessmentBuilderDialog({
                       className="mt-1"
                       placeholder="Leave empty for immediate release"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Leave empty for immediate release</p>
+                    <p className="text-xs text-muted-foreground mt-1">Leave empty for immediate release</p>
                   </div>
 
                   <div>
@@ -488,7 +488,7 @@ export function AssessmentBuilderDialog({
                       onChange={(e) => setDeadline(e.target.value)}
                       className="mt-1"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Leave empty for no deadline</p>
+                    <p className="text-xs text-muted-foreground mt-1">Leave empty for no deadline</p>
                   </div>
 
                   <div className="col-span-2 pt-4 border-t">
@@ -500,14 +500,14 @@ export function AssessmentBuilderDialog({
                               <Label className="text-base font-semibold">
                                 Question Selection Mode
                               </Label>
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="text-sm text-muted-foreground mt-1">
                                 {questionMode === "manual"
                                   ? "Manually add or select specific questions"
                                   : "Randomly select questions from question bank by subject"}
                               </p>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm font-medium ${questionMode === "manual" ? "text-blue-700" : "text-gray-500"}`}>
+                              <span className={`text-sm font-medium ${questionMode === "manual" ? "text-blue-700" : "text-muted-foreground"}`}>
                                 Manual
                               </span>
                               <Switch
@@ -515,7 +515,7 @@ export function AssessmentBuilderDialog({
                                 onCheckedChange={(checked) => setQuestionMode(checked ? "random" : "manual")}
                                 className="scale-125"
                               />
-                              <span className={`text-sm font-medium ${questionMode === "random" ? "text-blue-700" : "text-gray-500"}`}>
+                              <span className={`text-sm font-medium ${questionMode === "random" ? "text-blue-700" : "text-muted-foreground"}`}>
                                 Random
                               </span>
                             </div>
@@ -523,14 +523,14 @@ export function AssessmentBuilderDialog({
                         </CardContent>
                       </Card>
 
-                      <Card className={`border-2 ${isEnabled ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-gray-50'}`}>
+                      <Card className={`border-2 ${isEnabled ? 'border-green-500 bg-green-50' : 'border-border bg-muted/50'}`}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div>
                               <Label className="text-base font-semibold">
                                 {isEnabled ? '✓ Assessment Enabled' : '○ Assessment Disabled'}
                               </Label>
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="text-sm text-muted-foreground mt-1">
                                 {(questionMode === "manual" ? questions.length === 0 : randomSubjectSelections.length === 0)
                                   ? (questionMode === "manual" ? "Add questions to enable this assessment" : "Configure random question selection to enable this assessment")
                                   : isEnabled
@@ -554,7 +554,7 @@ export function AssessmentBuilderDialog({
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Randomize Question Order</Label>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Questions appear in random order for each student
                         </p>
                       </div>
@@ -567,7 +567,7 @@ export function AssessmentBuilderDialog({
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Shuffle Answer Options</Label>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Answer options appear in random order
                         </p>
                       </div>
@@ -580,7 +580,7 @@ export function AssessmentBuilderDialog({
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Allow AI Hints</Label>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Students can request up to 2 Socratic hints per question
                         </p>
                       </div>
@@ -595,7 +595,7 @@ export function AssessmentBuilderDialog({
 
               <TabsContent value="questions" className="space-y-3">
                 {/* Add Questions Toolbar */}
-                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                   <Button
                     variant="default"
                     size="sm"
@@ -639,7 +639,7 @@ export function AssessmentBuilderDialog({
                   {questions.length === 0 ? (
                     <Card>
                       <CardContent className="p-12 text-center">
-                        <p className="text-gray-500 mb-4">
+                        <p className="text-muted-foreground mb-4">
                           No questions added yet. Start by adding a multiple choice question.
                         </p>
                         <Button onClick={() => addQuestion()}>
@@ -656,7 +656,7 @@ export function AssessmentBuilderDialog({
 
               <TabsContent value="random" className="space-y-3">
                 {/* Question Bank Button */}
-                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                   <Button
                     variant="outline"
                     size="sm"

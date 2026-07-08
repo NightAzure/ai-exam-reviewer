@@ -120,7 +120,7 @@ export function QuizCompletion({
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                             isCorrect ? 'border-green-500 bg-green-500' :
                             isSelected && !isCorrect ? 'border-red-500 bg-red-500' :
-                            'border-gray-400'
+                            'border-muted-foreground/50'
                           }`}>
                             {(isSelected || isCorrect) && (
                               <div className="w-2 h-2 rounded-full bg-white"></div>

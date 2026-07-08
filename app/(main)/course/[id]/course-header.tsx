@@ -13,7 +13,7 @@ export default function CourseHeader({course}: CourseHeaderProps){
     return (<div className="flex flex-col sm:flex-row items-start gap-4">
         <button
           onClick={() => router.push("/dashboard")}
-          className="hover:text-gray-500 size-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors"
+          className="hover:text-muted-foreground size-10 flex items-center justify-center hover:bg-muted rounded-lg transition-colors"
         >
           <CornerDownLeft />
         </button>
@@ -22,7 +22,7 @@ export default function CourseHeader({course}: CourseHeaderProps){
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Brain className="w-7 h-7 text-primary" /> {course.title}
           </h1>
-          <p className="text-gray-600 text-sm leading-relaxed max-w-2xl">
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
             {course.description}
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function CourseHeader({course}: CourseHeaderProps){
             value={course.stats?.averageProgress || 0}
             className="h-2 w-36 rounded-full"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {course.stats?.averageProgress || 0}%
           </p>
         </div>

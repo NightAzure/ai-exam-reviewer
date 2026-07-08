@@ -19,7 +19,7 @@ export default function AdminCourseHeader({ course, courseId }: AdminCourseHeade
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button
           onClick={() => router.push("/admin/courses")}
-          className="hover:text-gray-500 size-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+          className="hover:text-muted-foreground size-10 flex items-center justify-center hover:bg-muted rounded-lg transition-colors flex-shrink-0"
         >
           <CornerDownLeft />
         </button>
@@ -33,7 +33,7 @@ export default function AdminCourseHeader({ course, courseId }: AdminCourseHeade
               Admin View
             </Badge>
           </div>
-          <p className="text-gray-600 text-sm leading-relaxed max-w-2xl">
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
             {course.description}
           </p>
         </div>
