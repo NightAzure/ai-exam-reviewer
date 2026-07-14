@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { mutate } from "swr";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +19,14 @@ interface JoinClassDialogProps {
   onJoinSuccess?: (classCode: string) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  trigger?: ReactNode;
 }
 
 export default function JoinClassDialog({
   onJoinSuccess,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
+  trigger,
 }: JoinClassDialogProps) {
   const [classCode, setClassCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -122,10 +124,12 @@ export default function JoinClassDialog({
     >
       {controlledOpen === undefined && (
         <DialogTrigger asChild>
-          <Button variant="outline">
-            <Plus className="w-4 h-4 mr-2" />
-            Join Class
-          </Button>
+          {trigger ?? (
+            <Button variant="outline">
+              <Plus className="w-4 h-4 mr-2" />
+              Join Class
+            </Button>
+          )}
         </DialogTrigger>
       )}
 
@@ -162,6 +166,7 @@ export default function JoinClassDialog({
                   <Tag className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="class-code"
+                    name="class-code"
                     placeholder="e.g. ABC123"
                     value={classCode}
                     onChange={handleInputChange}
@@ -174,10 +179,16 @@ export default function JoinClassDialog({
                     }`}
                     maxLength={20}
                     autoComplete="off"
+                    inputMode="text"
+                    aria-describedby={error ? "class-code-error" : undefined}
                   />
                 </div>
                 {error && (
-                  <div className="flex items-center text-destructive text-sm mt-1">
+                  <div
+                    id="class-code-error"
+                    role="alert"
+                    className="flex items-center text-destructive text-sm mt-1"
+                  >
                     <AlertCircle className="w-4 h-4 mr-1" />
                     {error}
                   </div>
@@ -192,7 +203,7 @@ export default function JoinClassDialog({
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Joining...
+                    Joining…
                   </>
                 ) : (
                   <>

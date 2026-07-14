@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 
 import "./globals.css";
 import { UserProvider } from "@/components/providers/user-provider";
@@ -7,13 +7,13 @@ import { SWRProvider } from "@/components/providers/swr-provider";
 import { AppShell } from "@/components/app-shell";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
 });
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export default function RootLayout({
     <>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
+          className={`${plusJakartaSans.variable} ${newsreader.variable} antialiased min-h-screen`}
         >
           <SWRProvider>
             <UserProvider>

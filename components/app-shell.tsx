@@ -19,8 +19,8 @@ function MobileBackdrop() {
   if (!isMobile || !isOpen) return null;
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-40"
-      style={{ top: "62px" }}
+      className="fixed inset-0 z-40 bg-[#18243a]/60 backdrop-blur-[1px]"
+      style={{ top: "64px" }}
       onClick={toggle}
     />
   );

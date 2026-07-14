@@ -5,6 +5,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import { Course } from "@/types/new_course";
 import { ACTIVE_ENROLLMENT_STATUSES } from "@/utils/supabase/enrollment-statuses";
+import {
+  deriveStudentCourseSummaries,
+  type StudentCourseSummary,
+  type SubjectMasteryRow,
+} from "@/lib/student-course-summary";
 
 type CourseRow = Course & {
   instructor:
@@ -38,7 +43,7 @@ async function fetchCoursesByIds(supabase: SupabaseClient, courseIds: number[]) 
 }
 
 export function useMyCourses() {
-  return useSWR("my-courses", async () => {
+  return useSWR<StudentCourseSummary[]>("my-courses", async () => {
     const supabase = createClient();
     const {
       data: { user },
@@ -46,7 +51,7 @@ export function useMyCourses() {
     } = await supabase.auth.getUser();
 
     if (authError) throw authError;
-    if (!user) return [] as Course[];
+    if (!user) return [];
 
     const [
       { data: enrollmentLinks, error: enrolledError },
@@ -107,8 +112,26 @@ export function useMyCourses() {
       });
     });
 
-    return Array.from(deduped.values()).sort((left, right) =>
+    const courses = Array.from(deduped.values()).sort((left, right) =>
       left.title.localeCompare(right.title),
+    );
+
+    if (courses.length === 0) return [];
+
+    const { data: masteryRows, error: masteryError } = await supabase
+      .from("subject_mastery")
+      .select("course_id, subject, mastery_score, total_questions_seen, last_updated")
+      .eq("user_id", user.id)
+      .in(
+        "course_id",
+        courses.map((course) => course.id),
+      );
+
+    if (masteryError) throw masteryError;
+
+    return deriveStudentCourseSummaries(
+      courses,
+      (masteryRows ?? []) as SubjectMasteryRow[],
     );
   });
 }

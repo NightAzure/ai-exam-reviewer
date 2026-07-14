@@ -5,13 +5,14 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Lightbulb,
   ChevronDown,
+  ChevronRight,
   Grid2X2,
   Settings,
   BookOpen,
   PlusIcon,
   Trash2,
   User,
-  DoorOpen,
+  LogOut,
   Loader2,
 } from "lucide-react";
 import {
@@ -31,8 +32,8 @@ import { createClient } from "@/utils/supabase/client";
 import { clearSWRCache } from "@/lib/swr-cache";
 import { cn } from "@/lib/utils";
 
-const SIDEBAR_WIDTH = 280;
-const COLLAPSED_WIDTH = 72;
+const SIDEBAR_WIDTH = 296;
+const COLLAPSED_WIDTH = 80;
 
 const supabase = createClient();
 
@@ -83,26 +84,30 @@ export const AppSidebar = React.memo(function AppSidebar() {
       }
       transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
-        "flex flex-col overflow-hidden z-50 bg-shell border-r border-shell-border",
-        isMobile ? "fixed bottom-0 left-0 top-[62px]" : "relative flex-shrink-0 h-full",
+        "z-50 flex flex-col overflow-hidden border-r border-[#f4ece2]/10 bg-[#1b2941] text-[#f4ece2] shadow-[8px_0_24px_rgba(24,36,58,0.08)]",
+        isMobile ? "fixed bottom-0 left-0 top-16" : "relative flex-shrink-0 h-full",
       )}
     >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#273754]/45 to-transparent" />
+
       {/* Nav */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 scrollbar-hide">
+      <div className={cn("relative flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide", isOpen ? "py-5" : "py-4")}>
         <AnimatePresence>
           {isOpen && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest text-shell-faint"
+              className="mb-2 px-5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#aeb8c6]"
             >
-              Menu
+              Workspace
             </motion.p>
           )}
         </AnimatePresence>
 
-        <nav className="flex flex-col gap-1 px-3">
+        {!isOpen && <div aria-hidden="true" className="mx-auto mb-2 h-px w-8 bg-[#f4ece2]/15" />}
+
+        <nav className={cn("flex flex-col gap-1.5 px-3", !isOpen && "items-center gap-3 px-0")}>
           {variant === "admin" && (
             <>
               <NavItem
@@ -125,44 +130,59 @@ export const AppSidebar = React.memo(function AppSidebar() {
           )}
 
           {variant === "main" && (
-            <div>
-              <button
-                onClick={() => !isActive("/dashboard") && router.push("/dashboard")}
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-3.5 rounded-lg text-sm font-medium transition-colors duration-150",
-                  isActive("/dashboard")
-                    ? "bg-shell-active text-shell-foreground"
-                    : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
-                )}
-                title={!isOpen ? "Courses" : undefined}
-              >
-                <BookOpen className="w-[18px] h-[18px] flex-shrink-0" />
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.span
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className="flex-1 text-left truncate overflow-hidden"
-                    >
-                      Courses
-                    </motion.span>
+            <div className={cn("w-full", !isOpen && "flex justify-center")}>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => !isActive("/dashboard") && router.push("/dashboard")}
+                  className={cn(
+                    "relative flex items-center gap-3 font-semibold transition-[background-color,color,box-shadow,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]",
+                    isOpen
+                      ? "min-w-0 flex-1 rounded-xl px-3 py-3 text-sm"
+                      : "size-12 justify-center rounded-2xl p-0",
+                    isActive("/dashboard")
+                      ? "bg-[#8e3039] text-[#fffaf2] shadow-[0_5px_16px_rgba(142,48,57,0.3)] ring-1 ring-[#e3aaad]/20"
+                      : "text-[#c9d1dc] hover:bg-[#f4ece2]/[0.08] hover:text-white",
                   )}
-                </AnimatePresence>
+                  title={!isOpen ? "Courses" : undefined}
+                  aria-label={!isOpen ? "Courses" : undefined}
+                  aria-current={isActive("/dashboard") ? "page" : undefined}
+                >
+                  <BookOpen className="size-[18px] flex-shrink-0" strokeWidth={1.8} />
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.span
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        className="flex-1 overflow-hidden text-left truncate"
+                      >
+                        Courses
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </button>
                 {isOpen && (
-                  <motion.span
-                    className="ml-auto"
-                    animate={{ rotate: sidebarCoursesOpen ? 180 : 0 }}
-                    transition={{ duration: 0.18 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!inCoursePath) setCoursesOpen((s) => !s);
-                    }}
+                  <button
+                    type="button"
+                    aria-label={sidebarCoursesOpen ? "Collapse course list" : "Expand course list"}
+                    aria-expanded={sidebarCoursesOpen}
+                    disabled={inCoursePath}
+                    onClick={() => setCoursesOpen((open) => !open)}
+                    className={cn(
+                      "-ml-10 z-10 mr-1 flex size-8 items-center justify-center rounded-lg text-[#c9d1dc] transition-colors hover:bg-[#f4ece2]/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad] disabled:cursor-default disabled:hover:bg-transparent",
+                      isActive("/dashboard") && "text-[#fffaf2]",
+                    )}
                   >
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </motion.span>
+                    <motion.span
+                      animate={{ rotate: sidebarCoursesOpen ? 180 : 0 }}
+                      transition={{ duration: 0.18 }}
+                    >
+                      <ChevronDown className="size-3.5" />
+                    </motion.span>
+                  </button>
                 )}
-              </button>
+              </div>
 
               <AnimatePresence initial={false}>
                 {sidebarCoursesOpen && isOpen && (
@@ -171,19 +191,21 @@ export const AppSidebar = React.memo(function AppSidebar() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-                    className="overflow-hidden ml-4 mt-0.5"
+                    className="ml-5 mt-1 overflow-hidden"
                   >
-                    <div className="pl-3 flex flex-col gap-1 border-l border-white/10">
+                    <div className="flex flex-col gap-1 border-l border-[#f4ece2]/12 pl-3">
                       {(courses ?? []).map((course) => (
                         <button
+                          type="button"
                           key={course.id}
                           onClick={() => !isActive("/course/" + course.id) && router.push("/course/" + course.id)}
                           className={cn(
-                            "w-full text-left text-[13px] px-3 py-2.5 rounded-md truncate transition-colors duration-150",
+                            "w-full truncate rounded-lg px-3 py-2.5 text-left text-[13px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]",
                             isActive("/course/" + course.id)
-                              ? "bg-shell-active text-shell-foreground"
-                              : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
+                              ? "bg-white/[0.12] text-[#fffaf2]"
+                              : "text-[#b8c2d1] hover:bg-white/[0.07] hover:text-white",
                           )}
+                          aria-current={isActive("/course/" + course.id) ? "page" : undefined}
                         >
                           {course.title}
                         </button>
@@ -209,17 +231,18 @@ export const AppSidebar = React.memo(function AppSidebar() {
 
         {/* Threads — shown on any /course/[id] route */}
         {courseId !== null && isOpen && (
-          <div className="mt-2">
-            <div className="mx-4 h-px mb-3 bg-shell-border" />
-            <p className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest text-shell-faint">
+          <div className="mt-3">
+            <div className="mx-5 mb-4 h-px bg-[#f4ece2]/10" />
+            <p className="mb-2 px-5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#aeb8c6]">
               Threads
             </p>
-            <div className="px-2 flex flex-col gap-0.5">
+            <div className="flex flex-col gap-1 px-3">
               <button
+                type="button"
                 onClick={newThread}
-                className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium mb-1 text-shell-muted border border-dashed border-white/15 transition-colors duration-150 hover:bg-shell-hover hover:text-shell-foreground"
+                className="mb-1 flex w-full items-center gap-2 rounded-xl border border-dashed border-[#f4ece2]/25 px-3 py-2.5 text-[13px] font-semibold text-[#d9dfe7] transition-colors duration-150 hover:border-[#f4ece2]/40 hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
               >
-                <PlusIcon className="w-4 h-4 flex-shrink-0" />
+                <PlusIcon className="size-4 flex-shrink-0" />
                 New Thread
               </button>
               {threads.map((thread) => {
@@ -228,23 +251,25 @@ export const AppSidebar = React.memo(function AppSidebar() {
                   <div
                     key={thread.id}
                     className={cn(
-                      "flex items-center rounded-lg group overflow-hidden",
-                      isActiveThread && "bg-shell-active",
+                      "group flex items-center overflow-hidden rounded-xl",
+                      isActiveThread && "bg-[#8e3039]/65 shadow-[0_3px_10px_rgba(12,20,34,0.16)]",
                     )}
                   >
                     <button
+                      type="button"
                       className={cn(
-                        "flex-1 min-w-0 px-3 py-2.5 text-left text-[13px] truncate transition-colors duration-150",
+                        "min-w-0 flex-1 truncate px-3 py-2.5 text-left text-[13px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]",
                         isActiveThread
-                          ? "text-shell-foreground"
-                          : "text-shell-muted hover:text-shell-foreground",
+                          ? "text-[#fffaf2]"
+                          : "text-[#b8c2d1] hover:bg-white/[0.07] hover:text-white",
                       )}
                       onClick={() => navigateTo(thread.id)}
                     >
                       {thread.title || "New Chat"}
                     </button>
                     <button
-                      className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1.5 mr-1 rounded text-shell-muted transition-[opacity,color] duration-150 hover:text-red-300"
+                      type="button"
+                      className="mr-1 flex-shrink-0 rounded-lg p-1.5 text-[#b8c2d1] opacity-0 transition-[opacity,color,background-color] duration-150 hover:bg-white/[0.1] hover:text-[#f5b7bd] group-hover:opacity-100 focus:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
                       onClick={(e) => { e.stopPropagation(); setPendingDeleteId(thread.id); }}
                       title="Delete thread"
                     >
@@ -304,45 +329,62 @@ export const AppSidebar = React.memo(function AppSidebar() {
       </Dialog>
 
       {/* User footer */}
-      <div className="flex-shrink-0 px-3 py-4 border-t border-shell-border">
+      <footer className="relative flex-shrink-0 border-t border-[#f4ece2]/10 bg-[#142037]/70 p-3">
         {isOpen ? (
-          <div className="flex items-center gap-3">
-            <div
-              className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-strong flex-shrink-0 flex items-center justify-center text-white text-[13px] font-bold select-none cursor-pointer"
-              onClick={() => router.push("/account")}
-            >
-              {initials || <User className="h-4 w-4" />}
-            </div>
-            <div className="flex-1 min-w-0 cursor-pointer" onClick={() => router.push("/account")}>
-              <p className="text-[14px] font-semibold truncate leading-tight text-shell-foreground">
-                {fullName || "Account"}
-              </p>
-              {role && (
-                <p className="text-[12px] truncate mt-0.5 text-shell-muted">
-                  {role}
-                </p>
-              )}
-            </div>
+          <div className="flex items-center rounded-2xl border border-[#f4ece2]/10 bg-white/[0.055] p-1.5 shadow-[0_8px_18px_rgba(10,18,31,0.16)]">
             <button
+              type="button"
+              className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl px-1.5 py-1.5 text-left transition-colors hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
+              onClick={() => router.push("/account")}
+              aria-label="Open account settings"
+            >
+              <span className="flex size-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#b94a54] to-[#80303b] text-[13px] font-bold text-white shadow-[0_3px_10px_rgba(128,48,59,0.38)]">
+                {initials || <User className="size-4" />}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[13px] font-bold leading-tight text-[#fffaf2]">
+                  {fullName || "Account"}
+                </span>
+                <span className="mt-1 block truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-[#aeb8c6]">
+                  {role || "Student"}
+                </span>
+              </span>
+              <ChevronRight className="size-4 flex-shrink-0 text-[#93a0b2] transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-[#e3aaad]" />
+            </button>
+            <button
+              type="button"
               onClick={handleSignOut}
               title="Sign out"
-              className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg text-shell-muted transition-colors duration-150 hover:text-red-300 hover:bg-brand-strong/15"
+              aria-label="Sign out"
+              className="flex size-9 flex-shrink-0 items-center justify-center rounded-xl border border-transparent text-[#aeb8c6] transition-colors duration-150 hover:border-[#e3aaad]/15 hover:bg-[#8e3039]/25 hover:text-[#f9c8cc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
             >
-              <DoorOpen className="h-[17px] w-[17px]" />
+              <LogOut className="size-4" />
             </button>
           </div>
         ) : (
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-2">
             <button
+              type="button"
               onClick={() => router.push("/account")}
               title={fullName || "Account"}
-              className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-strong flex items-center justify-center text-white text-[13px] font-bold select-none"
+              aria-label="Open account settings"
+              className="group relative flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#b94a54] to-[#80303b] text-[13px] font-bold text-white shadow-[0_5px_16px_rgba(128,48,59,0.38)] transition-transform hover:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
             >
-              {initials || <User className="h-4 w-4" />}
+              {initials || <User className="size-4" />}
+              <span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-[#142037] bg-[#c9d8a4]" />
+            </button>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              title="Sign out"
+              aria-label="Sign out"
+              className="flex size-9 items-center justify-center rounded-xl text-[#93a0b2] transition-colors hover:bg-white/[0.08] hover:text-[#f9c8cc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
+            >
+              <LogOut className="size-4" />
             </button>
           </div>
         )}
-      </div>
+      </footer>
 
     </motion.aside>
   );
@@ -361,13 +403,19 @@ type NavItemProps = {
 function NavItem({ icon, label, active, collapsed, onClick, tooltip }: NavItemProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       title={collapsed ? tooltip : undefined}
+      aria-label={collapsed ? tooltip : undefined}
+      aria-current={active ? "page" : undefined}
       className={cn(
-        "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium transition-colors duration-150",
+        "relative flex items-center gap-3 font-semibold transition-[background-color,color,box-shadow,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]",
+        collapsed
+          ? "size-12 justify-center rounded-2xl p-0"
+          : "w-full rounded-xl px-3 py-3 text-[14px]",
         active
-          ? "bg-shell-active text-shell-foreground"
-          : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
+          ? "bg-[#8e3039] text-[#fffaf2] shadow-[0_5px_16px_rgba(142,48,57,0.3)] ring-1 ring-[#e3aaad]/20"
+          : "text-[#c9d1dc] hover:bg-[#f4ece2]/[0.08] hover:text-white",
       )}
     >
       {icon}
