@@ -1,172 +1,109 @@
 "use client";
 
-import { Target } from "lucide-react";
-import { Course, Topic } from "@/types/course";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { ArrowUpRight, Target } from "lucide-react";
+import type { Course, Topic } from "@/types/course";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-
-export function getMastery(progress: number): {
-  label: string;
-  color: string;
-  bg: string;
-  border: string;
-} {
-  if (progress >= 90)
-    return { label: "Mastered", color: "text-green-700", bg: "bg-green-50", border: "border-green-200" };
-  if (progress >= 75)
-    return { label: "Proficient", color: "text-blue-700", bg: "bg-blue-50", border: "border-blue-200" };
-  if (progress >= 60)
-    return { label: "Almost There", color: "text-yellow-700", bg: "bg-yellow-50", border: "border-yellow-200" };
-  if (progress >= 40)
-    return { label: "Getting There", color: "text-orange-700", bg: "bg-orange-50", border: "border-orange-200" };
-  return { label: "Needs Work", color: "text-red-700", bg: "bg-red-50", border: "border-red-200" };
-}
-
-function getMasteryBarColor(progress: number): string {
-  if (progress >= 90) return "bg-green-500";
-  if (progress >= 75) return "bg-blue-500";
-  if (progress >= 60) return "bg-yellow-500";
-  if (progress >= 40) return "bg-orange-500";
-  return "bg-red-500";
-}
-
-function getConfidenceLabel(topic: Topic): string {
-  if ((topic.evidenceCount ?? 0) === 0) return "Needs baseline";
-  if (topic.confidence === "high") return "High confidence";
-  if (topic.confidence === "medium") return "Medium confidence";
-  return "Low confidence";
-}
-
-function formatLastPracticed(value?: string | null): string {
-  if (!value) return "No attempts yet";
-  const timestamp = new Date(value).getTime();
-  if (!Number.isFinite(timestamp)) return "Recently practiced";
-  const days = Math.max(0, Math.floor((Date.now() - timestamp) / 86_400_000));
-  if (days === 0) return "Practiced today";
-  if (days === 1) return "Practiced yesterday";
-  return `Practiced ${days} days ago`;
-}
+import { getTopicMasteryForTopic } from "@/lib/topic-mastery";
 
 interface CourseTrackerProps {
   course: Course;
   onTopicClick: (topicId: number) => void;
   onPractice: (topic: Topic) => void;
-  onNotesTab: () => void;
 }
 
 export default function CourseTracker({
   course,
   onTopicClick,
   onPractice,
-  onNotesTab,
 }: CourseTrackerProps) {
-  // Sort weakest first
-  const topics = [...(course.topics ?? [])].sort((a, b) => a.progress - b.progress);
+  const topics = [...(course.topics ?? [])].sort((left, right) => {
+    const leftEvidence = left.evidenceCount ?? 0;
+    const rightEvidence = right.evidenceCount ?? 0;
+    if (leftEvidence === 0 && rightEvidence !== 0) return 1;
+    if (rightEvidence === 0 && leftEvidence !== 0) return -1;
+    return left.progress - right.progress;
+  });
+  const hasEvidence = topics.some((topic) => (topic.evidenceCount ?? 0) > 0);
 
   return (
-    <Card className="border gap-2 border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Target className="w-5 h-5 text-primary" />
-          <CardTitle className="text-base font-semibold m-0">Your Topics</CardTitle>
+    <section aria-labelledby="topics-heading" className="space-y-4">
+      <div>
+        <div>
+          <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+            <Target aria-hidden="true" className="size-3.5" />
+            Topic Focus
+          </p>
+          <h2
+            id="topics-heading"
+            className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+          >
+            Choose What to Review
+          </h2>
         </div>
-        <span className="text-xs text-muted-foreground">Weakest first</span>
+        <p className="mt-2 text-xs text-[#647087]">
+          {hasEvidence ? "Topics needing the most attention appear first." : "Start a diagnostic to build your baseline."}
+        </p>
       </div>
 
-      <CardContent className="space-y-3 p-0">
-        {topics.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border bg-muted/50 p-4 text-sm text-muted-foreground">
-            No topics available yet.
-          </div>
-        ) : (
-          topics.map((topic) => {
-            const mastery = getMastery(topic.progress);
-            const barColor = getMasteryBarColor(topic.progress);
-            const confidence = getConfidenceLabel(topic);
+      {topics.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-[#24334c]/20 bg-white px-6 py-10 text-center">
+          <p className="font-semibold text-[#18243a]">Topics are being prepared</p>
+          <p className="mt-2 text-sm leading-6 text-[#647087]">
+            Your instructor has not added review topics to this course yet.
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-2xl border border-[#24334c]/10 bg-white shadow-sm">
+          {topics.map((topic, index) => {
+            const mastery = getTopicMasteryForTopic(topic);
             const evidenceCount = topic.evidenceCount ?? 0;
             const correctAnswers = topic.correctAnswers ?? 0;
+            const action = evidenceCount > 0 ? "Review" : "Practice";
 
             return (
-              <motion.div
+              <article
                 key={topic.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.32 }}
-                className="p-3 rounded-xl border border-border/60 bg-muted/50 hover:bg-muted transition cursor-pointer"
-                onClick={() => onTopicClick(topic.id)}
+                className={index > 0 ? "border-t border-[#24334c]/10" : undefined}
               >
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-medium truncate">{topic.name}</p>
-                      <span
-                        className={`text-[11px] px-2 py-0.5 rounded-full border ${mastery.bg} ${mastery.color} ${mastery.border}`}
-                      >
+                <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-semibold text-[#18243a]">{topic.name}</h3>
+                      <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${mastery.badgeClassName}`}>
                         {mastery.label}
                       </span>
                     </div>
-                    {topic.progress === 0 ? (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Take the diagnostic or try practice to create a baseline
-                      </p>
-                    ) : topic.progress < 75 && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Try a quick practice session on this topic
-                      </p>
-                    )}
-                    <p className="text-[11px] text-muted-foreground mt-1">
+                    <p className="mt-2 text-sm leading-6 text-[#647087]">
                       {evidenceCount > 0
-                        ? `${correctAnswers}/${evidenceCount} answers correct · ${formatLastPracticed(topic.lastPracticedAt)}`
-                        : "No scored answers yet"}
+                        ? `${mastery.detail} · ${topic.progress}% mastery from ${correctAnswers}/${evidenceCount} correct answers.`
+                        : "No assessment evidence yet. Practice this topic or take the course diagnostic."}
                     </p>
                   </div>
-                  <Badge variant="secondary" className="text-xs shrink-0">
-                    {confidence}
-                  </Badge>
-                </div>
 
-                {/* Progress bar */}
-                <div className="w-full h-2 bg-border rounded-full overflow-hidden mb-3" aria-hidden>
-                  <div
-                    className={`${barColor} h-full rounded-full`}
-                    style={{
-                      width: `${topic.progress}%`,
-                      transition: "width 600ms cubic-bezier(.2,.9,.2,1)",
-                    }}
-                    role="progressbar"
-                    aria-valuenow={topic.progress}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-label={`${topic.name} progress ${topic.progress} percent`}
-                  />
+                  <div className="flex shrink-0 flex-col-reverse gap-2 sm:flex-row">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => onTopicClick(topic.id)}
+                      className="h-11 rounded-xl px-3 text-[#647087] hover:bg-[#18243a]/[0.04] hover:text-[#18243a]"
+                    >
+                      Details
+                      <ArrowUpRight aria-hidden="true" className="size-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => onPractice(topic)}
+                      className="h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]"
+                    >
+                      {action}
+                    </Button>
+                  </div>
                 </div>
-
-                {/* Action buttons */}
-                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                  <Button
-                    size="sm"
-                    variant="default"
-                    className="flex-1 h-7 text-xs"
-                    onClick={() => onPractice(topic)}
-                  >
-                    Practice
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1 h-7 text-xs"
-                    onClick={onNotesTab}
-                  >
-                    Notes
-                  </Button>
-                </div>
-              </motion.div>
+              </article>
             );
-          })
-        )}
-      </CardContent>
-    </Card>
+          })}
+        </div>
+      )}
+    </section>
   );
 }

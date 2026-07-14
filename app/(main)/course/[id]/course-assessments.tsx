@@ -115,25 +115,25 @@ export default function CourseAssessment({ course }: CourseProps) {
 
   return (
     <>
-      <Card className="border border-border rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition bg-card">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold flex items-center gap-2 text-foreground">
-            <ClipboardList className="w-4 h-4 text-muted-foreground" />
-            Assessments
+      <Card className="gap-0 rounded-2xl border-[#24334c]/10 bg-white py-0 shadow-sm">
+        <CardHeader className="border-b border-[#24334c]/10 py-5">
+          <CardTitle className="flex items-center gap-2 font-[family-name:var(--font-display)] text-2xl tracking-[-0.02em] text-[#18243a]">
+            <ClipboardList className="size-5 text-[#8e3039]" />
+            Course Assessments
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3 pt-0">
+        <CardContent className="space-y-3 py-5">
           {attemptsError ? (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <div className="rounded-xl border border-[#a0363d]/20 bg-[#8e3039]/8 p-4 text-sm text-[#8e3039]">
               {attemptsError}
             </div>
           ) : null}
 
           {assessments.length === 0 ? (
-            <div className="text-center py-10 text-muted-foreground">
-              <ClipboardList className="w-8 h-8 mx-auto mb-2 opacity-30" />
-              <p className="text-sm font-medium">No assessments available</p>
-              <p className="text-xs mt-1 opacity-70">Check back later for new assessments</p>
+            <div className="py-10 text-center text-[#647087]">
+              <ClipboardList className="mx-auto mb-3 size-8 text-[#8e3039]/45" />
+              <p className="font-semibold text-[#18243a]">No assessments available</p>
+              <p className="mt-1 text-sm">Check back later for a new assessment from your instructor.</p>
             </div>
           ) : (
             assessments.map((assessment) => {
@@ -149,9 +149,9 @@ export default function CourseAssessment({ course }: CourseProps) {
               const score = latestAttempt?.score;
               const scoreColor =
                 score == null ? "" :
-                score >= 80 ? "text-green-700 bg-green-50 border-green-200" :
-                score >= 60 ? "text-yellow-700 bg-yellow-50 border-yellow-200" :
-                "text-red-700 bg-red-50 border-red-200";
+                score >= 75 ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
+                score >= 60 ? "border-amber-200 bg-amber-50 text-amber-800" :
+                "border-[#a0363d]/20 bg-[#8e3039]/8 text-[#8e3039]";
 
               return (
                 <div
@@ -160,44 +160,44 @@ export default function CourseAssessment({ course }: CourseProps) {
                     setOpenPreview(true);
                   }}
                   key={assessment.id}
-                  className="group border border-border/60 rounded-xl p-4 hover:border-border hover:shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all bg-muted/30 cursor-pointer"
+                  className="group rounded-xl border border-[#24334c]/10 bg-white p-4 transition-[border-color,box-shadow] hover:border-[#24334c]/20 hover:shadow-sm"
                 >
                   <div className="flex justify-between items-start gap-3">
                     <div className="space-y-2 flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground group-hover:text-foreground/80 truncate">
+                      <p className="truncate font-semibold text-[#18243a]">
                         {assessment.title}
                       </p>
                       <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
                           <Clock className="w-3 h-3" />
                           {assessment.deadline
-                            ? new Date(assessment.deadline).toLocaleDateString()
+                            ? new Intl.DateTimeFormat("en-PH", { month: "short", day: "numeric", year: "numeric" }).format(new Date(assessment.deadline))
                             : "No deadline"}
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
                           <Hash className="w-3 h-3" />
                           {questionCount} questions
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
                           <Trophy className="w-3 h-3" />
                           {attempts.length}/{assessment.maxAttempts} attempts
                         </span>
                       </div>
                       {score != null ? (
-                        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border ${scoreColor}`}>
+                        <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold ${scoreColor}`}>
                           Latest: {score}%
                         </span>
                       ) : attemptsLoading ? (
-                        <span className="text-xs italic text-muted-foreground/70">Loading...</span>
+                        <span className="text-xs text-[#647087]">Loading…</span>
                       ) : (
-                        <span className="text-xs italic text-muted-foreground/70">Not yet taken</span>
+                        <span className="text-xs text-[#647087]">Not yet taken</span>
                       )}
                     </div>
                     {latestAttempt ? (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="shrink-0 text-xs"
+                        className="h-11 shrink-0 rounded-xl border-[#24334c]/15 bg-white text-xs text-[#18243a] hover:bg-[#18243a]/[0.03]"
                         onClick={(event) => {
                           event.stopPropagation();
                           setCurrentAssessment(assessment);
@@ -209,7 +209,7 @@ export default function CourseAssessment({ course }: CourseProps) {
                     ) : (
                       <Button
                         size="sm"
-                        className="shrink-0 text-xs bg-primary hover:bg-primary/90 text-white"
+                        className="h-11 shrink-0 rounded-xl bg-[#18243a] text-xs text-white hover:bg-[#293752]"
                         disabled={!canStartAssessment(assessment, attempts)}
                         onClick={(event) => {
                           event.stopPropagation();

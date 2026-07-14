@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSWRConfig } from "swr";
 import { X, Brain, CheckCircle2, XCircle, Loader2, RotateCcw } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { getMastery } from "./course-tracker";
+import { getTopicMastery } from "@/lib/topic-mastery";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import type { Topic } from "@/types/course";
@@ -441,7 +441,7 @@ export default function DiagnosticSheet({
                     return leftPct - rightPct;
                   }).map(([topicName, stats]) => {
                     const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
-                    const mastery = getMastery(pct);
+                    const mastery = getTopicMastery(pct, stats.total);
                     return (
                       <div
                         key={topicName}
@@ -450,7 +450,7 @@ export default function DiagnosticSheet({
                         <span className="text-sm font-medium text-foreground">{topicName}</span>
                         <div className="flex items-center gap-2 shrink-0">
                           <span className="text-xs text-muted-foreground/70">{stats.correct}/{stats.total}</span>
-                          <span className={`text-[11px] px-2.5 py-0.5 rounded-full border ${mastery.bg} ${mastery.color} ${mastery.border}`}>
+                          <span className={`rounded-full border px-2.5 py-0.5 text-[11px] ${mastery.badgeClassName}`}>
                             {mastery.label}
                           </span>
                         </div>

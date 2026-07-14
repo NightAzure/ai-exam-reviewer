@@ -1,253 +1,144 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Course, Topic } from "@/types/course";
-import { motion } from "framer-motion";
-import { Bot, BarChart2, Zap, StickyNote, Brain, Layers } from "lucide-react";
+import type { Course, Topic } from "@/types/course";
+import { ArrowUpRight, Bot, Compass, Sparkles } from "lucide-react";
+import { getTopicMasteryForTopic } from "@/lib/topic-mastery";
 import Link from "next/link";
-
-interface CourseProps {
-  course: Course;
-}
-
-export const CourseInsights = ({ course }: CourseProps) => {
-  const strengths = course.insights?.strengths ?? [];
-  const weaknesses = course.insights?.weaknesses ?? [];
-  const total = strengths.length + weaknesses.length;
-  const strongPct = total > 0 ? Math.round((strengths.length / total) * 100) : 0;
-
-  return (
-    <Card className="p-5 rounded-xl border border-border bg-card shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-muted-foreground/70" />
-          <span className="text-sm font-semibold text-foreground">Mastery Overview</span>
-        </div>
-        {total > 0 && (
-          <span className="text-xs text-muted-foreground/70">{strongPct}% mastered</span>
-        )}
-      </div>
-
-      {/* Ratio bar */}
-      {total > 0 && (
-        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-          <motion.div
-            className="h-full rounded-full bg-emerald-500"
-            initial={{ width: 0 }}
-            animate={{ width: `${strongPct}%` }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-          />
-        </div>
-      )}
-
-      {/* Strengths */}
-      <div className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-          You know these
-        </p>
-        {strengths.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5">
-            {strengths.map((s, i) => (
-              <span
-                key={i}
-                className="text-xs px-2.5 py-1 rounded-lg border border-emerald-200 text-emerald-700 bg-emerald-50 font-medium"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground/70 italic">No data yet</p>
-        )}
-      </div>
-
-      {/* Divider */}
-      <div className="border-t border-border/60" />
-
-      {/* Weaknesses */}
-      <div className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-          Keep working on
-        </p>
-        {weaknesses.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5">
-            {weaknesses.map((w, i) => (
-              <span
-                key={i}
-                className="text-xs px-2.5 py-1 rounded-lg border border-red-200 text-red-700 bg-red-50 font-medium"
-              >
-                {w}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground/70 italic">No data yet</p>
-        )}
-      </div>
-    </Card>
-  );
-};
-
-export const CourseRecommendation = ({ course }: CourseProps) => {
-  //temp
-  const suggestion = course.insights?.suggestions?.[0] || "Continue practicing to improve your skills";
-  const focusTopic = course.insights?.weaknesses?.[0] || "your weak area";
-
-  return (
-    <Card className="border gap-3 border-primary rounded-xl bg-primary/10 p-4 shadow-sm hover:shadow-md transition">
-      <p className="text-sm font-semibold text-primary">
-        Recommended Next Step
-      </p>
-      <p className="text-sm text-foreground">{suggestion}</p>
-      <Link href={`/course/${course.id}/chat?review=${focusTopic}`}>
-        <Button size="sm" className="w-full">
-          Review with AI Buddy
-        </Button>
-      </Link>
-    </Card>
-  );
-};
 
 interface CourseAICTAProps {
   course: Course;
   weakestTopic: Topic | null;
   onPractice: (topic: Topic | null) => void;
-  onNotesTab: () => void;
   onDiagnostic?: () => void;
   onFlashcards?: () => void;
 }
 
-export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDiagnostic, onFlashcards }: CourseAICTAProps) => {
-  const hasData =
-    course.topics.some((topic) => topic.progress > 0) ||
-    (course.insights?.strengths?.length ?? 0) > 0 ||
-    (course.insights?.weaknesses?.length ?? 0) > 0;
+export const CourseAICTA = ({
+  course,
+  weakestTopic,
+  onPractice,
+  onDiagnostic,
+  onFlashcards,
+}: CourseAICTAProps) => {
+  const assessedTopics = course.topics.filter((topic) => (topic.evidenceCount ?? 0) > 0);
+  const hasEvidence = assessedTopics.length > 0;
+  const questionsAnswered = assessedTopics.reduce(
+    (total, topic) => total + (topic.evidenceCount ?? 0),
+    0,
+  );
+  const masteryScore = hasEvidence
+    ? Math.round(
+        assessedTopics.reduce((total, topic) => total + topic.progress, 0) /
+          assessedTopics.length,
+      )
+    : null;
+  const focus = weakestTopic ? getTopicMasteryForTopic(weakestTopic) : null;
+  const takeDiagnostic = !hasEvidence && onDiagnostic;
+  const questionLabel = questionsAnswered === 1 ? "question" : "questions";
+  const topicLabel = assessedTopics.length === 1 ? "topic" : "topics";
+  const tutorHref = weakestTopic
+    ? `/course/${course.id}/chat?topic=${encodeURIComponent(weakestTopic.name)}`
+    : `/course/${course.id}/chat`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-    >
-      <Card className="relative overflow-hidden p-6 flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-primary/90 to-primary text-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.24)] transition border-0">
-        {/* Subtle red tint — left only */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to right, rgba(50,0,27,0.18) 0%, transparent 60%)" }}
-        />
-        {/* Circuit pattern — right side, fading toward left */}
-        <div
-          className="absolute inset-0 pointer-events-none select-none"
-          style={{
-            backgroundImage: "url('/grid.png')",
-            backgroundSize: "750px auto",
-            backgroundPosition: "right center",
-            backgroundRepeat: "no-repeat",
-            opacity: 0.3,
-            maskImage: "linear-gradient(to right, transparent 40%, black 60%)",
-            WebkitMaskImage: "linear-gradient(to right, transparent 40%, black 60%)",
-          }}
-        />
+    <section aria-labelledby="study-session-heading" className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+      <article className="relative overflow-hidden rounded-3xl bg-[#18243a] p-6 text-white shadow-[0_18px_40px_rgb(24_36_58/0.18)] sm:p-7">
+        <div aria-hidden="true" className="absolute -right-16 -top-20 size-56 rounded-full border border-white/10" />
+        <div aria-hidden="true" className="absolute -bottom-28 right-16 size-52 rounded-full bg-[#8e3039]/30 blur-3xl" />
+        <div className="relative">
+          <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#e4b57a]">
+            <Compass aria-hidden="true" className="size-3.5" />
+            Today&apos;s Focus
+          </p>
+          <h2 id="study-session-heading" className="mt-3 text-pretty font-[family-name:var(--font-display)] text-3xl leading-[1.03] tracking-[-0.028em]">
+            {takeDiagnostic
+              ? "Build your baseline for this course"
+              : weakestTopic
+                ? `Practice ${weakestTopic.name} next`
+                : "Begin your focused review"}
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-white/70">
+            {takeDiagnostic
+              ? "Take a diagnostic to create reliable topic evidence and personalize your study desk."
+              : weakestTopic && focus
+                ? `${focus.detail}. ${weakestTopic.name} is currently your clearest opportunity to strengthen this course.`
+                : "Choose a topic to start building reliable study evidence."}
+          </p>
 
-        {/* Content */}
-        <div className="relative z-10 flex items-center gap-4 flex-1 min-w-0">
-          <div className="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
-            <Bot className="w-7 h-7" />
-          </div>
-          <div className="space-y-1 min-w-0">
-            <p className="font-bold text-lg leading-tight">What to focus on next</p>
-            {hasData && weakestTopic ? (
-              <p className="text-sm opacity-85 leading-relaxed">
-                {weakestTopic.progress > 0 ? (
-                  <>
-                    Your weakest topic is{" "}
-                    <span className="font-semibold underline decoration-white/40">
-                      {weakestTopic.name}
-                    </span>{" "}
-                    at {weakestTopic.progress}%. Here&apos;s how to work on it:
-                  </>
-                ) : (
-                  <>
-                    <span className="font-semibold underline decoration-white/40">
-                      {weakestTopic.name}
-                    </span>{" "}
-                    still needs a baseline. Start there so future guidance is more precise.
-                  </>
-                )}
-              </p>
-            ) : onDiagnostic ? (
-              <p className="text-sm opacity-85 leading-relaxed">
-                Take a short diagnostic to create a baseline across your topics and unlock personalized guidance.
-              </p>
-            ) : (
-              <p className="text-sm opacity-85 leading-relaxed">
-                Take your first assessment or practice session to get personalized guidance.
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Action buttons */}
-        <div className="relative z-10 flex flex-wrap gap-2 shrink-0 rounded-2xl p-2 backdrop-blur-xl">
-          {!hasData && onDiagnostic ? (
-            <>
-              {/* Primary CTA — solid white */}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {takeDiagnostic ? (
               <Button
-                size="sm"
-                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-card text-primary hover:bg-muted"
+                type="button"
                 onClick={onDiagnostic}
+                className="h-11 rounded-xl bg-[#f4ece2] px-4 text-[#18243a] hover:bg-white"
               >
-                <Brain className="size-4" />
                 Take Diagnostic
               </Button>
-              {/* Secondary — solid dark */}
-              <Link href={`/course/${course.id}/chat`}>
-                <Button
-                  size="sm"
-                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
-                >
-                  <Bot className="size-4" />
-                  Ask AI Tutor
-                </Button>
-              </Link>
-            </>
-          ) : (
-            <>
-              {/* Primary CTA — solid white */}
+            ) : (
               <Button
-                size="sm"
-                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-card text-primary hover:bg-muted"
-                disabled={!weakestTopic}
+                type="button"
                 onClick={() => onPractice(weakestTopic)}
+                disabled={!weakestTopic}
+                className="h-11 rounded-xl bg-[#f4ece2] px-4 text-[#18243a] hover:bg-white"
               >
-                <Zap className="size-4" />
-                Quick Practice
+                {weakestTopic ? `Practice ${weakestTopic.name}` : "Choose a Topic"}
               </Button>
-              {/* Tertiary — solid muted */}
-              {onFlashcards && (
-                <Button
-                  size="sm"
-                  className="rounded-lg font-medium gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
-                  onClick={onFlashcards}
-                >
-                  <Layers className="size-4" />
-                  Flashcards
-                </Button>
-              )}
-              {/* Secondary — solid dark */}
-              <Link href={`/course/${course.id}/chat`}>
-                <Button
-                  size="sm"
-                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
-                >
-                  <Bot className="size-4" />
-                  Ask AI Tutor
-                </Button>
-              </Link>
-            </>
-          )}
+            )}
+            {onFlashcards ? (
+              <button
+                type="button"
+                onClick={onFlashcards}
+                className="text-sm font-semibold text-white/70 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
+              >
+                Review flashcards
+              </button>
+            ) : null}
+          </div>
+
+          <p className="mt-6 border-t border-white/10 pt-4 text-xs leading-5 text-white/60">
+            {masteryScore !== null
+              ? `Early signal: ${masteryScore}% mastery from ${questionsAnswered} answered ${questionLabel} across ${assessedTopics.length} ${topicLabel}.`
+              : "Not Assessed · a diagnostic creates your first reliable study signal."}
+          </p>
         </div>
-      </Card>
-    </motion.div>
+
+      </article>
+
+      <aside className="relative overflow-hidden rounded-3xl border border-[#24334c]/10 bg-white p-6 shadow-sm sm:p-7">
+        <div aria-hidden="true" className="absolute -right-12 -top-10 size-40 rounded-full bg-[#8e3039]/8 blur-2xl" />
+        <div className="relative flex h-full flex-col">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+                <Bot aria-hidden="true" className="size-3.5" />
+                Need a Hand?
+              </p>
+              <h2 className="mt-3 text-pretty font-[family-name:var(--font-display)] text-2xl leading-[1.08] tracking-[-0.025em] text-[#18243a] sm:text-3xl">
+                Ask Your AI Tutor
+              </h2>
+            </div>
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#18243a] text-[#e4b57a]">
+              <Sparkles aria-hidden="true" className="size-5" />
+            </span>
+          </div>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-[#647087]">
+            Get an explanation, a quick quiz, or help preparing for your next assessment.
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Button asChild className="h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]">
+              <Link href={tutorHref}>
+                Ask AI Tutor
+                <ArrowUpRight aria-hidden="true" className="size-4" />
+              </Link>
+            </Button>
+            {weakestTopic ? (
+              <p className="text-xs leading-5 text-[#647087]">
+                Starts with <span className="font-semibold text-[#18243a]">{weakestTopic.name}</span> context.
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </aside>
+    </section>
   );
 };

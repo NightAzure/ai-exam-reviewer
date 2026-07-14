@@ -23,7 +23,13 @@ export type CourseStudySummary = {
   status: CourseStudyStatus;
 };
 
-export type StudentCourseSummary = Course & {
+/**
+ * The learner-facing course experience intentionally excludes the join code.
+ * A code is an enrollment credential, not course metadata for students.
+ */
+export type StudentCoursePreview = Omit<Course, "code">;
+
+export type StudentCourseSummary = StudentCoursePreview & {
   study: CourseStudySummary;
 };
 
@@ -44,12 +50,12 @@ function hasStarted(date: string | undefined, now: Date): boolean {
   return !Number.isFinite(time) || time <= now.getTime();
 }
 
-export function isCourseEnded(course: Course, now = new Date()): boolean {
+export function isCourseEnded(course: StudentCoursePreview, now = new Date()): boolean {
   return !course.is_active || isPast(course.end_date, now);
 }
 
 export function isCourseAvailableForStudy(
-  course: Course,
+  course: StudentCoursePreview,
   now = new Date(),
 ): boolean {
   return !isCourseEnded(course, now) && hasStarted(course.start_date, now);
@@ -66,7 +72,7 @@ function latestDate(rows: SubjectMasteryRow[]): string | null {
 }
 
 function getStatus(
-  course: Course,
+  course: StudentCoursePreview,
   masteryScore: number | null,
   now: Date,
 ): CourseStudyStatus {
@@ -78,7 +84,7 @@ function getStatus(
 }
 
 export function deriveStudentCourseSummaries(
-  courses: Course[],
+  courses: StudentCoursePreview[],
   masteryRows: SubjectMasteryRow[],
   now = new Date(),
 ): StudentCourseSummary[] {
@@ -90,7 +96,7 @@ export function deriveStudentCourseSummaries(
     masteriesByCourse.set(row.course_id, rows);
   });
 
-  return courses.map((course) => {
+  return courses.map((course): StudentCourseSummary => {
     const rows = masteriesByCourse.get(course.id) ?? [];
     const rankedSubjects = [...rows].sort((left, right) => {
       const scoreDifference = toScore(left.mastery_score) - toScore(right.mastery_score);

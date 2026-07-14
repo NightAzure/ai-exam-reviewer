@@ -16,6 +16,11 @@ export function CourseRecommendation({
 }) {
   const hasMastery = course.study.masteryScore !== null;
   const focusSubject = course.study.weakestSubject;
+  const actionLabel = hasMastery
+    ? focusSubject
+      ? `Review ${focusSubject}`
+      : "Continue Reviewing"
+    : "Take Diagnostic";
 
   return (
     <section
@@ -33,7 +38,11 @@ export function CourseRecommendation({
             Your Next Best Step
           </p>
           <h2 id="next-step-heading" className="mt-3 font-[family-name:var(--font-display)] text-3xl leading-[1.03] tracking-[-0.028em] sm:text-4xl">
-            {hasMastery ? `Return to ${course.title}` : `Start your baseline in ${course.title}`}
+            {hasMastery && focusSubject
+              ? `Review ${focusSubject} in ${course.title}`
+              : hasMastery
+                ? `Return to ${course.title}`
+                : `Start your baseline in ${course.title}`}
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-white/70">
             {hasMastery && focusSubject
@@ -45,7 +54,7 @@ export function CourseRecommendation({
 
           <Button asChild className="mt-6 h-11 rounded-xl bg-[#f4ece2] px-4 text-[#18243a] hover:bg-white">
             <Link href={`/course/${course.id}`}>
-              {hasMastery ? "Continue Reviewing" : "Take Diagnostic"}
+              {actionLabel}
               <ArrowUpRight aria-hidden="true" className="size-4" />
             </Link>
           </Button>
@@ -53,7 +62,7 @@ export function CourseRecommendation({
 
         <div className="rounded-2xl border border-white/12 bg-white/6 p-5 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/60">Study Signal</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/60">Current Mastery</p>
             <Target aria-hidden="true" className="size-4 text-[#e4b57a]" />
           </div>
           {hasMastery ? (

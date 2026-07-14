@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, Clock3, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, Clock3, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -70,6 +70,13 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
   const hasMastery = course.study.masteryScore !== null;
   const courseHref = `/course/${course.id}`;
   const fallbackTheme = fallbackThemes[Math.abs(course.id) % fallbackThemes.length];
+  const courseInitials = course.title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#24334c]/10 bg-white shadow-[0_1px_2px_rgb(24_34_52/0.05)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-[#24334c]/20 hover:shadow-[0_16px_36px_rgb(24_34_52/0.12)] motion-reduce:transform-none motion-reduce:transition-none">
@@ -89,17 +96,13 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
           >
             <div className="absolute -right-6 -top-8 h-36 w-36 rounded-full border border-white/20" />
             <div className="absolute bottom-4 left-5 font-[family-name:var(--font-display)] text-5xl leading-none text-white/20">
-              {course.code.slice(0, 2).toUpperCase()}
+              {courseInitials}
             </div>
             <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
           </div>
         )}
 
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-white/15 bg-[#14223a]/70 px-2.5 py-1 text-[11px] font-semibold tracking-[0.12em] text-white shadow-sm backdrop-blur-md">
-            <BookOpen aria-hidden="true" className="size-3 shrink-0" />
-            <span className="truncate">{course.code}</span>
-          </span>
           <Button
             type="button"
             variant="ghost"
@@ -107,7 +110,7 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
             aria-label={isPinned ? `Unpin ${course.title}` : `Pin ${course.title}`}
             aria-pressed={isPinned}
             onClick={() => toggle(course.id)}
-            className="size-10 shrink-0 rounded-full border border-white/15 bg-[#14223a]/65 text-white shadow-sm backdrop-blur-md hover:bg-white hover:text-[#8e3039]"
+            className="ml-auto size-10 shrink-0 rounded-full border border-white/15 bg-[#14223a]/65 text-white shadow-sm backdrop-blur-md hover:bg-white hover:text-[#8e3039]"
           >
             <Star
               aria-hidden="true"

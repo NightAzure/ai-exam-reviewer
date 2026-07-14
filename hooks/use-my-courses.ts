@@ -3,15 +3,15 @@
 import useSWR from "swr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
-import { Course } from "@/types/new_course";
 import { ACTIVE_ENROLLMENT_STATUSES } from "@/utils/supabase/enrollment-statuses";
 import {
   deriveStudentCourseSummaries,
+  type StudentCoursePreview,
   type StudentCourseSummary,
   type SubjectMasteryRow,
 } from "@/lib/student-course-summary";
 
-type CourseRow = Course & {
+type CourseRow = Omit<StudentCoursePreview, "instructor"> & {
   instructor:
     | {
         id: number;
@@ -25,8 +25,21 @@ type CourseRow = Course & {
       }[];
 };
 
-const instructorSelect = `
-  *,
+const courseSelect = `
+  id,
+  title,
+  description,
+  thumbnail_url,
+  instructor_id,
+  is_active,
+  start_date,
+  end_date,
+  enrollment_limit,
+  allow_self_enrollment,
+  require_enrollment_approval,
+  created_at,
+  updated_at,
+  created_by,
   instructor:profiles!instructor_id(id, first_name, second_name)
 `;
 
@@ -36,7 +49,7 @@ async function fetchCoursesByIds(supabase: SupabaseClient, courseIds: number[]) 
   if (unique.length === 0) return [] as CourseRow[];
   const { data, error } = await supabase
     .from("courses")
-    .select(instructorSelect)
+    .select(courseSelect)
     .in("id", unique);
   if (error) throw error;
   return (data ?? []) as CourseRow[];
@@ -65,23 +78,11 @@ export function useMyCourses() {
         .in("status", [...ACTIVE_ENROLLMENT_STATUSES]),
       supabase
         .from("course_staff")
-        .select(
-          `
-            course:courses(
-              *,
-              instructor:profiles!instructor_id(id, first_name, second_name)
-            )
-          `,
-        )
+        .select("course_id")
         .eq("user_id", user.id),
       supabase
         .from("courses")
-        .select(
-          `
-            *,
-            instructor:profiles!instructor_id(id, first_name, second_name)
-          `,
-        )
+        .select(courseSelect)
         .eq("instructor_id", user.id),
     ]);
 
@@ -100,7 +101,7 @@ export function useMyCourses() {
       ...((instructorRows ?? []) as CourseRow[]),
     ] as CourseRow[];
 
-    const deduped = new Map<number, Course>();
+    const deduped = new Map<number, StudentCoursePreview>();
     allCourses.forEach((course) => {
       const instructor = Array.isArray(course.instructor)
         ? course.instructor[0]

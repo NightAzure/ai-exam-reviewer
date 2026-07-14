@@ -120,7 +120,7 @@ export default function Dashboard() {
         .join(" ");
       const matchesSearch =
         !normalizedQuery ||
-        [course.title, course.code, instructor]
+        [course.title, instructor]
           .filter(Boolean)
           .some((value) => value.toLocaleLowerCase().includes(normalizedQuery));
 
@@ -188,10 +188,11 @@ export default function Dashboard() {
           <section aria-labelledby="course-collection-heading" className="space-y-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">Course Collection</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">Your Courses</p>
                 <h2 id="course-collection-heading" className="mt-1 font-[family-name:var(--font-display)] text-3xl tracking-[-0.025em] text-[#18243a]">
-                  Choose Your Next Focus
+                  Continue Your Review
                 </h2>
+                <p className="mt-1 text-sm text-[#647087]">Choose a course, or follow the recommendation above.</p>
               </div>
               <label className="relative block w-full lg:max-w-xs">
                 <span className="sr-only">Search courses</span>

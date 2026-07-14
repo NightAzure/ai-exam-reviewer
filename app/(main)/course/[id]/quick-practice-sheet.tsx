@@ -5,7 +5,7 @@ import { X, Zap, RotateCcw, CheckCircle2, XCircle, Loader2 } from "lucide-react"
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { getMastery } from "./course-tracker";
+import { getTopicMastery } from "@/lib/topic-mastery";
 import { cn } from "@/lib/utils";
 import type { Topic } from "@/types/course";
 
@@ -92,7 +92,7 @@ export default function QuickPracticeSheet({
   };
 
   const scorePct = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
-  const mastery = getMastery(scorePct);
+  const mastery = getTopicMastery(scorePct, questions.length);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -254,7 +254,7 @@ export default function QuickPracticeSheet({
               <div className="w-full max-w-xs space-y-2">
                 <Progress value={scorePct} className="h-3" />
                 <span
-                  className={`inline-block text-sm px-3 py-1 rounded-full border ${mastery.bg} ${mastery.color} ${mastery.border}`}
+                  className={`inline-block rounded-full border px-3 py-1 text-sm ${mastery.badgeClassName}`}
                 >
                   {mastery.label}
                 </span>

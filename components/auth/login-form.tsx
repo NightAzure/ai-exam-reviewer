@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, AlertCircle, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,8 +51,7 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const signInWithCredentials = async (signInEmail: string, signInPassword: string) => {
     setIsLoading(true);
     setError(null);
 
@@ -64,8 +63,8 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
       }
 
       const { error } = await auth.signInWithPassword({
-        email,
-        password,
+        email: signInEmail,
+        password: signInPassword,
       });
 
       if (error) {
@@ -79,6 +78,17 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await signInWithCredentials(email, password);
+  };
+
+  const handleDemoStudentLogin = async () => {
+    setEmail("student@gmail.com");
+    setPassword("student123");
+    await signInWithCredentials("student@gmail.com", "student123");
   };
 
   return (
@@ -188,6 +198,17 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
         ) : (
           "Sign In"
         )}
+      </Button>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full h-11 gap-2"
+        disabled={isBusy}
+        onClick={handleDemoStudentLogin}
+      >
+        <GraduationCap className="size-4" />
+        Login as Student (Demo)
       </Button>
     </form>
   );

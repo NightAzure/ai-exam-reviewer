@@ -10,7 +10,7 @@ export function MainLayoutWrapper({ children }: { children: React.ReactNode }) {
       {children}
     </div>
   ) : (
-    <div className="bg-page flex-1 overflow-auto px-4 py-5 sm:px-6 sm:py-7 md:px-10 md:py-8">
+    <div className="bg-page flex-1 overflow-auto px-4 py-5 sm:px-6 sm:py-7 md:px-8 md:py-8">
       <div className="mx-auto w-full max-w-7xl">{children}</div>
     </div>
   );

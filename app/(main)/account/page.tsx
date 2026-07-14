@@ -1,48 +1,121 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  KeyRound,
+  Loader2,
+  LogOut,
+  Shield,
+  UserRound,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/components/providers/user-provider";
-import { motion, AnimatePresence } from "framer-motion";
+import { clearSWRCache } from "@/lib/swr-cache";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/utils/supabase/client";
 
 const NAME_RE = /^[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{1,50}$/;
 const USERNAME_RE = /^[a-z0-9_]{3,30}$/;
 
+const dateFormatter = new Intl.DateTimeFormat("en-PH", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+
 function validateFields(firstName: string, lastName: string, username: string) {
   const errors: { firstName?: string; lastName?: string; username?: string } = {};
-  if (firstName.trim() && !NAME_RE.test(firstName.trim()))
+  if (firstName.trim() && !NAME_RE.test(firstName.trim())) {
     errors.firstName = "Only letters, spaces, hyphens, and apostrophes (max 50 chars).";
-  if (lastName.trim() && !NAME_RE.test(lastName.trim()))
+  }
+  if (lastName.trim() && !NAME_RE.test(lastName.trim())) {
     errors.lastName = "Only letters, spaces, hyphens, and apostrophes (max 50 chars).";
-  if (!username.trim()) errors.username = "Username is required.";
-  else if (!USERNAME_RE.test(username.trim()))
-    errors.username = "3–30 chars: lowercase letters, numbers, underscores only.";
+  }
+  if (!username.trim()) {
+    errors.username = "Username is required.";
+  } else if (!USERNAME_RE.test(username.trim())) {
+    errors.username = "Use 3–30 characters: lowercase letters, numbers, and underscores only.";
+  }
   return errors;
 }
 
-const ROLE_META: Record<string, { label: string; variant: "default" | "secondary" | "outline"; className: string }> = {
-  instructor: { label: "Instructor", variant: "default", className: "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-100" },
-  ta:         { label: "Teaching Assistant", variant: "default", className: "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100" },
-  student:    { label: "Student", variant: "secondary", className: "" },
-};
+function roleLabel(role: string) {
+  if (role === "ta") return "Teaching Assistant";
+  if (role === "instructor") return "Instructor";
+  if (role === "student") return "Student";
+  return role.charAt(0).toUpperCase() + role.slice(1);
+}
+
+function AccountSettingsSkeleton() {
+  return (
+    <main className="space-y-8 pb-6" aria-busy="true" aria-label="Loading account settings">
+      <header className="border-b border-[#24334c]/10 pb-7">
+        <div className="h-3 w-20 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+        <div className="mt-3 h-10 w-56 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none sm:h-12 sm:w-72" />
+        <div className="mt-3 h-4 w-72 max-w-full animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+      </header>
+
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,340px)] lg:items-start">
+        <section className="space-y-5 lg:col-start-1 lg:row-start-1">
+          <div className="space-y-2">
+            <div className="h-3 w-16 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="h-8 w-40 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+          </div>
+          <div className="rounded-2xl border border-[#24334c]/10 bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex items-center gap-4 border-b border-[#24334c]/10 pb-5">
+              <div className="size-14 shrink-0 animate-pulse rounded-2xl bg-[#18243a]/8 motion-reduce:animate-none" />
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="h-5 w-40 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+                <div className="h-4 w-28 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+              </div>
+            </div>
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+              <div className="h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+            </div>
+            <div className="mt-4 h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="mt-6 flex justify-end gap-2">
+              <div className="h-11 w-24 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+              <div className="h-11 w-32 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+            </div>
+          </div>
+        </section>
+
+        <div className="h-64 animate-pulse rounded-2xl bg-[#18243a]/90 motion-reduce:animate-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:h-72" />
+
+        <section className="space-y-5 lg:col-start-1 lg:row-start-2">
+          <div className="space-y-2">
+            <div className="h-3 w-24 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="h-8 w-28 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+          </div>
+          <div className="h-24 animate-pulse rounded-2xl border border-[#24334c]/10 bg-white motion-reduce:animate-none" />
+        </section>
+      </div>
+    </main>
+  );
+}
 
 export default function AccountSettings() {
   const { user, isLoading } = useUser();
   const { mutate } = useSWRConfig();
+  const router = useRouter();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ firstName?: string; lastName?: string; username?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+  }>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const [status, setStatus] = useState<{ type: "error" | "success"; msg: string } | null>(null);
 
   useEffect(() => {
@@ -53,38 +126,62 @@ export default function AccountSettings() {
   }, [user]);
 
   const initials = useMemo(() => {
-    const a = (user?.first_name ?? "").trim().charAt(0);
-    const b = (user?.second_name ?? "").trim().charAt(0);
-    return `${a}${b}`.trim() || "U";
-  }, [user]);
+    const a = firstName.trim().charAt(0);
+    const b = lastName.trim().charAt(0);
+    return `${a}${b}`.trim().toUpperCase() || "U";
+  }, [firstName, lastName]);
 
   const displayName = useMemo(
-    () => `${(user?.first_name ?? "").trim()} ${(user?.second_name ?? "").trim()}`.trim() || "Your Name",
-    [user],
+    () => `${firstName.trim()} ${lastName.trim()}`.trim() || "Your Name",
+    [firstName, lastName],
   );
 
-  const role = user?.role ?? "student";
-  const roleMeta = ROLE_META[role] ?? { label: role.charAt(0).toUpperCase() + role.slice(1), variant: "secondary" as const, className: "" };
+  const isDirty = useMemo(() => {
+    if (!user) return false;
+    return (
+      firstName !== (user.first_name ?? "") ||
+      lastName !== (user.second_name ?? "") ||
+      username !== (user.username ?? "")
+    );
+  }, [user, firstName, lastName, username]);
 
-  const handleSave = async () => {
+  const role = user?.role ?? "student";
+  const lastUpdated = user?.updated_at ? dateFormatter.format(new Date(user.updated_at)) : null;
+
+  const handleSave = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!user) return;
+
     const errors = validateFields(firstName, lastName, username);
-    if (Object.keys(errors).length > 0) { setFieldErrors(errors); return; }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setStatus(null);
+      return;
+    }
+
     setFieldErrors({});
     setIsSaving(true);
     setStatus(null);
+
     try {
       const res = await fetch("/api/account/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, first_name: firstName, second_name: lastName }),
+        body: JSON.stringify({
+          username,
+          first_name: firstName,
+          second_name: lastName,
+        }),
       });
       const payload = await res.json().catch(() => null);
       if (!res.ok) throw new Error(payload?.message ?? "Unable to update profile");
       await mutate(["user-profile", user.id]);
-      setStatus({ type: "success", msg: "Profile updated." });
+      setStatus({ type: "success", msg: "Profile settings saved." });
     } catch (err) {
-      setStatus({ type: "error", msg: err instanceof Error ? err.message : "Unable to update profile" });
+      setStatus({
+        type: "error",
+        msg: err instanceof Error ? err.message : "Couldn't save changes. Check your connection and try again.",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -99,190 +196,353 @@ export default function AccountSettings() {
     setStatus(null);
   };
 
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch {
+      // Continue to clear local state even if the network call fails.
+    }
+    clearSWRCache();
+    router.push("/auth");
+  };
+
   if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="space-y-1">
-          <Skeleton className="h-8 w-52" />
-          <Skeleton className="h-4 w-72" />
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
-          <Card>
-            <CardContent className="p-6 space-y-5">
-              <div className="flex items-center gap-4 pb-5 border-b">
-                <Skeleton className="size-16 rounded-full" />
-                <div className="space-y-1.5"><Skeleton className="h-5 w-36" /><Skeleton className="h-4 w-20" /></div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Skeleton className="h-9 rounded-lg" /><Skeleton className="h-9 rounded-lg" />
-              </div>
-              <Skeleton className="h-9 rounded-lg" />
-            </CardContent>
-          </Card>
-          <Card><CardContent className="p-6 space-y-3">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-9 rounded-lg" />
-            <Skeleton className="h-9 rounded-lg" />
-          </CardContent></Card>
-        </div>
-      </div>
-    );
+    return <AccountSettingsSkeleton />;
   }
 
   if (!user) {
     return (
-      <p className="text-sm text-destructive">You need to sign in to view account settings.</p>
+      <main className="pb-6">
+        <section
+          aria-labelledby="account-signed-out-heading"
+          className="rounded-3xl border border-[#a0363d]/15 bg-white px-6 py-12 text-center shadow-sm"
+        >
+          <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#a0363d]/8 text-[#8e3039]">
+            <AlertCircle aria-hidden="true" className="size-5" />
+          </span>
+          <h1
+            id="account-signed-out-heading"
+            className="mt-4 font-[family-name:var(--font-display)] text-2xl text-[#18243a]"
+          >
+            Sign In Required
+          </h1>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#647087]">
+            You need an active session to view and update account settings.
+          </p>
+          <Button
+            type="button"
+            onClick={() => router.push("/auth")}
+            className="mt-5 h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]"
+          >
+            Go to Sign In
+          </Button>
+        </section>
+      </main>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <main className="space-y-8 pb-6">
+      <header className="border-b border-[#24334c]/10 pb-7">
+        <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+          <UserRound aria-hidden="true" className="size-3.5" />
+          Account
+        </p>
+        <h1 className="mt-2 text-pretty font-[family-name:var(--font-display)] text-4xl leading-none tracking-[-0.035em] text-[#18243a] sm:text-5xl">
+          Account Settings
+        </h1>
+        <p className="mt-3 max-w-xl text-sm leading-6 text-[#647087]">
+          Update the name shown in your courses and review how you sign in.
+        </p>
+      </header>
 
-      {/* Page heading */}
-      <div>
-        <h1 className="text-3xl font-bold">Account Settings</h1>
-        <p className="text-muted-foreground mt-1">Manage your profile and sign-in details.</p>
-      </div>
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,340px)] lg:items-start">
+        <section
+          aria-labelledby="profile-heading"
+          className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-1"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+              Profile
+            </p>
+            <h2
+              id="profile-heading"
+              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+            >
+              Your Details
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#647087]">
+              This name and username appear across your review space.
+            </p>
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
-
-        {/* ── Left: Profile form ── */}
-        <Card>
-          <CardContent className="p-6 space-y-5">
-
-            {/* Live preview */}
-            <div className="flex items-center gap-4 pb-5 border-b">
-              <div className="size-16 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground text-xl font-bold shrink-0 select-none">
-                <motion.span
-                  key={initials}
-                  initial={{ scale: 0.75, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  {initials}
-                </motion.span>
+          <form
+            onSubmit={(event) => void handleSave(event)}
+            className="rounded-2xl border border-[#24334c]/10 bg-white p-5 shadow-sm sm:p-6"
+            noValidate
+          >
+            <div className="flex items-center gap-4 border-b border-[#24334c]/10 pb-5">
+              <div
+                aria-hidden="true"
+                className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#18243a] font-[family-name:var(--font-display)] text-xl tracking-tight text-[#f4ece2]"
+              >
+                {initials}
               </div>
-              <div className="min-w-0 space-y-1">
-                <motion.p
-                  key={displayName}
-                  className="font-semibold text-foreground truncate"
-                  initial={{ opacity: 0.5 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  {displayName}
-                </motion.p>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Badge variant={roleMeta.variant} className={cn("text-xs font-medium", roleMeta.className)}>
-                    {roleMeta.label}
-                  </Badge>
-                  {user.username && (
-                    <span className="text-xs text-muted-foreground">@{user.username}</span>
-                  )}
+              <div className="min-w-0 space-y-1.5">
+                <p className="truncate font-semibold text-[#18243a]">{displayName}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex h-7 items-center rounded-full border border-[#24334c]/12 bg-[#18243a]/[0.03] px-2.5 text-xs font-semibold text-[#59677c]">
+                    {roleLabel(role)}
+                  </span>
+                  {username.trim() ? (
+                    <span className="truncate font-mono text-xs tracking-wide text-[#647087]">
+                      @{username.trim()}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>
 
-            {/* Name fields */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="firstName">First Name</Label>
+            <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="firstName" className="text-[#18243a]">
+                  First Name
+                </Label>
                 <Input
                   id="firstName"
+                  name="firstName"
+                  type="text"
+                  autoComplete="given-name"
                   value={firstName}
-                  onChange={(e) => { setFirstName(e.target.value); setFieldErrors(p => ({ ...p, firstName: undefined })); }}
-                  className={cn(fieldErrors.firstName && "border-destructive")}
+                  onChange={(event) => {
+                    setFirstName(event.target.value);
+                    setFieldErrors((prev) => ({ ...prev, firstName: undefined }));
+                    setStatus(null);
+                  }}
+                  placeholder="e.g. Maria…"
+                  aria-invalid={Boolean(fieldErrors.firstName)}
+                  aria-describedby={fieldErrors.firstName ? "firstName-error" : undefined}
+                  className={cn(
+                    "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                    fieldErrors.firstName && "border-destructive",
+                  )}
                 />
-                {fieldErrors.firstName && <p className="text-xs text-destructive">{fieldErrors.firstName}</p>}
+                {fieldErrors.firstName ? (
+                  <p id="firstName-error" role="alert" className="text-xs leading-5 text-destructive">
+                    {fieldErrors.firstName}
+                  </p>
+                ) : null}
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="lastName">Last Name</Label>
+
+              <div className="space-y-2">
+                <Label htmlFor="lastName" className="text-[#18243a]">
+                  Last Name
+                </Label>
                 <Input
                   id="lastName"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
                   value={lastName}
-                  onChange={(e) => { setLastName(e.target.value); setFieldErrors(p => ({ ...p, lastName: undefined })); }}
-                  className={cn(fieldErrors.lastName && "border-destructive")}
+                  onChange={(event) => {
+                    setLastName(event.target.value);
+                    setFieldErrors((prev) => ({ ...prev, lastName: undefined }));
+                    setStatus(null);
+                  }}
+                  placeholder="e.g. Santos…"
+                  aria-invalid={Boolean(fieldErrors.lastName)}
+                  aria-describedby={fieldErrors.lastName ? "lastName-error" : undefined}
+                  className={cn(
+                    "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                    fieldErrors.lastName && "border-destructive",
+                  )}
                 />
-                {fieldErrors.lastName && <p className="text-xs text-destructive">{fieldErrors.lastName}</p>}
+                {fieldErrors.lastName ? (
+                  <p id="lastName-error" role="alert" className="text-xs leading-5 text-destructive">
+                    {fieldErrors.lastName}
+                  </p>
+                ) : null}
               </div>
             </div>
 
-            {/* Username */}
-            <div className="space-y-1.5">
-              <Label htmlFor="username">Username</Label>
+            <div className="mt-5 space-y-2">
+              <Label htmlFor="username" className="text-[#18243a]">
+                Username
+              </Label>
               <Input
                 id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
                 value={username}
-                onChange={(e) => { setUsername(e.target.value); setFieldErrors(p => ({ ...p, username: undefined })); }}
-                className={cn(fieldErrors.username && "border-destructive")}
+                onChange={(event) => {
+                  setUsername(event.target.value);
+                  setFieldErrors((prev) => ({ ...prev, username: undefined }));
+                  setStatus(null);
+                }}
+                placeholder="e.g. maria_santos…"
+                aria-invalid={Boolean(fieldErrors.username)}
+                aria-describedby={fieldErrors.username ? "username-error" : "username-help"}
+                className={cn(
+                  "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                  fieldErrors.username && "border-destructive",
+                )}
               />
-              {fieldErrors.username
-                ? <p className="text-xs text-destructive">{fieldErrors.username}</p>
-                : <p className="text-xs text-muted-foreground">3–30 characters. Lowercase letters, numbers, and underscores only.</p>}
+              {fieldErrors.username ? (
+                <p id="username-error" role="alert" className="text-xs leading-5 text-destructive">
+                  {fieldErrors.username}
+                </p>
+              ) : (
+                <p id="username-help" className="text-xs leading-5 text-[#647087]">
+                  3–30 characters. Lowercase letters, numbers, and underscores only.
+                </p>
+              )}
             </div>
 
-            {/* Actions + status */}
-            <div className="flex items-center justify-between pt-1 border-t gap-4">
-              <AnimatePresence mode="wait">
-                {status && (
-                  <motion.p
-                    key={status.type}
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
+            <div className="mt-6 flex flex-col gap-3 border-t border-[#24334c]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-h-5 min-w-0" aria-live="polite">
+                {status ? (
+                  <p
                     className={cn(
-                      "flex items-center gap-1.5 text-sm",
-                      status.type === "success" ? "text-emerald-600" : "text-destructive"
+                      "flex items-start gap-1.5 text-sm leading-5",
+                      status.type === "success" ? "text-emerald-700" : "text-destructive",
                     )}
                   >
-                    {status.type === "success"
-                      ? <CheckCircle2 className="size-4 shrink-0" />
-                      : <AlertCircle className="size-4 shrink-0" />}
-                    {status.msg}
-                  </motion.p>
-                )}
-                {!status && <div />}
-              </AnimatePresence>
-              <div className="flex items-center gap-2 shrink-0">
-                <Button variant="outline" size="sm" onClick={handleReset}>Reset</Button>
-                <Button size="sm" onClick={() => void handleSave()} disabled={isSaving}>
-                  {isSaving && <Loader2 className="size-3.5 mr-1.5 animate-spin" />}
-                  {isSaving ? "Saving…" : "Save Changes"}
+                    {status.type === "success" ? (
+                      <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+                    ) : (
+                      <AlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+                    )}
+                    <span>{status.msg}</span>
+                  </p>
+                ) : lastUpdated ? (
+                  <p className="text-xs text-[#647087]">Last updated {lastUpdated}</p>
+                ) : null}
+              </div>
+
+              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleReset}
+                  disabled={!isDirty || isSaving}
+                  className="h-11 rounded-xl border-[#24334c]/15 bg-white px-4 text-[#18243a] shadow-sm hover:bg-[#18243a]/[0.03]"
+                >
+                  Discard Changes
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSaving}
+                  className="h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+                      Saving…
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </Button>
               </div>
             </div>
+          </form>
+        </section>
 
-          </CardContent>
-        </Card>
+        <aside className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-6">
+          <section
+            aria-labelledby="security-heading"
+            className="overflow-hidden rounded-2xl bg-[#18243a] p-5 text-white shadow-[0_18px_40px_rgb(24_36_58/0.16)] sm:p-6"
+          >
+            <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#e4b57a]">
+              <Shield aria-hidden="true" className="size-3.5" />
+              Security
+            </p>
+            <h2
+              id="security-heading"
+              className="mt-3 font-[family-name:var(--font-display)] text-2xl leading-tight tracking-[-0.025em]"
+            >
+              Sign-In Details
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-white/70">
+              Managed by your authentication provider. Password changes happen in Microsoft or your organization.
+            </p>
 
-        {/* ── Right: Sign-in info ── */}
-        <Card>
-          <CardContent className="p-6 space-y-4">
-            <div>
-              <p className="text-sm font-semibold">Sign-In Details</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Managed by your authentication provider.</p>
-            </div>
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Email Address</Label>
-                <div className="flex h-9 items-center rounded-md border border-input bg-muted/40 px-3 text-sm text-muted-foreground select-none truncate">
+            <div className="mt-6 space-y-4">
+              <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
+                  Email Address
+                </p>
+                <p className="mt-2 break-all text-sm font-medium text-white">
                   {user.email ?? "No email available"}
-                </div>
+                </p>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">Authentication Method</Label>
-                <div className="flex h-9 items-center rounded-md border border-input bg-muted/40 px-3 text-sm text-muted-foreground select-none">
+
+              <div className="rounded-xl border border-white/12 bg-white/6 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
+                  Authentication Method
+                </p>
+                <div className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
+                  <KeyRound aria-hidden="true" className="size-4 shrink-0 text-[#e4b57a]" />
                   Microsoft SSO
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Password changes are handled through your Microsoft account or organization&apos;s identity provider.
-              </p>
             </div>
-          </CardContent>
-        </Card>
+          </section>
+        </aside>
 
+        <section
+          aria-labelledby="account-actions-heading"
+          className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-2"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+              Account Actions
+            </p>
+            <h2
+              id="account-actions-heading"
+              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+            >
+              Session
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#647087]">
+              End your current session when you finish studying on this device.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[#24334c]/10 bg-white shadow-sm">
+            <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+              <div className="min-w-0">
+                <p className="font-semibold text-[#18243a]">Sign Out</p>
+                <p className="mt-1 text-sm leading-6 text-[#647087]">
+                  Ends your session on this device. Your courses and progress stay saved.
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => void handleSignOut()}
+                disabled={isSigningOut}
+                className="h-11 w-full shrink-0 rounded-xl border-[#24334c]/15 bg-white px-4 text-[#18243a] shadow-sm hover:bg-[#18243a]/[0.03] sm:w-auto"
+              >
+                {isSigningOut ? (
+                  <>
+                    <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+                    Signing Out…
+                  </>
+                ) : (
+                  <>
+                    <LogOut aria-hidden="true" className="size-4" />
+                    Sign Out
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
