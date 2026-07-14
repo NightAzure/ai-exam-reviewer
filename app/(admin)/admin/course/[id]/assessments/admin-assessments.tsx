@@ -251,7 +251,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
         {/* Assessment rows */}
         <div className="space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl shadow-sm bg-white p-5 space-y-3">
+            <div key={i} className="rounded-xl shadow-sm bg-card p-5 space-y-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center gap-3">
@@ -389,7 +389,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
       return <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Completed</Badge>;
     }
     if (!assessment.isEnabled) {
-      return <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">Disabled</Badge>;
+      return <Badge className="bg-muted text-foreground/80 hover:bg-muted">Disabled</Badge>;
     }
     return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100">Active</Badge>;
   };
@@ -437,7 +437,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900">Assessment Management</h1>
+          <h1 className="text-2xl font-bold text-foreground">Assessment Management</h1>
           <p className="text-sm text-muted-foreground truncate">{course.title}</p>
         </div>
         <Button
@@ -477,11 +477,11 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
           { label: "In Progress", value: stats.pending, icon: Clock, accent: "bg-amber-50 text-amber-600" },
           { label: "Avg Score", value: `${stats.avgScore.toFixed(1)}%`, icon: TrendingUp, accent: "bg-purple-50 text-purple-600" },
         ].map(({ label, value, icon: Icon, accent }) => (
-          <div key={label} className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-5">
+          <div key={label} className="rounded-2xl border border-border bg-card/90 shadow-sm p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500">{label}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+                <p className="text-xs font-medium text-muted-foreground">{label}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
               </div>
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${accent}`}>
                 <Icon className="w-5 h-5" />
@@ -494,16 +494,16 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
       {/* Filters */}
       <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
           <Input
             placeholder="Search assessments..."
-            className="pl-9 bg-white"
+            className="pl-9 bg-card"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-[180px] bg-white">
+          <SelectTrigger className="w-full sm:w-[180px] bg-card">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -517,12 +517,12 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
       {/* Most Missed Questions */}
       {lowestPerformingQuestions.length > 0 && (
         <motion.div variants={itemVariants}>
-          <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <div className="rounded-2xl border border-border bg-card/90 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-border/60 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-red-500" />
-              <h2 className="text-sm font-semibold text-gray-900">Most Missed Questions</h2>
+              <h2 className="text-sm font-semibold text-foreground">Most Missed Questions</h2>
             </div>
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-border/60">
               {lowestPerformingQuestions.map((question) => {
                 const assessment = assessments.find((item) => item.id === question.assessmentId);
                 return (
@@ -539,20 +539,20 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-gray-800">{question.questionText}</p>
+                        <p className="text-sm text-foreground">{question.questionText}</p>
                       </div>
                       <div className="flex gap-6 text-sm shrink-0">
                         <div>
-                          <p className="text-xs text-gray-400">Correct Rate</p>
+                          <p className="text-xs text-muted-foreground/70">Correct Rate</p>
                           <p className="font-semibold text-red-600">{question.correctRate.toFixed(1)}%</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400">Misses</p>
-                          <p className="font-semibold text-gray-900">{question.incorrectAttempts}</p>
+                          <p className="text-xs text-muted-foreground/70">Misses</p>
+                          <p className="font-semibold text-foreground">{question.incorrectAttempts}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400">Attempts</p>
-                          <p className="font-semibold text-gray-900">{question.totalAttempts}</p>
+                          <p className="text-xs text-muted-foreground/70">Attempts</p>
+                          <p className="font-semibold text-foreground">{question.totalAttempts}</p>
                         </div>
                       </div>
                     </div>
@@ -567,18 +567,18 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
       {/* Assessments List */}
       <motion.div variants={itemVariants} className="space-y-3">
         {filteredAssessments.map((assessment) => (
-          <div key={assessment.id} className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm hover:shadow-md transition-shadow">
+          <div key={assessment.id} className="rounded-2xl border border-border bg-card/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0 space-y-3">
                   {/* Title + status */}
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <h3 className="text-base font-semibold text-gray-900">{assessment.title}</h3>
+                    <h3 className="text-base font-semibold text-foreground">{assessment.title}</h3>
                     {getStatusBadge(assessment)}
                   </div>
 
                   {/* Meta row */}
-                  <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-gray-500">
+                  <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
                       {assessment.duration ? `${assessment.duration} min` : "No time limit"}
@@ -601,12 +601,12 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
 
                   {/* Release / deadline detail */}
                   {(assessment.releaseDate || assessment.deadline) && (
-                    <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-400">
+                    <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground/70">
                       {assessment.releaseDate && (
-                        <span><span className="font-medium text-gray-500">Release:</span> {new Date(assessment.releaseDate).toLocaleString()}</span>
+                        <span><span className="font-medium text-muted-foreground">Release:</span> {new Date(assessment.releaseDate).toLocaleString()}</span>
                       )}
                       {assessment.deadline && (
-                        <span><span className="font-medium text-gray-500">Deadline:</span> {new Date(assessment.deadline).toLocaleString()}</span>
+                        <span><span className="font-medium text-muted-foreground">Deadline:</span> {new Date(assessment.deadline).toLocaleString()}</span>
                       )}
                     </div>
                   )}
@@ -627,15 +627,15 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
 
                   {/* Stats row */}
                   {assessment.stats && (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-gray-100">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-border/60">
                       {[
-                        { label: "Enrolled", value: assessment.stats.totalStudents, color: "text-gray-900" },
+                        { label: "Enrolled", value: assessment.stats.totalStudents, color: "text-foreground" },
                         { label: "Completed", value: assessment.stats.completedStudents, color: "text-green-600" },
                         { label: "Avg Score", value: `${assessment.stats.averageScore.toFixed(1)}%`, color: "text-blue-600" },
                         { label: "Completion", value: `${assessment.stats.completionRate.toFixed(1)}%`, color: "text-purple-600" },
                       ].map(({ label, value, color }) => (
-                        <div key={label} className="bg-gray-50 rounded-xl px-3 py-2">
-                          <p className="text-xs text-gray-400">{label}</p>
+                        <div key={label} className="bg-muted/50 rounded-xl px-3 py-2">
+                          <p className="text-xs text-muted-foreground/70">{label}</p>
                           <p className={`text-sm font-bold mt-0.5 ${color}`}>{value}</p>
                         </div>
                       ))}
@@ -677,11 +677,11 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
         ))}
 
         {filteredAssessments.length === 0 && (
-          <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mx-auto">
-              <BarChart3 className="w-6 h-6 text-gray-400" />
+          <div className="rounded-2xl border border-border bg-card/90 shadow-sm p-12 text-center space-y-3">
+            <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mx-auto">
+              <BarChart3 className="w-6 h-6 text-muted-foreground/70" />
             </div>
-            <p className="text-sm text-gray-500">No assessments found matching your criteria.</p>
+            <p className="text-sm text-muted-foreground">No assessments found matching your criteria.</p>
             <Button size="sm" onClick={handleCreateNew}>
               <Plus className="w-4 h-4 mr-2" />
               Create Your First Assessment

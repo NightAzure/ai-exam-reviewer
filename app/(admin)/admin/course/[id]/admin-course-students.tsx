@@ -175,7 +175,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
       case "down":
         return <TrendingDown className="w-4 h-4 text-red-600" />;
       default:
-        return <Minus className="w-4 h-4 text-gray-400" />;
+        return <Minus className="w-4 h-4 text-muted-foreground/70" />;
     }
   };
 
@@ -186,7 +186,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-xl font-bold">Student Performance</CardTitle>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {isLoading ? "Loading students..." : `${filteredAndSortedStudents.length} students found`}
               </p>
               {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
@@ -200,7 +200,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
         <CardContent className="space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
               <Input
                 placeholder="Search students by name or email..."
                 className="pl-10"
@@ -332,7 +332,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                         .join("");
 
                       return (
-                        <TableRow key={student.id} className="hover:bg-gray-50">
+                        <TableRow key={student.id} className="hover:bg-muted/50">
                           <TableCell>
                             <div className="flex items-center gap-3">
                               <Avatar className="h-9 w-9 border-2 border-white shadow-sm shrink-0">
@@ -341,8 +341,8 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                                 </AvatarFallback>
                               </Avatar>
                               <div className="min-w-0">
-                                <p className="font-medium text-gray-900 truncate">{student.name}</p>
-                                <p className="text-xs text-gray-500 truncate">{student.email}</p>
+                                <p className="font-medium text-foreground truncate">{student.name}</p>
+                                <p className="text-xs text-muted-foreground truncate">{student.email}</p>
                               </div>
                             </div>
                           </TableCell>
@@ -355,7 +355,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Progress value={student.progress} className="h-1.5 w-16" />
-                              <span className="text-sm font-medium text-gray-700 tabular-nums">
+                              <span className="text-sm font-medium text-foreground/80 tabular-nums">
                                 {student.progress}%
                               </span>
                             </div>
@@ -377,14 +377,14 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                             </span>
                           </TableCell>
                           <TableCell className="hidden lg:table-cell">
-                            <span className="text-sm text-gray-600">{student.lastActive}</span>
+                            <span className="text-sm text-muted-foreground">{student.lastActive}</span>
                           </TableCell>
                         </TableRow>
                       );
                     })}
                 {!isLoading && paginatedStudents.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-sm text-gray-500">
+                    <TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">
                       No students found.
                     </TableCell>
                   </TableRow>
@@ -395,7 +395,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Showing {(currentPage - 1) * pageSize + 1} to{" "}
                 {Math.min(currentPage * pageSize, filteredAndSortedStudents.length)} of{" "}
                 {filteredAndSortedStudents.length} students
@@ -463,7 +463,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
             <div className="space-y-2">
               <Label htmlFor="student-email">Student Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
                 <Input
                   id="student-email"
                   type="email"
@@ -473,7 +473,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                   onChange={(e) => setStudentEmail(e.target.value)}
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Enter the email address of the student you want to add to this course.
               </p>
             </div>

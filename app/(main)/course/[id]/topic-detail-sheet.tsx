@@ -20,9 +20,9 @@ interface TopicDetailSheetProps {
 
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-gray-100 p-3.5">
-      <div className="text-[10px] uppercase tracking-[0.18em] text-gray-400">{label}</div>
-      <div className="mt-1.5 text-base font-semibold text-gray-800">{value}</div>
+    <div className="rounded-2xl border border-border bg-muted p-3.5">
+      <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">{label}</div>
+      <div className="mt-1.5 text-base font-semibold text-foreground">{value}</div>
     </div>
   );
 }
@@ -94,10 +94,10 @@ export default function TopicDetailSheet({
         <div className="flex-1 overflow-auto px-6 pb-6 space-y-4">
 
           {/* Hero insight card — slightly tinted with gray */}
-          <div className="rounded-[24px] border border-gray-200 bg-gray-50 p-5">
+          <div className="rounded-[24px] border border-border bg-muted/50 p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 space-y-2">
-                <h2 className="text-lg font-semibold text-gray-900 leading-tight truncate">
+                <h2 className="text-lg font-semibold text-foreground leading-tight truncate">
                   {topic.name}
                 </h2>
                 <span
@@ -108,9 +108,9 @@ export default function TopicDetailSheet({
               </div>
 
               {/* Mastery pill */}
-              <div className="rounded-2xl border border-gray-300 bg-white px-4 py-3 text-right shrink-0 shadow-sm">
-                <div className="text-[10px] uppercase tracking-[0.18em] text-gray-400">Mastery</div>
-                <div className="mt-1 text-3xl font-semibold text-gray-900 tabular-nums">{topic.progress}%</div>
+              <div className="rounded-2xl border border-border bg-card px-4 py-3 text-right shrink-0 shadow-sm">
+                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">Mastery</div>
+                <div className="mt-1 text-3xl font-semibold text-foreground tabular-nums">{topic.progress}%</div>
               </div>
             </div>
 
@@ -126,13 +126,13 @@ export default function TopicDetailSheet({
           <div className="rounded-[24px] border border-primary/20 bg-primary/5 p-5 space-y-3">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-medium text-gray-900">Recommended next step</div>
-                <div className="mt-1 text-sm text-gray-500 leading-relaxed">{recommendedNote}</div>
+                <div className="text-sm font-medium text-foreground">Recommended next step</div>
+                <div className="mt-1 text-sm text-muted-foreground leading-relaxed">{recommendedNote}</div>
               </div>
-              <span className="text-xs text-gray-400 shrink-0">Now</span>
+              <span className="text-xs text-muted-foreground/70 shrink-0">Now</span>
             </div>
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs text-gray-400">
+              <div className="flex justify-between text-xs text-muted-foreground/70">
                 <span>Overall mastery</span>
                 <span>{topic.progress}%</span>
               </div>
@@ -149,11 +149,11 @@ export default function TopicDetailSheet({
 
           {/* Topic description */}
           {topic.description && (
-            <div className="rounded-[24px] border border-gray-200 bg-gray-50 px-5 py-4 space-y-1">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+            <div className="rounded-[24px] border border-border bg-muted/50 px-5 py-4 space-y-1">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                 About this topic
               </p>
-              <p className="text-sm text-gray-700 leading-relaxed">{topic.description}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">{topic.description}</p>
             </div>
           )}
 
@@ -166,19 +166,19 @@ export default function TopicDetailSheet({
                 className={`group w-full rounded-2xl border px-4 py-4 text-left transition-all ${
                   action.primary
                     ? "bg-primary border-primary text-white hover:opacity-90"
-                    : "bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+                    : "bg-card border-border hover:bg-muted/50 hover:border-border"
                 }`}
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className={`font-medium ${action.primary ? "text-white" : "text-gray-800"}`}>
+                    <div className={`font-medium ${action.primary ? "text-white" : "text-foreground"}`}>
                       {action.label}
                     </div>
-                    <div className={`text-sm mt-0.5 ${action.primary ? "text-white/70" : "text-gray-400"}`}>
+                    <div className={`text-sm mt-0.5 ${action.primary ? "text-white/70" : "text-muted-foreground/70"}`}>
                       {action.hint}
                     </div>
                   </div>
-                  <span className={`text-lg transition-transform group-hover:translate-x-0.5 ${action.primary ? "text-white/70" : "text-gray-400"}`}>
+                  <span className={`text-lg transition-transform group-hover:translate-x-0.5 ${action.primary ? "text-white/70" : "text-muted-foreground/70"}`}>
                     →
                   </span>
                 </div>
@@ -189,13 +189,13 @@ export default function TopicDetailSheet({
               href={`/course/${courseId}/chat?topic=${encodeURIComponent(topic.name)}`}
               className="block w-full"
             >
-              <button className="group w-full rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 px-4 py-4 text-left transition-all">
+              <button className="group w-full rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-border px-4 py-4 text-left transition-all">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="font-medium text-gray-800">Ask AI Tutor</div>
-                    <div className="text-sm mt-0.5 text-gray-400">Get unstuck fast</div>
+                    <div className="font-medium text-foreground">Ask AI Tutor</div>
+                    <div className="text-sm mt-0.5 text-muted-foreground/70">Get unstuck fast</div>
                   </div>
-                  <span className="text-lg text-gray-400 transition-transform group-hover:translate-x-0.5">→</span>
+                  <span className="text-lg text-muted-foreground/70 transition-transform group-hover:translate-x-0.5">→</span>
                 </div>
               </button>
             </Link>

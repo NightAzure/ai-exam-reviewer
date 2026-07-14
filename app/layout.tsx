@@ -17,8 +17,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 export const metadata: Metadata = {
-  title: "AI Reviewer",
-  description: "",
+  title: {
+    default: "Exam Reviewer",
+    template: "%s · Exam Reviewer",
+  },
+  description:
+    "AI-powered board exam review platform with adaptive practice, mastery tracking, and a personal AI tutor.",
 };
 
 export default function RootLayout({
@@ -38,14 +42,6 @@ export default function RootLayout({
             </UserProvider>
           </SWRProvider>
           <Toaster richColors position="top-right" />
-          {/*<ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>*/}
         </body>
       </html>
     </>

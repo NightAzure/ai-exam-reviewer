@@ -19,11 +19,11 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
   };
 
   return (
-    <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
+    <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-base font-semibold">Course Statistics</h3>
-          <p className="text-xs text-gray-500">Real-time overview</p>
+          <p className="text-xs text-muted-foreground">Real-time overview</p>
         </div>
         {isLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
       </div>
@@ -35,7 +35,7 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
               <Users className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">{stats.totalEnrolled} Students</p>
+              <p className="text-sm font-medium text-foreground">{stats.totalEnrolled} Students</p>
               <p className="text-xs text-blue-600">Enrolled in course</p>
             </div>
           </div>
@@ -47,7 +47,7 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
               <div className="bg-purple-500/10 p-1.5 rounded-lg">
                 <TrendingUp className="w-4 h-4 text-purple-600" />
               </div>
-              <p className="text-sm font-medium text-gray-900">Average Score</p>
+              <p className="text-sm font-medium text-foreground">Average Score</p>
             </div>
             <span className="text-lg font-bold text-purple-600">{stats.avgScore}%</span>
           </div>
@@ -65,7 +65,7 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
               <Award className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">{stats.completionRate}%</p>
+              <p className="text-sm font-medium text-foreground">{stats.completionRate}%</p>
               <p className="text-xs text-green-600">Completion rate</p>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
               <BookOpen className="w-5 h-5 text-orange-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">{stats.activeToday} Active</p>
+              <p className="text-sm font-medium text-foreground">{stats.activeToday} Active</p>
               <p className="text-xs text-orange-600">Active today</p>
             </div>
           </div>

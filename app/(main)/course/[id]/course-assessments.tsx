@@ -115,10 +115,10 @@ export default function CourseAssessment({ course }: CourseProps) {
 
   return (
     <>
-      <Card className="border border-gray-200 rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition bg-white">
+      <Card className="border border-border rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition bg-card">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold flex items-center gap-2 text-gray-900">
-            <ClipboardList className="w-4 h-4 text-gray-500" />
+          <CardTitle className="text-base font-semibold flex items-center gap-2 text-foreground">
+            <ClipboardList className="w-4 h-4 text-muted-foreground" />
             Assessments
           </CardTitle>
         </CardHeader>
@@ -160,25 +160,25 @@ export default function CourseAssessment({ course }: CourseProps) {
                     setOpenPreview(true);
                   }}
                   key={assessment.id}
-                  className="group border border-gray-100 rounded-xl p-4 hover:border-gray-300 hover:shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all bg-gray-50/60 cursor-pointer"
+                  className="group border border-border/60 rounded-xl p-4 hover:border-border hover:shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all bg-muted/30 cursor-pointer"
                 >
                   <div className="flex justify-between items-start gap-3">
                     <div className="space-y-2 flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-700 truncate">
+                      <p className="text-sm font-semibold text-foreground group-hover:text-foreground/80 truncate">
                         {assessment.title}
                       </p>
                       <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
                           {assessment.deadline
                             ? new Date(assessment.deadline).toLocaleDateString()
                             : "No deadline"}
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                           <Hash className="w-3 h-3" />
                           {questionCount} questions
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                           <Trophy className="w-3 h-3" />
                           {attempts.length}/{assessment.maxAttempts} attempts
                         </span>
@@ -188,9 +188,9 @@ export default function CourseAssessment({ course }: CourseProps) {
                           Latest: {score}%
                         </span>
                       ) : attemptsLoading ? (
-                        <span className="text-xs italic text-gray-400">Loading...</span>
+                        <span className="text-xs italic text-muted-foreground/70">Loading...</span>
                       ) : (
-                        <span className="text-xs italic text-gray-400">Not yet taken</span>
+                        <span className="text-xs italic text-muted-foreground/70">Not yet taken</span>
                       )}
                     </div>
                     {latestAttempt ? (
@@ -209,7 +209,7 @@ export default function CourseAssessment({ course }: CourseProps) {
                     ) : (
                       <Button
                         size="sm"
-                        className="shrink-0 text-xs bg-gray-900 hover:bg-gray-700 text-white"
+                        className="shrink-0 text-xs bg-primary hover:bg-primary/90 text-white"
                         disabled={!canStartAssessment(assessment, attempts)}
                         onClick={(event) => {
                           event.stopPropagation();

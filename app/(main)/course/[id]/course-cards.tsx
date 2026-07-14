@@ -16,21 +16,21 @@ export const CourseInsights = ({ course }: CourseProps) => {
   const strongPct = total > 0 ? Math.round((strengths.length / total) * 100) : 0;
 
   return (
-    <Card className="p-5 rounded-xl border border-gray-200 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition space-y-4">
+    <Card className="p-5 rounded-xl border border-border bg-card shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-gray-400" />
-          <span className="text-sm font-semibold text-gray-900">Mastery Overview</span>
+          <BarChart2 className="w-4 h-4 text-muted-foreground/70" />
+          <span className="text-sm font-semibold text-foreground">Mastery Overview</span>
         </div>
         {total > 0 && (
-          <span className="text-xs text-gray-400">{strongPct}% mastered</span>
+          <span className="text-xs text-muted-foreground/70">{strongPct}% mastered</span>
         )}
       </div>
 
       {/* Ratio bar */}
       {total > 0 && (
-        <div className="h-2 w-full rounded-full bg-gray-100 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
           <motion.div
             className="h-full rounded-full bg-emerald-500"
             initial={{ width: 0 }}
@@ -42,7 +42,7 @@ export const CourseInsights = ({ course }: CourseProps) => {
 
       {/* Strengths */}
       <div className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
           You know these
         </p>
         {strengths.length > 0 ? (
@@ -57,16 +57,16 @@ export const CourseInsights = ({ course }: CourseProps) => {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-gray-400 italic">No data yet</p>
+          <p className="text-xs text-muted-foreground/70 italic">No data yet</p>
         )}
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-100" />
+      <div className="border-t border-border/60" />
 
       {/* Weaknesses */}
       <div className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
           Keep working on
         </p>
         {weaknesses.length > 0 ? (
@@ -81,7 +81,7 @@ export const CourseInsights = ({ course }: CourseProps) => {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-gray-400 italic">No data yet</p>
+          <p className="text-xs text-muted-foreground/70 italic">No data yet</p>
         )}
       </div>
     </Card>
@@ -98,7 +98,7 @@ export const CourseRecommendation = ({ course }: CourseProps) => {
       <p className="text-sm font-semibold text-primary">
         Recommended Next Step
       </p>
-      <p className="text-sm text-gray-800">{suggestion}</p>
+      <p className="text-sm text-foreground">{suggestion}</p>
       <Link href={`/course/${course.id}/chat?review=${focusTopic}`}>
         <Button size="sm" className="w-full">
           Review with AI Buddy
@@ -194,7 +194,7 @@ export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDi
               {/* Primary CTA — solid white */}
               <Button
                 size="sm"
-                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-white text-primary hover:bg-gray-100"
+                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-card text-primary hover:bg-muted"
                 onClick={onDiagnostic}
               >
                 <Brain className="size-4" />
@@ -204,7 +204,7 @@ export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDi
               <Link href={`/course/${course.id}/chat`}>
                 <Button
                   size="sm"
-                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-slate-900 text-white hover:bg-slate-800 border border-white"
+                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
                 >
                   <Bot className="size-4" />
                   Ask AI Tutor
@@ -216,7 +216,7 @@ export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDi
               {/* Primary CTA — solid white */}
               <Button
                 size="sm"
-                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-white text-primary hover:bg-gray-100"
+                className="rounded-lg font-semibold shadow-md gap-1.5 whitespace-nowrap bg-card text-primary hover:bg-muted"
                 disabled={!weakestTopic}
                 onClick={() => onPractice(weakestTopic)}
               >
@@ -227,7 +227,7 @@ export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDi
               {onFlashcards && (
                 <Button
                   size="sm"
-                  className="rounded-lg font-medium gap-1.5 whitespace-nowrap bg-slate-900 text-white hover:bg-slate-600 border border-white"
+                  className="rounded-lg font-medium gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
                   onClick={onFlashcards}
                 >
                   <Layers className="size-4" />
@@ -238,7 +238,7 @@ export const CourseAICTA = ({ course, weakestTopic, onPractice, onNotesTab, onDi
               <Link href={`/course/${course.id}/chat`}>
                 <Button
                   size="sm"
-                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-slate-900 text-white hover:bg-slate-800 border border-white"
+                  className="rounded-lg font-semibold gap-1.5 whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/25 backdrop-blur-sm"
                 >
                   <Bot className="size-4" />
                   Ask AI Tutor

@@ -155,8 +155,8 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Platform overview</p>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Platform overview</p>
         </div>
         <Alert variant="destructive">
           <AlertDescription>{error ?? "Unable to load dashboard analytics."}</AlertDescription>
@@ -168,8 +168,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Welcome back! Here&apos;s an overview of your platform
         </p>
       </div>
@@ -210,12 +210,12 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               User Growth Trend
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Total users vs active sign-ins over 6 months
             </p>
           </CardHeader>
@@ -268,12 +268,12 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               Assessment Completion
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Student progress across enrolled learners
             </p>
           </CardHeader>
@@ -308,12 +308,12 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               Course Performance
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Enrollment volume with average assessment score by course
             </p>
           </CardHeader>
@@ -362,12 +362,12 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               Student Performance
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Distribution of student performance levels
             </p>
           </CardHeader>
@@ -376,14 +376,14 @@ export default function AdminDashboardPage() {
               {analytics.studentPerformanceData.map((item, index) => (
                 <div key={item.category}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-foreground/80">
                       {item.category}
                     </span>
-                    <span className="text-sm font-bold text-gray-900">
+                    <span className="text-sm font-bold text-foreground">
                       {item.count} ({item.percentage}%)
                     </span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-3">
+                  <div className="w-full bg-muted rounded-full h-3">
                     <div
                       className={`h-3 rounded-full transition-all ${
                         index === 0
@@ -401,11 +401,11 @@ export default function AdminDashboardPage() {
               ))}
             </div>
             <div className="mt-5 p-3 rounded-lg bg-blue-50 border border-blue-100">
-              <p className="text-sm text-gray-700">
-                <span className="font-semibold text-gray-900">Tracked Students:</span>{" "}
+              <p className="text-sm text-foreground/80">
+                <span className="font-semibold text-foreground">Tracked Students:</span>{" "}
                 {analytics.studentPerformanceData.reduce((sum, item) => sum + item.count, 0)}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Distribution is based on average completed assessment scores.
               </p>
             </div>
@@ -414,12 +414,12 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               Weekly Platform Activity
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Active users by week
             </p>
           </CardHeader>
@@ -449,12 +449,12 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
+        <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold">
               Platform Signals
             </CardTitle>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Derived trends and areas to watch
             </p>
           </CardHeader>
@@ -471,10 +471,10 @@ export default function AdminDashboardPage() {
                   <div className="flex items-start gap-3">
                     <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${style.iconClass}`} />
                     <div>
-                      <p className="font-semibold text-gray-900 text-sm">
+                      <p className="font-semibold text-foreground text-sm">
                         {insight.title}
                       </p>
-                      <p className="text-xs text-gray-600 mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         {insight.description}
                       </p>
                     </div>

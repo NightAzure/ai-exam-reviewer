@@ -509,7 +509,7 @@ export default function AssessmentSheet({
                   ? "bg-red-100 border-red-500 text-red-700"
                   : getQuestionStatus(questionIndex) === "answered"
                     ? "bg-blue-100 border-blue-500 text-blue-700"
-                    : "bg-gray-100 border-gray-300 text-gray-600"
+                    : "bg-muted border-border text-muted-foreground"
             }`}
           >
             {questionIndex + 1}
@@ -801,7 +801,7 @@ export default function AssessmentSheet({
                               ? "bg-green-500"
                               : status === "incorrect"
                                 ? "bg-red-500"
-                                : "bg-gray-400"
+                                : "bg-muted-foreground/50"
                           }`}
                         />
                       ) : null}

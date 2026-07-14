@@ -149,10 +149,10 @@ export default function CourseNotes({ course }: CourseProps) {
 
   return (
     <>
-      <Card className="border border-gray-200 rounded-xl bg-white shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition">
+      <Card className="border border-border rounded-xl bg-card shadow-[0_2px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.13)] transition">
         <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <CardTitle className="text-base font-semibold flex items-center gap-2 text-gray-900">
-            <NotebookPen className="w-4 h-4 text-gray-500" />
+          <CardTitle className="text-base font-semibold flex items-center gap-2 text-foreground">
+            <NotebookPen className="w-4 h-4 text-muted-foreground" />
             Personal Course Notes
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -187,7 +187,7 @@ export default function CourseNotes({ course }: CourseProps) {
             )}
             <Button
               size="sm"
-              className="h-8 text-xs gap-1.5 bg-gray-900 hover:bg-gray-700 text-white"
+              className="h-8 text-xs gap-1.5 bg-primary hover:bg-primary/90 text-white"
               onClick={openCreateDialog}
             >
               <Plus className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ export default function CourseNotes({ course }: CourseProps) {
           {!isLoading && notes.length > 0 && (
             <div className="flex gap-2 items-center">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/70" />
                 <Input
                   placeholder="Search notes..."
                   value={searchQuery}
@@ -236,7 +236,7 @@ export default function CourseNotes({ course }: CourseProps) {
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="border border-gray-100 rounded-xl p-4 flex justify-between items-start bg-gray-50"
+                  className="border border-border/60 rounded-xl p-4 flex justify-between items-start bg-muted/50"
                 >
                   <div className="space-y-2 flex-1">
                     <Skeleton className="h-4 w-2/5" />
@@ -270,16 +270,16 @@ export default function CourseNotes({ course }: CourseProps) {
                   setNote(note);
                 }}
                 key={note.id}
-                className="group border border-gray-100 rounded-xl p-4 hover:border-gray-300 hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] active:bg-gray-50 transition-all flex justify-between items-start bg-gray-50/60 cursor-pointer"
+                className="group border border-border/60 rounded-xl p-4 hover:border-border hover:shadow-[0_2px_12px_rgba(0,0,0,0.07)] active:bg-muted/50 transition-all flex justify-between items-start bg-muted/30 cursor-pointer"
               >
                 <div className="space-y-1.5 flex-1 min-w-0 pr-2">
-                  <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-700 truncate">
+                  <p className="text-sm font-semibold text-foreground group-hover:text-foreground/80 truncate">
                     {note.title}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-muted-foreground/70">
                     Updated {new Date(note.updatedAt).toLocaleString()}
                   </p>
-                  <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                     {note.content.replace(/[#*`_~>]/g, "").trim() || "No content"}
                   </p>
                 </div>

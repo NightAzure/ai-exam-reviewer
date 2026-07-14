@@ -129,14 +129,14 @@ export default function ManageCoursePage({ id }: ManageCoursePageProps) {
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 rounded-xl bg-gray-100 p-1 h-auto">
-          <TabsTrigger value="general" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">General</TabsTrigger>
-          <TabsTrigger value="documents" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 rounded-xl bg-muted p-1 h-auto">
+          <TabsTrigger value="general" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">General</TabsTrigger>
+          <TabsTrigger value="documents" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
             <span className="sm:hidden">Documents</span>
             <span className="hidden sm:inline">RAG Documents</span>
           </TabsTrigger>
-          <TabsTrigger value="members" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">Members</TabsTrigger>
-          <TabsTrigger value="settings" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">Settings</TabsTrigger>
+          <TabsTrigger value="members" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Members</TabsTrigger>
+          <TabsTrigger value="settings" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">

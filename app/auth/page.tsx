@@ -17,8 +17,8 @@ const AUTH_CONTENT = {
     heroDescription:
       "Review smarter with guided coursework, adaptive practice, and progress tracking that stays readable on every screen.",
     legal:
-      "By continuing, you agree to MyPua's Terms of Service and Privacy Policy",
-    ctaTitle: "Welcome to MyPua",
+      "By continuing, you agree to Exam Reviewer's Terms of Service and Privacy Policy",
+    ctaTitle: "Welcome to Exam Reviewer",
     ctaSubtitle: "Your AI-powered exam review companion",
     features: [
       {
@@ -40,14 +40,14 @@ const AUTH_CONTENT = {
   },
   register: {
     badge: "AI-Powered Learning",
-    title: "Join MyPua",
+    title: "Create Your Account",
     subtitle: "Create your account and start achieving more",
     heroTitle: "Everything You Need to Excel in Your Exams",
     heroDescription:
       "Set up your account once and keep your review workflow consistent across desktop, tablet, and phone.",
     legal:
-      "By creating an account, you agree to MyPua's Terms of Service and Privacy Policy",
-    ctaTitle: "Register to MyPua",
+      "By creating an account, you agree to Exam Reviewer's Terms of Service and Privacy Policy",
+    ctaTitle: "Register to Exam Reviewer",
     ctaSubtitle: "AI-powered exam review companion",
     features: [
       {
@@ -82,7 +82,7 @@ export default function Auth() {
 
   return (
     <div>
-      <div className="relative min-h-screen overflow-x-hidden bg-slate-50 lg:hidden">
+      <div className="relative min-h-screen overflow-x-hidden bg-page lg:hidden">
         <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 sm:py-6">
           <motion.section
             initial={{ opacity: 0, y: 24 }}
@@ -130,7 +130,7 @@ export default function Auth() {
                   >
                     <div className="mb-4 px-1">
                       <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                        Join MyPua
+                        Create Your Account
                       </h1>
                       <p className="mt-2 text-sm leading-6 text-slate-600">
                         Create your account and start reviewing on any device.
@@ -171,7 +171,7 @@ export default function Auth() {
         </div>
       </div>
 
-      <div className="relative hidden min-h-screen w-full overflow-hidden bg-gray-50 lg:flex">
+      <div className="relative hidden min-h-screen w-full overflow-hidden bg-page lg:flex">
         <motion.div
           animate={{
             x: isLogin ? "0%" : "100%",
@@ -180,7 +180,7 @@ export default function Auth() {
             duration: 0.8,
             ease: [0.45, 0, 0.25, 1],
           }}
-          className="flex flex-1 items-center justify-center bg-white p-8 shadow-xl z-0"
+          className="flex flex-1 items-center justify-center bg-background p-8 shadow-xl z-0"
         >
           <div className="w-full max-w-md">
             <AnimatePresence mode="wait">
@@ -207,7 +207,7 @@ export default function Auth() {
                   </Card>
 
                   <p className="text-center text-xs text-muted-foreground mt-6">
-                    By continuing, you agree to MyPua&apos;s Terms of Service and Privacy Policy
+                    By continuing, you agree to Exam Reviewer&apos;s Terms of Service and Privacy Policy
                   </p>
                 </motion.div>
               ) : (
@@ -219,7 +219,7 @@ export default function Auth() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="mb-6 text-center">
-                    <h2 className="text-2xl font-bold tracking-tight">Join MyPua</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Create Your Account</h2>
                     <p className="text-muted-foreground text-sm mt-1">
                       Create your account and start achieving more
                     </p>
@@ -249,7 +249,7 @@ export default function Auth() {
                   </Card>
 
                   <p className="text-center text-xs text-muted-foreground mt-6">
-                    By creating an account, you agree to MyPua&apos;s Terms of Service and Privacy Policy
+                    By creating an account, you agree to Exam Reviewer&apos;s Terms of Service and Privacy Policy
                   </p>
                 </motion.div>
               )}
@@ -265,7 +265,7 @@ export default function Auth() {
             duration: 0.5,
             ease: [0.45, 0, 0.25, 1],
           }}
-          className="flex flex-1 items-center justify-center bg-gradient-to-br from-blue-900 via-red-900 to-blue-950 p-8 text-white z-10"
+          className="flex flex-1 items-center justify-center bg-gradient-to-br from-slate-900 via-red-950 to-slate-950 p-8 text-white z-10"
         >
           <div className="max-w-md space-y-6">
             <AnimatePresence mode="wait">
@@ -282,7 +282,7 @@ export default function Auth() {
                     <div className="inline-flex items-center justify-center size-16 rounded-xl bg-white/10 backdrop-blur-sm mb-4 shadow-lg">
                       <GraduationCap className="size-8 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight mb-2">Welcome to MyPua</h1>
+                    <h1 className="text-3xl font-bold tracking-tight mb-2">Welcome to Exam Reviewer</h1>
                     <p className="text-sm text-white/70">
                       Your AI-powered exam review companion
                     </p>
@@ -346,7 +346,7 @@ export default function Auth() {
                     <div className="inline-flex items-center justify-center size-16 rounded-xl bg-white/10 backdrop-blur-sm mb-4 shadow-lg">
                       <GraduationCap className="size-8 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight mb-2">Register to MyPua</h1>
+                    <h1 className="text-3xl font-bold tracking-tight mb-2">Register to Exam Reviewer</h1>
                     <p className="text-sm text-white/70">
                       AI-powered exam review companion
                     </p>

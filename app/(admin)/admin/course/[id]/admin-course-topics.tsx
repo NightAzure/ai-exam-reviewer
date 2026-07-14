@@ -11,7 +11,7 @@ interface AdminCourseTopicsProps {
 
 export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
   return (
-    <Card className="border border-gray-200 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
+    <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Target className="w-5 h-5 text-primary" />
@@ -19,7 +19,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
             Topic Performance
           </CardTitle>
         </div>
-        <span className="text-xs text-gray-500">Student progress by topic</span>
+        <span className="text-xs text-muted-foreground">Student progress by topic</span>
       </div>
 
       <CardContent className="space-y-3 p-0">
@@ -61,7 +61,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.32 }}
-                className="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition"
+                className="p-3 rounded-xl border border-border/60 bg-muted/50 hover:bg-muted transition"
               >
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div className="min-w-0 flex-1">
@@ -73,7 +73,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
                       <span className={`text-[11px] px-2 py-0.5 rounded-full ${badgeClass}`}>
                         {status}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         {topic.progress < 40
                           ? "Highest review priority"
                           : topic.progress < 75
@@ -88,7 +88,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
                   </Badge>
                 </div>
 
-                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-border rounded-full overflow-hidden">
                   <div
                     className={`${colorClass} h-full rounded-full transition-all duration-500`}
                     style={{ width: `${topic.progress}%` }}
@@ -98,7 +98,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
             );
           })
         ) : (
-          <div className="text-center py-6 text-sm text-gray-500">
+          <div className="text-center py-6 text-sm text-muted-foreground">
             No topics available
           </div>
         )}

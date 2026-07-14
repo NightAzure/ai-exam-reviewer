@@ -48,7 +48,7 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
           {/* Left column */}
           <div className="space-y-5">
             {/* Stats card */}
-            <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-5 space-y-4">
+            <div className="rounded-2xl border border-border bg-card/90 shadow-sm p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <Skeleton className="h-5 w-36" />
@@ -77,7 +77,7 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
             </div>
 
             {/* Topics card */}
-            <div className="rounded-2xl border border-gray-200 bg-white/90 shadow-sm p-5 space-y-4">
+            <div className="rounded-2xl border border-border bg-card/90 shadow-sm p-5 space-y-4">
               <div className="space-y-1">
                 <Skeleton className="h-5 w-36" />
                 <Skeleton className="h-3 w-28" />
@@ -106,14 +106,14 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
             </div>
 
             {/* Table rows */}
-            <div className="rounded-xl border border-gray-100 overflow-hidden">
-              <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 grid grid-cols-4 gap-4">
+            <div className="rounded-xl border border-border/60 overflow-hidden">
+              <div className="px-4 py-3 bg-muted/50 border-b border-border/60 grid grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <Skeleton key={i} className="h-3 w-full" />
                 ))}
               </div>
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="px-4 py-3.5 border-b border-gray-50 last:border-0 grid grid-cols-4 gap-4 items-center">
+                <div key={i} className="px-4 py-3.5 border-b border-border/40 last:border-0 grid grid-cols-4 gap-4 items-center">
                   <div className="flex items-center gap-3">
                     <Skeleton className="size-8 rounded-full shrink-0" />
                     <Skeleton className="h-4 w-24" />
@@ -144,11 +144,11 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
         {/* Right Column  */}
         <div className="space-y-6 min-w-0">
           <Tabs defaultValue="students" className="w-full">
-            <TabsList className="grid grid-cols-2 w-full mb-4 rounded-xl bg-gray-100 p-1 h-auto">
-              <TabsTrigger value="students" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+            <TabsList className="grid grid-cols-2 w-full mb-4 rounded-xl bg-muted p-1 h-auto">
+              <TabsTrigger value="students" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
                 Students
               </TabsTrigger>
-              <TabsTrigger value="insights" className="rounded-lg py-2.5 text-sm font-medium text-gray-500 transition-all duration-150 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+              <TabsTrigger value="insights" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
                 Insights
               </TabsTrigger>
             </TabsList>

@@ -19,9 +19,9 @@ import {
   DialogContent,
   DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useIsActive } from "@/utils/activePath";
 import { useMyCourses } from "@/hooks/use-my-courses";
 import { useCustomSidebar } from "./sidebar-context";
@@ -29,18 +29,10 @@ import { useSidebarThreads } from "@/hooks/use-sidebar-threads";
 import { useUser } from "@/components/providers/user-provider";
 import { createClient } from "@/utils/supabase/client";
 import { clearSWRCache } from "@/lib/swr-cache";
+import { cn } from "@/lib/utils";
 
 const SIDEBAR_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
-
-// Palette
-const BG = "#1c1f26";
-const DIVIDER = "rgba(255,255,255,0.07)";
-const TEXT_PRIMARY = "#ffffff";
-const TEXT_MUTED = "rgba(255,255,255,0.45)";
-const TEXT_SECTION = "rgba(255,255,255,0.3)";
-const ACTIVE_BG = "rgba(185,28,28,0.2)";
-const HOVER_BG = "rgba(255,255,255,0.06)";
 
 const supabase = createClient();
 
@@ -90,12 +82,10 @@ export const AppSidebar = React.memo(function AppSidebar() {
           : { width: isOpen ? SIDEBAR_WIDTH : COLLAPSED_WIDTH, x: 0 }
       }
       transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-      className={`flex flex-col overflow-hidden z-50 ${isMobile ? "fixed bottom-0 left-0" : "relative flex-shrink-0 h-full"}`}
-      style={{
-        background: BG,
-        borderRight: `1px solid ${DIVIDER}`,
-        top: isMobile ? "62px" : undefined,
-      }}
+      className={cn(
+        "flex flex-col overflow-hidden z-50 bg-shell border-r border-shell-border",
+        isMobile ? "fixed bottom-0 left-0 top-[62px]" : "relative flex-shrink-0 h-full",
+      )}
     >
       {/* Nav */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 scrollbar-hide">
@@ -105,8 +95,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest"
-              style={{ color: TEXT_SECTION }}
+              className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest text-shell-faint"
             >
               Menu
             </motion.p>
@@ -139,24 +128,12 @@ export const AppSidebar = React.memo(function AppSidebar() {
             <div>
               <button
                 onClick={() => !isActive("/dashboard") && router.push("/dashboard")}
-                className="w-full flex items-center gap-3 px-3 py-3.5 rounded-lg text-sm font-medium transition-all duration-150"
-                style={
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-3.5 rounded-lg text-sm font-medium transition-colors duration-150",
                   isActive("/dashboard")
-                    ? { background: ACTIVE_BG, color: TEXT_PRIMARY }
-                    : { color: TEXT_MUTED }
-                }
-                onMouseEnter={(e) => {
-                  if (!isActive("/dashboard")) {
-                    (e.currentTarget as HTMLButtonElement).style.background = HOVER_BG;
-                    (e.currentTarget as HTMLButtonElement).style.color = TEXT_PRIMARY;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive("/dashboard")) {
-                    (e.currentTarget as HTMLButtonElement).style.background = "";
-                    (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                  }
-                }}
+                    ? "bg-shell-active text-shell-foreground"
+                    : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
+                )}
                 title={!isOpen ? "Courses" : undefined}
               >
                 <BookOpen className="w-[18px] h-[18px] flex-shrink-0" />
@@ -196,29 +173,17 @@ export const AppSidebar = React.memo(function AppSidebar() {
                     transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
                     className="overflow-hidden ml-4 mt-0.5"
                   >
-                    <div className="pl-3 flex flex-col gap-1 border-l" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+                    <div className="pl-3 flex flex-col gap-1 border-l border-white/10">
                       {(courses ?? []).map((course) => (
                         <button
                           key={course.id}
                           onClick={() => !isActive("/course/" + course.id) && router.push("/course/" + course.id)}
-                          className="w-full text-left text-[13px] px-3 py-2.5 rounded-md truncate transition-all duration-150"
-                          style={
+                          className={cn(
+                            "w-full text-left text-[13px] px-3 py-2.5 rounded-md truncate transition-colors duration-150",
                             isActive("/course/" + course.id)
-                              ? { background: ACTIVE_BG, color: TEXT_PRIMARY }
-                              : { color: TEXT_MUTED }
-                          }
-                          onMouseEnter={(e) => {
-                            if (!isActive("/course/" + course.id)) {
-                              (e.currentTarget as HTMLButtonElement).style.background = HOVER_BG;
-                              (e.currentTarget as HTMLButtonElement).style.color = TEXT_PRIMARY;
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isActive("/course/" + course.id)) {
-                              (e.currentTarget as HTMLButtonElement).style.background = "";
-                              (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                            }
-                          }}
+                              ? "bg-shell-active text-shell-foreground"
+                              : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
+                          )}
                         >
                           {course.title}
                         </button>
@@ -245,23 +210,14 @@ export const AppSidebar = React.memo(function AppSidebar() {
         {/* Threads — shown on any /course/[id] route */}
         {courseId !== null && isOpen && (
           <div className="mt-2">
-            <div className="mx-4 h-px mb-3" style={{ background: DIVIDER }} />
-            <p className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest" style={{ color: TEXT_SECTION }}>
+            <div className="mx-4 h-px mb-3 bg-shell-border" />
+            <p className="px-4 mb-2 text-[11px] font-semibold uppercase tracking-widest text-shell-faint">
               Threads
             </p>
             <div className="px-2 flex flex-col gap-0.5">
               <button
                 onClick={newThread}
-                className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 mb-1"
-                style={{ color: TEXT_MUTED, border: "1px dashed rgba(255,255,255,0.15)" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = HOVER_BG;
-                  (e.currentTarget as HTMLButtonElement).style.color = TEXT_PRIMARY;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "";
-                  (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                }}
+                className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium mb-1 text-shell-muted border border-dashed border-white/15 transition-colors duration-150 hover:bg-shell-hover hover:text-shell-foreground"
               >
                 <PlusIcon className="w-4 h-4 flex-shrink-0" />
                 New Thread
@@ -271,37 +227,26 @@ export const AppSidebar = React.memo(function AppSidebar() {
                 return (
                   <div
                     key={thread.id}
-                    className="flex items-center rounded-lg group overflow-hidden"
-                    style={isActiveThread ? { background: ACTIVE_BG } : {}}
+                    className={cn(
+                      "flex items-center rounded-lg group overflow-hidden",
+                      isActiveThread && "bg-shell-active",
+                    )}
                   >
                     <button
-                      className="flex-1 min-w-0 px-3 py-2.5 text-left text-[13px] truncate transition-all duration-150"
-                      style={{ color: isActiveThread ? TEXT_PRIMARY : TEXT_MUTED }}
+                      className={cn(
+                        "flex-1 min-w-0 px-3 py-2.5 text-left text-[13px] truncate transition-colors duration-150",
+                        isActiveThread
+                          ? "text-shell-foreground"
+                          : "text-shell-muted hover:text-shell-foreground",
+                      )}
                       onClick={() => navigateTo(thread.id)}
-                      onMouseEnter={(e) => {
-                        if (!isActiveThread) {
-                          (e.currentTarget as HTMLButtonElement).style.color = TEXT_PRIMARY;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActiveThread) {
-                          (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                        }
-                      }}
                     >
                       {thread.title || "New Chat"}
                     </button>
                     <button
-                      className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1.5 mr-1 rounded transition-opacity duration-150"
-                      style={{ color: TEXT_MUTED }}
+                      className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1.5 mr-1 rounded text-shell-muted transition-[opacity,color] duration-150 hover:text-red-300"
                       onClick={(e) => { e.stopPropagation(); setPendingDeleteId(thread.id); }}
                       title="Delete thread"
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLButtonElement).style.color = "#fca5a5";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                      }}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -320,8 +265,8 @@ export const AppSidebar = React.memo(function AppSidebar() {
       >
         <DialogContent showCloseButton={!isDeleting} className="sm:max-w-sm">
           <div className="flex flex-col items-center gap-4 pt-2 pb-1 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-              <Trash2 className="h-5 w-5 text-red-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+              <Trash2 className="h-5 w-5 text-destructive" />
             </div>
             <div className="space-y-1.5">
               <DialogTitle className="text-base">Delete this thread?</DialogTitle>
@@ -331,23 +276,19 @@ export const AppSidebar = React.memo(function AppSidebar() {
             </div>
           </div>
           <DialogFooter className="mt-2 gap-2 sm:gap-2">
-            <button
+            <Button
+              variant="outline"
+              className="flex-1"
               onClick={() => setPendingDeleteId(null)}
               disabled={isDeleting}
-              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg border transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ borderColor: "#e5e7eb", color: "#374151", background: "#ffffff" }}
-              onMouseEnter={(e) => { if (!isDeleting) (e.currentTarget as HTMLButtonElement).style.background = "#f9fafb"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#ffffff"; }}
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="destructive"
+              className="flex-1"
               onClick={confirmDelete}
               disabled={isDeleting}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 disabled:cursor-not-allowed"
-              style={{ background: isDeleting ? "#b91c1c" : "#dc2626", color: "#ffffff" }}
-              onMouseEnter={(e) => { if (!isDeleting) (e.currentTarget as HTMLButtonElement).style.background = "#b91c1c"; }}
-              onMouseLeave={(e) => { if (!isDeleting) (e.currentTarget as HTMLButtonElement).style.background = "#dc2626"; }}
             >
               {isDeleting ? (
                 <>
@@ -357,27 +298,27 @@ export const AppSidebar = React.memo(function AppSidebar() {
               ) : (
                 "Delete thread"
               )}
-            </button>
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* User footer */}
-      <div className="flex-shrink-0 px-3 py-4" style={{ borderTop: `1px solid ${DIVIDER}` }}>
+      <div className="flex-shrink-0 px-3 py-4 border-t border-shell-border">
         {isOpen ? (
           <div className="flex items-center gap-3">
             <div
-              className="h-9 w-9 rounded-full bg-red-700 flex-shrink-0 flex items-center justify-center text-white text-[13px] font-bold select-none cursor-pointer"
+              className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-strong flex-shrink-0 flex items-center justify-center text-white text-[13px] font-bold select-none cursor-pointer"
               onClick={() => router.push("/account")}
             >
               {initials || <User className="h-4 w-4" />}
             </div>
             <div className="flex-1 min-w-0 cursor-pointer" onClick={() => router.push("/account")}>
-              <p className="text-[14px] font-semibold truncate leading-tight" style={{ color: TEXT_PRIMARY }}>
+              <p className="text-[14px] font-semibold truncate leading-tight text-shell-foreground">
                 {fullName || "Account"}
               </p>
               {role && (
-                <p className="text-[12px] truncate mt-0.5" style={{ color: TEXT_MUTED }}>
+                <p className="text-[12px] truncate mt-0.5 text-shell-muted">
                   {role}
                 </p>
               )}
@@ -385,16 +326,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
             <button
               onClick={handleSignOut}
               title="Sign out"
-              className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-150"
-              style={{ color: TEXT_MUTED }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.color = "#fca5a5";
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(185,28,28,0.15)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-                (e.currentTarget as HTMLButtonElement).style.background = "";
-              }}
+              className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg text-shell-muted transition-colors duration-150 hover:text-red-300 hover:bg-brand-strong/15"
             >
               <DoorOpen className="h-[17px] w-[17px]" />
             </button>
@@ -404,7 +336,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
             <button
               onClick={() => router.push("/account")}
               title={fullName || "Account"}
-              className="h-9 w-9 rounded-full bg-red-700 flex items-center justify-center text-white text-[13px] font-bold select-none"
+              className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-strong flex items-center justify-center text-white text-[13px] font-bold select-none"
             >
               {initials || <User className="h-4 w-4" />}
             </button>
@@ -431,24 +363,12 @@ function NavItem({ icon, label, active, collapsed, onClick, tooltip }: NavItemPr
     <button
       onClick={onClick}
       title={collapsed ? tooltip : undefined}
-      className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium transition-all duration-150"
-      style={
+      className={cn(
+        "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium transition-colors duration-150",
         active
-          ? { background: ACTIVE_BG, color: TEXT_PRIMARY }
-          : { color: TEXT_MUTED }
-      }
-      onMouseEnter={(e) => {
-        if (!active) {
-          (e.currentTarget as HTMLButtonElement).style.background = HOVER_BG;
-          (e.currentTarget as HTMLButtonElement).style.color = TEXT_PRIMARY;
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!active) {
-          (e.currentTarget as HTMLButtonElement).style.background = "";
-          (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
-        }
-      }}
+          ? "bg-shell-active text-shell-foreground"
+          : "text-shell-muted hover:bg-shell-hover hover:text-shell-foreground",
+      )}
     >
       {icon}
       <AnimatePresence>

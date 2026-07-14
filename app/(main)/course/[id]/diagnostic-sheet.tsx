@@ -195,21 +195,21 @@ export default function DiagnosticSheet({
           {phase === "intro" && (
             <div className="space-y-4 max-w-lg mx-auto">
               {/* Hero card */}
-              <div className="rounded-[24px] border border-gray-200 bg-gray-50 p-5 space-y-3">
+              <div className="rounded-[24px] border border-border bg-muted/50 p-5 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-primary/10">
                     <Brain className="size-5 text-primary" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-900">Discover your knowledge level</h2>
+                    <h2 className="text-lg font-semibold text-foreground">Discover your knowledge level</h2>
                     {fetchStatus === "ready" && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-muted-foreground/70 mt-0.5">
                         {questions.length} question{questions.length !== 1 ? "s" : ""} &middot; {topics.length} topic{topics.length !== 1 ? "s" : ""}
                       </p>
                     )}
                   </div>
                 </div>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   We&apos;ll ask a few questions on each topic to map where you stand. This usually
                   takes 5 to 10 minutes. To keep the baseline clean, feedback waits until the end.
                 </p>
@@ -217,14 +217,14 @@ export default function DiagnosticSheet({
 
               {/* Topics covered */}
               <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   Topics covered
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {topics.map((t) => (
                     <span
                       key={t.id}
-                      className="text-xs font-medium px-2.5 py-1 rounded-full border border-primary/20 bg-white text-gray-700"
+                      className="text-xs font-medium px-2.5 py-1 rounded-full border border-primary/20 bg-card text-foreground/80"
                     >
                       {t.name}
                     </span>
@@ -272,9 +272,9 @@ export default function DiagnosticSheet({
             <div className="space-y-4">
               {/* Progress card */}
               <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-2">
-                <div className="flex items-center justify-between text-xs text-gray-400">
+                <div className="flex items-center justify-between text-xs text-muted-foreground/70">
                   <span>Question {current + 1} of {questions.length}</span>
-                  <span className="font-medium text-gray-600">{q.topicName}</span>
+                  <span className="font-medium text-muted-foreground">{q.topicName}</span>
                 </div>
                 <div className="h-2 rounded-full bg-primary/15 overflow-hidden">
                   <motion.div
@@ -287,8 +287,8 @@ export default function DiagnosticSheet({
               </div>
 
               {/* Question card */}
-              <div className="rounded-[24px] border border-gray-200 bg-gray-50 px-5 py-4">
-                <p className="text-base font-medium leading-relaxed text-gray-900">{q.text}</p>
+              <div className="rounded-[24px] border border-border bg-muted/50 px-5 py-4">
+                <p className="text-base font-medium leading-relaxed text-foreground">{q.text}</p>
               </div>
 
               {/* Options */}
@@ -305,11 +305,11 @@ export default function DiagnosticSheet({
                         !submitted && [
                           "cursor-pointer",
                           isSelected
-                            ? "border-primary bg-primary/5 text-gray-900 font-medium"
-                            : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50",
+                            ? "border-primary bg-primary/5 text-foreground font-medium"
+                            : "border-border bg-card text-foreground/80 hover:border-border hover:bg-muted/50",
                         ],
-                        submitted && isSelected && "border-primary bg-primary/5 text-gray-900 font-medium",
-                        submitted && !isSelected && "opacity-45 border-gray-100 bg-white cursor-default",
+                        submitted && isSelected && "border-primary bg-primary/5 text-foreground font-medium",
+                        submitted && !isSelected && "opacity-45 border-border/60 bg-card cursor-default",
                       )}
                     >
                       {option}
@@ -320,8 +320,8 @@ export default function DiagnosticSheet({
 
               {/* Locked answer cue */}
               {submitted && (
-                <div className="rounded-[24px] border border-primary/20 bg-primary/5 p-4 space-y-1 text-sm text-gray-700">
-                  <p className="font-semibold flex items-center gap-1.5 text-gray-900">
+                <div className="rounded-[24px] border border-primary/20 bg-primary/5 p-4 space-y-1 text-sm text-foreground/80">
+                  <p className="font-semibold flex items-center gap-1.5 text-foreground">
                     <CheckCircle2 className="size-4 text-primary" />
                     Answer saved
                   </p>
@@ -378,14 +378,14 @@ export default function DiagnosticSheet({
                 <XCircle className="size-7 text-red-400" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Couldn&apos;t save your results</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="font-medium text-foreground">Couldn&apos;t save your results</p>
+                <p className="text-sm text-muted-foreground mt-1">
                   {submitError || "Your answers couldn't be persisted. Try again."}
                 </p>
               </div>
               <button
                 onClick={() => void handleFinish()}
-                className="group flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                className="group flex items-center gap-2 rounded-2xl border border-border bg-card px-5 py-3 text-sm font-medium text-foreground/80 hover:bg-muted/50 transition-all"
               >
                 <RotateCcw className="size-4" />
                 Retry
@@ -397,24 +397,24 @@ export default function DiagnosticSheet({
           {phase === "done" && (
             <div className="space-y-4 max-w-lg mx-auto">
               {/* Score hero card */}
-              <div className="rounded-[24px] border border-gray-200 bg-gray-50 p-5">
+              <div className="rounded-[24px] border border-border bg-muted/50 p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-1">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-gray-400">Your result</p>
-                    <p className="text-lg font-semibold text-gray-900">Diagnostic complete</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/70">Your result</p>
+                    <p className="text-lg font-semibold text-foreground">Diagnostic complete</p>
+                    <p className="text-sm text-muted-foreground">
                       Your topic guidance is now based on the saved baseline answers.
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gray-300 bg-white px-4 py-3 text-right shrink-0 shadow-sm">
-                    <div className="text-[10px] uppercase tracking-[0.18em] text-gray-400">Score</div>
-                    <div className="mt-1 text-3xl font-semibold text-gray-900 tabular-nums">
-                      {finalScore}<span className="text-lg text-gray-400">/{questions.length}</span>
+                  <div className="rounded-2xl border border-border bg-card px-4 py-3 text-right shrink-0 shadow-sm">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">Score</div>
+                    <div className="mt-1 text-3xl font-semibold text-foreground tabular-nums">
+                      {finalScore}<span className="text-lg text-muted-foreground/70">/{questions.length}</span>
                     </div>
                   </div>
                 </div>
                 <div className="mt-4 space-y-1.5">
-                  <div className="flex justify-between text-xs text-gray-400">
+                  <div className="flex justify-between text-xs text-muted-foreground/70">
                     <span>Overall score</span>
                     <span>{questions.length > 0 ? Math.round((finalScore / questions.length) * 100) : 0}%</span>
                   </div>
@@ -431,7 +431,7 @@ export default function DiagnosticSheet({
 
               {/* Results by topic */}
               <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   Results by topic
                 </p>
                 <div className="space-y-2">
@@ -445,11 +445,11 @@ export default function DiagnosticSheet({
                     return (
                       <div
                         key={topicName}
-                        className="flex items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white px-4 py-3"
+                        className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-4 py-3"
                       >
-                        <span className="text-sm font-medium text-gray-800">{topicName}</span>
+                        <span className="text-sm font-medium text-foreground">{topicName}</span>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-xs text-gray-400">{stats.correct}/{stats.total}</span>
+                          <span className="text-xs text-muted-foreground/70">{stats.correct}/{stats.total}</span>
                           <span className={`text-[11px] px-2.5 py-0.5 rounded-full border ${mastery.bg} ${mastery.color} ${mastery.border}`}>
                             {mastery.label}
                           </span>
