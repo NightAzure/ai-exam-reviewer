@@ -1,107 +1,103 @@
 "use client";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Target, TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
-import { Course } from "@/types/course";
-import { motion } from "framer-motion";
+
+import Link from "next/link";
+import { BookOpen, Layers3, ListTree } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { Course } from "@/types/course";
+
+const number = new Intl.NumberFormat("en-PH");
 
 interface AdminCourseTopicsProps {
   course: Course;
+  courseId: number;
 }
 
-export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
+export default function AdminCourseTopics({ course, courseId }: AdminCourseTopicsProps) {
+  const topics = course.topics ?? [];
+  const subtopicTotal = topics.reduce(
+    (sum, topic) => sum + (topic.subtopics?.length ?? 0),
+    0,
+  );
+
   return (
-    <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Target className="w-5 h-5 text-ink" />
-          <CardTitle className="text-base font-semibold m-0">
-            Topic Performance
-          </CardTitle>
-        </div>
-        <span className="text-xs text-muted-foreground">Student progress by topic</span>
-      </div>
-
-      <CardContent className="space-y-3 p-0">
-        {course.topics && course.topics.length > 0 ? (
-          course.topics.map((topic) => {
-            const colorClass =
-              topic.progress < 40
-                ? "bg-needs-focus/80"
-                : topic.progress < 75
-                ? "bg-yellow-500"
-                : "bg-proficient/100";
-
-            const badgeClass =
-              topic.progress < 40
-                ? "bg-red-100 text-needs-focus"
-                : topic.progress < 75
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-green-100 text-proficient";
-
-            const status =
-              topic.progress < 40
-                ? "Needs Focus"
-                : topic.progress < 75
-                ? "In Progress"
-                : "Excelling";
-
-            const icon =
-              topic.progress < 40 ? (
-                <AlertTriangle className="w-4 h-4 text-needs-focus" />
-              ) : topic.progress < 75 ? (
-                <TrendingUp className="w-4 h-4 text-yellow-600" />
-              ) : (
-                <CheckCircle2 className="w-4 h-4 text-proficient" />
-              );
-
-            return (
-              <motion.div
-                key={topic.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.32 }}
-                className="p-3 rounded-xl border border-border/60 bg-muted/50 hover:bg-muted transition"
-              >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      {icon}
-                      <p className="text-sm font-medium truncate">{topic.name}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[11px] px-2 py-0.5 rounded-full ${badgeClass}`}>
-                        {status}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {topic.progress < 40
-                          ? "Highest review priority"
-                          : topic.progress < 75
-                          ? "Worth revisiting soon"
-                          : "Healthy performance signal"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <Badge variant="secondary" className="text-xs shrink-0">
-                    {topic.progress}%
-                  </Badge>
-                </div>
-
-                <div className="w-full h-2 bg-border rounded-full overflow-hidden">
-                  <div
-                    className={`${colorClass} h-full rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-500`}
-                    style={{ width: `${topic.progress}%` }}
-                  />
-                </div>
-              </motion.div>
-            );
-          })
-        ) : (
-          <div className="text-center py-6 text-sm text-muted-foreground">
-            No topics available
+    <Card className="rounded-3xl border-ink/10 bg-surface shadow-sm">
+      <CardContent className="space-y-5 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-oxblood">
+              Topic coverage
+            </p>
+            <h2 className="mt-1 text-xl font-bold text-ink">Authoring structure</h2>
+            <p className="mt-1 text-xs leading-5 text-slate">
+              Topics organize practice and assessments. Mastery signals appear only after students
+              complete scored work.
+            </p>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-ink/10 bg-canvas/70 p-3.5">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate">
+              <BookOpen aria-hidden="true" className="size-3.5" />
+              Topics
+            </p>
+            <p className="mt-2 font-[family-name:var(--font-display)] text-3xl leading-none tabular-nums text-ink">
+              {number.format(topics.length)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-ink/10 bg-canvas/70 p-3.5">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate">
+              <ListTree aria-hidden="true" className="size-3.5" />
+              Subtopics
+            </p>
+            <p className="mt-2 font-[family-name:var(--font-display)] text-3xl leading-none tabular-nums text-ink">
+              {number.format(subtopicTotal)}
+            </p>
+          </div>
+        </div>
+
+        {topics.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-ink/20 bg-canvas/40 px-4 py-8 text-center">
+            <span className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-ink text-canvas">
+              <Layers3 aria-hidden="true" className="size-5" />
+            </span>
+            <h3 className="mt-4 text-base font-semibold text-ink">No topics yet</h3>
+            <p className="mx-auto mt-1.5 max-w-xs text-sm leading-6 text-slate">
+              Create topics so assessments and practice can map to the course outline.
+            </p>
+            <Button asChild className="mt-4 h-11 rounded-xl">
+              <Link href={`/admin/course/${courseId}/manage`}>Add Topics</Link>
+            </Button>
+          </div>
+        ) : (
+          <ul className="divide-y divide-ink/10 rounded-2xl border border-ink/10">
+            {topics.map((topic) => {
+              const subtopicCount = topic.subtopics?.length ?? 0;
+              return (
+                <li key={topic.id} className="flex items-start justify-between gap-3 px-4 py-3.5">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-ink">{topic.name}</p>
+                    <p className="mt-0.5 text-xs text-slate">
+                      {subtopicCount === 0
+                        ? "No subtopics yet"
+                        : `${number.format(subtopicCount)} subtopic${subtopicCount === 1 ? "" : "s"}`}
+                    </p>
+                  </div>
+                  <span className="shrink-0 rounded-full border border-ink/10 bg-ink/[0.04] px-2.5 py-1 text-[11px] font-semibold text-slate">
+                    Outline ready
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         )}
+
+        {topics.length > 0 ? (
+          <Button asChild variant="outline" className="h-11 w-full rounded-xl">
+            <Link href={`/admin/course/${courseId}/manage`}>Manage Topics</Link>
+          </Button>
+        ) : null}
       </CardContent>
     </Card>
   );

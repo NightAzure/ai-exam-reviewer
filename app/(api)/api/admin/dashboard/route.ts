@@ -265,15 +265,23 @@ export async function GET(request: Request) {
     });
 
     const attemptsByCourse = new Map<number, number[]>();
+    const completedAttemptsByCourse = new Map<number, number>();
     attempts.forEach((attempt) => {
       const assessment = Array.isArray(attempt.assessments)
         ? attempt.assessments[0]
         : attempt.assessments;
-      if (!assessment || typeof attempt.score !== "number" || attempt.status !== "completed") return;
+      if (!assessment || attempt.status !== "completed") return;
 
-      const current = attemptsByCourse.get(assessment.course_id) ?? [];
-      current.push(attempt.score);
-      attemptsByCourse.set(assessment.course_id, current);
+      completedAttemptsByCourse.set(
+        assessment.course_id,
+        (completedAttemptsByCourse.get(assessment.course_id) ?? 0) + 1,
+      );
+
+      if (typeof attempt.score === "number") {
+        const current = attemptsByCourse.get(assessment.course_id) ?? [];
+        current.push(attempt.score);
+        attemptsByCourse.set(assessment.course_id, current);
+      }
     });
 
     const coursePerformanceData = courses
@@ -285,9 +293,12 @@ export async function GET(request: Request) {
             : 0;
 
         return {
+          courseId: course.id,
           topic: course.title,
           avgScore,
           students: enrollmentsByCourse.get(course.id) ?? 0,
+          completedAttempts: completedAttemptsByCourse.get(course.id) ?? 0,
+          isActive: course.is_active ?? false,
         };
       })
       .sort((left, right) => right.students - left.students)

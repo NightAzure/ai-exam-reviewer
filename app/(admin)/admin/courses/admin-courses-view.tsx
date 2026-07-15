@@ -1,27 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import AdminCoursesHeader from "./admin-courses-header";
-import CourseCard from "@/components/course/course-card";
 import { useCourses } from "@/hooks/use-courses";
-import CourseCardSkeleton from "@/components/course/course-card-skeleton";
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
-
+import { AdminCourseLibrary } from "./admin-course-library";
 
 export type FilterOptions = {
   status: string;
@@ -31,6 +13,51 @@ export type FilterOptions = {
   enabledStatus: string;
 };
 
+function AdminCourseGridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgb(24_34_52/0.05)]"
+        >
+          <div className="relative h-36 animate-pulse bg-ink/8 motion-reduce:animate-none">
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
+              <div className="h-6 w-28 rounded-full bg-ink/20" />
+              <div className="size-10 rounded-full bg-ink/20" />
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="h-3 w-24 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+                <div className="h-7 w-3/4 animate-pulse rounded bg-ink/10 motion-reduce:animate-none" />
+              </div>
+              <div className="h-6 w-16 shrink-0 animate-pulse rounded-full bg-ink/8 motion-reduce:animate-none" />
+            </div>
+            <div className="mt-5 space-y-3 border-y border-ink/8 py-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <div className="h-3 w-20 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+                <div className="h-6 w-16 animate-pulse rounded bg-ink/10 motion-reduce:animate-none" />
+              </div>
+              <div className="flex gap-2">
+                <div className="h-7 w-24 animate-pulse rounded-lg bg-ink/8 motion-reduce:animate-none" />
+                <div className="h-7 w-24 animate-pulse rounded-lg bg-ink/8 motion-reduce:animate-none" />
+              </div>
+              <div className="h-3 w-4/5 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <div className="h-3 w-28 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+              <div className="h-3 w-20 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            </div>
+            <div className="mt-5 h-11 animate-pulse rounded-xl bg-ink/10 motion-reduce:animate-none" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function AdminCoursesView() {
   const { data: courses } = useCourses();
   const [filters, setFilters] = useState<FilterOptions>({
@@ -38,86 +65,23 @@ export default function AdminCoursesView() {
     instructor: "all",
     searchQuery: "",
     sortBy: "name",
-    enabledStatus: "all"
+    enabledStatus: "all",
   });
 
-  const filteredCourses = (courses ?? [])
-    .filter((course) => {
-      if (filters.enabledStatus === "enabled" && !course.is_active) return false;
-      if (filters.enabledStatus === "disabled" && course.is_active) return false;
-
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        return (
-          course.title.toLowerCase().includes(query) ||
-          course.code.toLowerCase().includes(query)
-        );
-      }
-
-      return true;
-    })
-    .sort((a, b) => {
-      switch (filters.sortBy) {
-        case "name":
-          return a.title.localeCompare(b.title);
-        case "code":
-          return a.code.localeCompare(b.code);
-        default:
-          return 0;
-      }
-    });
-
-  const stats = {
-    total: courses?.length ?? 0,
-    active: courses?.filter(c => c.is_active).length ?? 0,
-    disabled: courses?.filter(c => !c.is_active).length ?? 0,
-  };
+  if (courses !== undefined) {
+    return (
+      <AdminCourseLibrary
+        courses={courses}
+        filters={filters}
+        setFilters={setFilters}
+      />
+    );
+  }
 
   return (
-    <motion.div
-      className="space-y-6"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.div variants={itemVariants}>
-        <AdminCoursesHeader
-          filters={filters}
-          setFilters={setFilters}
-          stats={stats}
-        />
-      </motion.div>
-
-      {courses === undefined ? (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(340px,1fr))]">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <CourseCardSkeleton key={index} />
-          ))}
-        </div>
-      ) : filteredCourses.length === 0 ? (
-        <motion.div
-          key="no-courses"
-          variants={itemVariants}
-          className="text-center py-12 text-muted-foreground"
-        >
-          <p className="text-lg">No courses found matching your filters.</p>
-          <p className="text-sm mt-2">Try adjusting your search criteria.</p>
-        </motion.div>
-      ) : (
-        <motion.div
-          key="courses-grid"
-          className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(340px,1fr))]"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filteredCourses.map((course) => (
-            <motion.div key={`course-${course.id}`} variants={itemVariants}>
-              <CourseCard course={course} variant="admin"/>
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
-    </motion.div>
+    <main className="space-y-8 pb-6">
+      <AdminCoursesHeader total={0} active={0} isLoading />
+      <AdminCourseGridSkeleton />
+    </main>
   );
 }

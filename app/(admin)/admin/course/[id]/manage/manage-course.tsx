@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCourseStore } from "@/stores/course-store";
 import { useCourseInit } from "@/hooks/use-course-init";
 import { toast } from "sonner";
@@ -13,13 +13,28 @@ import { DocumentsTab } from "./components/documents-tab";
 import { MembersTab } from "./components/members-tab";
 import { SettingsTab } from "./components/settings-tab";
 
+const manageTabs = ["general", "documents", "members", "settings"] as const;
+type ManageTab = (typeof manageTabs)[number];
+
+function parseManageTab(value: string | null): ManageTab {
+  return manageTabs.includes(value as ManageTab) ? (value as ManageTab) : "general";
+}
+
 interface ManageCoursePageProps {
   id: string;
 }
 
 export default function ManageCoursePage({ id }: ManageCoursePageProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const courseId = parseInt(id);
+  const [activeTab, setActiveTab] = useState<ManageTab>(() =>
+    parseManageTab(searchParams.get("tab")),
+  );
+
+  useEffect(() => {
+    setActiveTab(parseManageTab(searchParams.get("tab")));
+  }, [searchParams]);
 
   useCourseInit(courseId);
 
@@ -128,7 +143,22 @@ export default function ManageCoursePage({ id }: ManageCoursePageProps) {
         </div>
       </div>
 
-      <Tabs defaultValue="general" className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => {
+          const nextTab = parseManageTab(value);
+          setActiveTab(nextTab);
+          const params = new URLSearchParams(searchParams.toString());
+          if (nextTab === "general") params.delete("tab");
+          else params.set("tab", nextTab);
+          const query = params.toString();
+          router.replace(
+            `/admin/course/${courseId}/manage${query ? `?${query}` : ""}`,
+            { scroll: false },
+          );
+        }}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 rounded-xl bg-muted p-1 h-auto">
           <TabsTrigger value="general" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">General</TabsTrigger>
           <TabsTrigger value="documents" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">

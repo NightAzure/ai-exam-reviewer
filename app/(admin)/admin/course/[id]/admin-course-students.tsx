@@ -1,18 +1,30 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useMemo, useState } from "react";
+import {
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Mail,
+  Search,
+  UserPlus,
+} from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -28,73 +41,97 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Label } from "@/components/ui/label";
-import {
-  Search,
-  UserPlus,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Mail,
-  Filter,
-  ArrowUpDown,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { Course } from "@/types/course";
-import { useState, useMemo } from "react";
-import { Progress } from "@/components/ui/progress";
 import { useCourseMembers } from "@/hooks/use-course-members";
+import type { Course } from "@/types/course";
+import { cn } from "@/lib/utils";
+
+const number = new Intl.NumberFormat("en-PH");
+const dateTime = new Intl.DateTimeFormat("en-PH", {
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+});
+
+type StudentStatus = "all" | "not-assessed" | "proficient" | "building" | "needs-focus";
 
 interface AdminCourseStudentsProps {
   course: Course;
 }
 
+function statusMeta(assessmentsTaken: number, avgScore: number | null) {
+  if (assessmentsTaken === 0 || avgScore == null) {
+    return {
+      key: "not-assessed" as const,
+      label: "Not Assessed",
+      badge: "evidence" as const,
+      scoreLabel: "Not Assessed",
+    };
+  }
+  if (avgScore >= 75) {
+    return {
+      key: "proficient" as const,
+      label: "Proficient",
+      badge: "proficient" as const,
+      scoreLabel: `${Math.round(avgScore)}%`,
+    };
+  }
+  if (avgScore >= 60) {
+    return {
+      key: "building" as const,
+      label: "Building Confidence",
+      badge: "confidence" as const,
+      scoreLabel: `${Math.round(avgScore)}%`,
+    };
+  }
+  return {
+    key: "needs-focus" as const,
+    label: "Needs Focus",
+    badge: "needs-focus" as const,
+    scoreLabel: `${Math.round(avgScore)}%`,
+  };
+}
+
 export default function AdminCourseStudents({ course }: AdminCourseStudentsProps) {
   const { members, isLoading, isMutating, error, addMembers } = useCourseMembers(course.id);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState<StudentStatus>("all");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [addStudentOpen, setAddStudentOpen] = useState(false);
   const [studentEmail, setStudentEmail] = useState("");
+  const [addError, setAddError] = useState<string | null>(null);
 
-  const filteredAndSortedStudents = useMemo(() => {
-    const students = members
+  const students = useMemo(() => {
+    return members
       .filter((member) => member.role === "student")
       .map((member) => {
-        const avgScore = member.averageScore ?? 0;
-        const status =
-          member.assessmentsTaken === 0
-            ? "active"
-            : avgScore >= 85
-              ? "excellent"
-              : avgScore < 60
-                ? "at-risk"
-                : "active";
-
+        const status = statusMeta(member.assessmentsTaken, member.averageScore);
         return {
           id: member.userId,
           name: member.name,
           email: member.email ?? "No email available",
-          progress: Math.max(0, Math.min(100, avgScore)),
-          lastActive: member.lastActiveAt
-            ? new Date(member.lastActiveAt).toLocaleString()
-            : "No activity yet",
           assessmentsTaken: member.assessmentsTaken,
-          avgScore,
+          avgScore: member.averageScore,
+          lastActive: member.lastActiveAt
+            ? dateTime.format(new Date(member.lastActiveAt))
+            : "No activity yet",
           status,
-          trend: "stable" as const,
         };
       });
+  }, [members]);
 
+  const filteredAndSortedStudents = useMemo(() => {
     const filtered = students.filter((student) => {
+      const query = searchQuery.trim().toLocaleLowerCase();
       const matchesSearch =
-        student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = filterStatus === "all" || student.status === filterStatus;
+        !query ||
+        student.name.toLocaleLowerCase().includes(query) ||
+        student.email.toLocaleLowerCase().includes(query);
+      const matchesStatus =
+        filterStatus === "all" || student.status.key === filterStatus;
       return matchesSearch && matchesStatus;
     });
 
@@ -103,46 +140,49 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
       let compareB: string | number;
 
       switch (sortBy) {
-        case "name":
-          compareA = a.name;
-          compareB = b.name;
-          break;
         case "progress":
-          compareA = a.progress;
-          compareB = b.progress;
-          break;
         case "avgScore":
-          compareA = a.avgScore;
-          compareB = b.avgScore;
+          compareA = a.avgScore ?? -1;
+          compareB = b.avgScore ?? -1;
           break;
         case "assessments":
           compareA = a.assessmentsTaken;
           compareB = b.assessmentsTaken;
           break;
+        case "name":
         default:
-          return 0;
+          compareA = a.name;
+          compareB = b.name;
+          break;
       }
 
-      if (sortOrder === "asc") {
-        return compareA > compareB ? 1 : -1;
-      }
-
+      if (compareA === compareB) return 0;
+      if (sortOrder === "asc") return compareA > compareB ? 1 : -1;
       return compareA < compareB ? 1 : -1;
     });
 
     return filtered;
-  }, [members, searchQuery, filterStatus, sortBy, sortOrder]);
+  }, [students, searchQuery, filterStatus, sortBy, sortOrder]);
 
-  const totalPages = Math.ceil(filteredAndSortedStudents.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(filteredAndSortedStudents.length / pageSize));
   const paginatedStudents = filteredAndSortedStudents.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   );
+  const hasActiveFilters =
+    filterStatus !== "all" || Boolean(searchQuery.trim());
 
   const handleAddStudent = async () => {
-    await addMembers([studentEmail], "student");
-    setStudentEmail("");
-    setAddStudentOpen(false);
+    setAddError(null);
+    try {
+      await addMembers([studentEmail], "student");
+      setStudentEmail("");
+      setAddStudentOpen(false);
+    } catch (addFailure) {
+      setAddError(
+        addFailure instanceof Error ? addFailure.message : "Unable to add student",
+      );
+    }
   };
 
   const toggleSort = (field: string) => {
@@ -150,343 +190,392 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
       return;
     }
-
     setSortBy(field);
     setSortOrder("asc");
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "excellent":
-        return <Badge className="bg-green-100 text-proficient hover:bg-green-100">Excellent</Badge>;
-      case "active":
-        return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Active</Badge>;
-      case "at-risk":
-        return <Badge className="bg-red-100 text-needs-focus hover:bg-red-100">At Risk</Badge>;
-      default:
-        return <Badge variant="secondary">Active</Badge>;
-    }
-  };
-
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-proficient" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-needs-focus" />;
-      default:
-        return <Minus className="w-4 h-4 text-muted-foreground/70" />;
-    }
-  };
+  const statusFilters: Array<{ value: StudentStatus; label: string }> = [
+    { value: "all", label: "All" },
+    { value: "needs-focus", label: "Needs Focus" },
+    { value: "building", label: "Building" },
+    { value: "proficient", label: "Proficient" },
+    { value: "not-assessed", label: "Not Assessed" },
+  ];
 
   return (
     <>
-      <Card className="border-none shadow-md hover:shadow-lg transition-shadow">
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <Card className="rounded-3xl border-ink/10 bg-surface shadow-sm">
+        <CardContent className="space-y-5 p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <CardTitle className="text-xl font-bold">Student Performance</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
-                {isLoading ? "Loading students..." : `${filteredAndSortedStudents.length} students found`}
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-oxblood">
+                Roster
               </p>
-              {error && <p className="text-sm text-needs-focus mt-1">{error}</p>}
+              <h2 className="mt-1 text-xl font-bold text-ink">Student Performance</h2>
+              <p className="mt-1 text-sm text-slate">
+                {isLoading
+                  ? "Loading students…"
+                  : `${number.format(filteredAndSortedStudents.length)} student${filteredAndSortedStudents.length === 1 ? "" : "s"} in this view`}
+              </p>
             </div>
-            <Button className="gap-2 shadow-sm" onClick={() => setAddStudentOpen(true)}>
-              <UserPlus className="w-4 h-4" />
+            <Button
+              type="button"
+              className="h-11 gap-2 rounded-xl"
+              onClick={() => {
+                setAddError(null);
+                setAddStudentOpen(true);
+              }}
+            >
+              <UserPlus aria-hidden="true" className="size-4" />
               Add Student
             </Button>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
+
+          {error ? (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <div className="space-y-3">
+            <label className="relative block">
+              <span className="sr-only">Search students</span>
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate"
+              />
               <Input
-                placeholder="Search students by name or email..."
-                className="pl-10"
+                type="search"
+                name="student-search"
+                placeholder="Search by name or email…"
+                autoComplete="off"
+                className="h-11 rounded-xl border-ink/15 bg-white pl-10"
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
+                onChange={(event) => {
+                  setSearchQuery(event.target.value);
                   setCurrentPage(1);
                 }}
               />
+            </label>
+
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div
+                className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
+                aria-label="Filter students by assessment status"
+              >
+                {statusFilters.map((option) => {
+                  const isActive = option.value === filterStatus;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      aria-pressed={isActive}
+                      onClick={() => {
+                        setFilterStatus(option.value);
+                        setCurrentPage(1);
+                      }}
+                      className={cn(
+                        "h-10 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-[background-color,border-color,color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-oxblood/50",
+                        isActive
+                          ? "border-ink bg-ink text-white shadow-sm"
+                          : "border-ink/12 bg-white text-slate hover:border-ink/25 hover:text-ink",
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Select
+                  value={pageSize.toString()}
+                  onValueChange={(value) => {
+                    setPageSize(parseInt(value, 10));
+                    setCurrentPage(1);
+                  }}
+                >
+                  <SelectTrigger className="h-10 w-full rounded-full border-ink/12 bg-white text-xs font-semibold sm:w-[140px]">
+                    <Filter aria-hidden="true" className="mr-1 size-3.5" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">Show 10</SelectItem>
+                    <SelectItem value="25">Show 25</SelectItem>
+                    <SelectItem value="50">Show 50</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <Select
-              value={filterStatus}
-              onValueChange={(value) => {
-                setFilterStatus(value);
-                setCurrentPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full md:w-[200px]">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="excellent">Excellent</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="at-risk">At Risk</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select
-              value={pageSize.toString()}
-              onValueChange={(value) => {
-                setPageSize(parseInt(value, 10));
-                setCurrentPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full md:w-[150px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">Show 10</SelectItem>
-                <SelectItem value="25">Show 25</SelectItem>
-                <SelectItem value="50">Show 50</SelectItem>
-                <SelectItem value="100">Show 100</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
-          <div className="rounded-lg border overflow-x-auto">
-            <Table className="min-w-[640px]">
+          <div className="overflow-x-auto rounded-2xl border border-ink/10">
+            <Table className="min-w-[720px]">
               <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[180px]">
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="min-w-[200px]">
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-8 gap-1"
+                      className="h-9 gap-1 px-2"
                       onClick={() => toggleSort("name")}
                     >
                       Student
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown aria-hidden="true" className="size-3" />
                     </Button>
                   </TableHead>
-                  <TableHead className="w-[110px]">Status</TableHead>
-                  <TableHead className="w-[140px]">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 gap-1"
-                      onClick={() => toggleSort("progress")}
-                    >
-                      Progress
-                      <ArrowUpDown className="w-3 h-3" />
-                    </Button>
-                  </TableHead>
+                  <TableHead className="w-[150px]">Status</TableHead>
                   <TableHead className="w-[110px]">
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-8 gap-1"
+                      className="h-9 gap-1 px-2"
                       onClick={() => toggleSort("assessments")}
                     >
                       Attempts
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown aria-hidden="true" className="size-3" />
                     </Button>
                   </TableHead>
-                  <TableHead className="w-[100px]">
+                  <TableHead className="w-[120px]">
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-8 gap-1"
+                      className="h-9 gap-1 px-2"
                       onClick={() => toggleSort("avgScore")}
                     >
                       Score
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown aria-hidden="true" className="size-3" />
                     </Button>
                   </TableHead>
-                  <TableHead className="hidden lg:table-cell w-[140px]">Last Active</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[150px]">Last Active</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading
-                  ? Array.from({ length: 5 }).map((_, i) => (
-                      <TableRow key={i}>
+                  ? Array.from({ length: 5 }).map((_, index) => (
+                      <TableRow key={index}>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <Skeleton className="h-9 w-9 rounded-full shrink-0" />
-                            <div className="space-y-1.5 flex-1">
-                              <Skeleton className="h-3.5 w-32" />
-                              <Skeleton className="h-3 w-24" />
+                            <Skeleton className="size-9 rounded-full" />
+                            <div className="space-y-1.5">
+                              <Skeleton className="h-3.5 w-28" />
+                              <Skeleton className="h-3 w-36" />
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Skeleton className="h-2 w-20 rounded-full" />
-                            <Skeleton className="h-3.5 w-8" />
-                          </div>
+                          <Skeleton className="h-6 w-24 rounded-full" />
                         </TableCell>
-                        <TableCell><Skeleton className="h-4 w-6" /></TableCell>
-                        <TableCell><Skeleton className="h-4 w-10" /></TableCell>
-                        <TableCell className="hidden lg:table-cell"><Skeleton className="h-3.5 w-24" /></TableCell>
+                        <TableCell>
+                          <Skeleton className="h-4 w-8" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-4 w-16" />
+                        </TableCell>
+                        <TableCell className="hidden lg:table-cell">
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
                       </TableRow>
                     ))
                   : paginatedStudents.map((student) => {
                       const initials = student.name
                         .split(" ")
                         .map((part) => part[0] ?? "")
-                        .join("");
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase();
 
                       return (
-                        <TableRow key={student.id} className="hover:bg-muted/50">
+                        <TableRow key={student.id} className="hover:bg-ink/[0.02]">
                           <TableCell>
                             <div className="flex items-center gap-3">
-                              <Avatar className="h-9 w-9 border-2 border-white shadow-sm shrink-0">
-                                <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white font-semibold text-xs">
-                                  {initials}
+                              <Avatar className="size-9 border border-ink/10">
+                                <AvatarFallback className="bg-ink text-[11px] font-semibold text-white">
+                                  {initials || "ST"}
                                 </AvatarFallback>
                               </Avatar>
                               <div className="min-w-0">
-                                <p className="font-medium text-foreground truncate">{student.name}</p>
-                                <p className="text-xs text-muted-foreground truncate">{student.email}</p>
+                                <p className="truncate font-medium text-ink">{student.name}</p>
+                                <p className="truncate text-xs text-slate">{student.email}</p>
                               </div>
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-1.5">
-                              {getStatusBadge(student.status)}
-                              {getTrendIcon(student.trend)}
-                            </div>
+                            <Badge variant={student.status.badge}>{student.status.label}</Badge>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Progress value={student.progress} className="h-1.5 w-16" />
-                              <span className="text-sm font-medium text-foreground/80 tabular-nums">
-                                {student.progress}%
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <span className="font-medium tabular-nums">{student.assessmentsTaken}</span>
+                            <span className="tabular-nums font-medium text-ink">
+                              {number.format(student.assessmentsTaken)}
+                            </span>
                           </TableCell>
                           <TableCell>
                             <span
-                              className={`font-bold tabular-nums ${
-                                student.avgScore >= 80
-                                  ? "text-proficient"
-                                  : student.avgScore >= 60
-                                    ? "text-yellow-600"
-                                    : "text-needs-focus"
-                              }`}
+                              className={cn(
+                                "tabular-nums font-semibold",
+                                student.status.key === "not-assessed"
+                                  ? "text-slate"
+                                  : "text-ink",
+                              )}
                             >
-                              {student.avgScore}%
+                              {student.status.scoreLabel}
                             </span>
                           </TableCell>
                           <TableCell className="hidden lg:table-cell">
-                            <span className="text-sm text-muted-foreground">{student.lastActive}</span>
+                            <span className="text-sm text-slate">{student.lastActive}</span>
                           </TableCell>
                         </TableRow>
                       );
                     })}
-                {!isLoading && paginatedStudents.length === 0 && (
+                {!isLoading && paginatedStudents.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">
-                      No students found.
+                    <TableCell colSpan={5} className="py-12 text-center">
+                      <h3 className="text-base font-semibold text-ink">
+                        {hasActiveFilters
+                          ? "No Students Match That View"
+                          : "No Students Enrolled Yet"}
+                      </h3>
+                      <p className="mx-auto mt-1 max-w-sm text-sm text-slate">
+                        {hasActiveFilters
+                          ? "Try a different search or clear the status filter."
+                          : "Add a student by email, or share the course code from Manage Course."}
+                      </p>
+                      {hasActiveFilters ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="mt-4 h-10 rounded-xl"
+                          onClick={() => {
+                            setSearchQuery("");
+                            setFilterStatus("all");
+                            setCurrentPage(1);
+                          }}
+                        >
+                          Clear Filters
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          className="mt-4 h-10 rounded-xl"
+                          onClick={() => setAddStudentOpen(true)}
+                        >
+                          Add Student
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
-                )}
+                ) : null}
               </TableBody>
             </Table>
           </div>
 
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-4">
-              <p className="text-sm text-muted-foreground">
-                Showing {(currentPage - 1) * pageSize + 1} to{" "}
-                {Math.min(currentPage * pageSize, filteredAndSortedStudents.length)} of{" "}
-                {filteredAndSortedStudents.length} students
+          {filteredAndSortedStudents.length > pageSize ? (
+            <div className="flex flex-col gap-3 border-t border-ink/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-slate">
+                Showing{" "}
+                <span className="tabular-nums font-medium text-ink">
+                  {(currentPage - 1) * pageSize + 1}
+                </span>{" "}
+                to{" "}
+                <span className="tabular-nums font-medium text-ink">
+                  {Math.min(currentPage * pageSize, filteredAndSortedStudents.length)}
+                </span>{" "}
+                of{" "}
+                <span className="tabular-nums font-medium text-ink">
+                  {number.format(filteredAndSortedStudents.length)}
+                </span>
               </p>
               <div className="flex items-center gap-2">
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
+                  className="h-10 rounded-xl"
                   onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft aria-hidden="true" className="size-4" />
                   Previous
                 </Button>
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => {
-                    let pageNum: number;
-                    if (totalPages <= 5) {
-                      pageNum = index + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = index + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + index;
-                    } else {
-                      pageNum = currentPage - 2 + index;
-                    }
-
-                    return (
-                      <Button
-                        key={pageNum}
-                        variant={currentPage === pageNum ? "default" : "outline"}
-                        size="sm"
-                        className="w-9"
-                        onClick={() => setCurrentPage(pageNum)}
-                      >
-                        {pageNum}
-                      </Button>
-                    );
-                  })}
-                </div>
+                <span className="min-w-16 text-center text-sm tabular-nums text-slate">
+                  {currentPage} / {totalPages}
+                </span>
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
+                  className="h-10 rounded-xl"
                   onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage >= totalPages}
                 >
                   Next
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight aria-hidden="true" className="size-4" />
                 </Button>
               </div>
             </div>
-          )}
+          ) : null}
         </CardContent>
       </Card>
 
-      <Dialog open={addStudentOpen} onOpenChange={setAddStudentOpen}>
+      <Dialog
+        open={addStudentOpen}
+        onOpenChange={(open) => {
+          setAddStudentOpen(open);
+          if (!open) {
+            setStudentEmail("");
+            setAddError(null);
+          }
+        }}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <UserPlus className="w-5 h-5" />
-              Add Student to Course
-            </DialogTitle>
+            <DialogTitle>Add Student to Course</DialogTitle>
+            <DialogDescription>
+              Enter the student&apos;s email address. They will be enrolled with student access.
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="student-email">Student Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
-                <Input
-                  id="student-email"
-                  type="email"
-                  placeholder="student@example.com"
-                  className="pl-10"
-                  value={studentEmail}
-                  onChange={(e) => setStudentEmail(e.target.value)}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Enter the email address of the student you want to add to this course.
-              </p>
+          <div className="space-y-2 py-2">
+            <Label htmlFor="student-email">Student Email</Label>
+            <div className="relative">
+              <Mail
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate"
+              />
+              <Input
+                id="student-email"
+                type="email"
+                name="student-email"
+                autoComplete="email"
+                placeholder="student@university.edu…"
+                className="h-11 rounded-xl pl-10"
+                value={studentEmail}
+                onChange={(event) => setStudentEmail(event.target.value)}
+                disabled={isMutating}
+              />
             </div>
+            {addError ? (
+              <p role="alert" className="text-sm text-destructive">
+                {addError}
+              </p>
+            ) : null}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAddStudentOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setAddStudentOpen(false)}
+              disabled={isMutating}
+            >
               Cancel
             </Button>
             <Button
+              type="button"
               onClick={() => void handleAddStudent()}
-              disabled={!studentEmail || isMutating}
+              disabled={!studentEmail.trim() || isMutating}
             >
-              Add Student
+              {isMutating ? "Adding…" : "Add Student"}
             </Button>
           </DialogFooter>
         </DialogContent>

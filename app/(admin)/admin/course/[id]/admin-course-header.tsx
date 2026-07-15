@@ -1,76 +1,99 @@
 "use client";
-import { CornerDownLeft, GraduationCap, Settings, Eye, ClipboardList } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Course } from "@/types/course";
+
+import Link from "next/link";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  CirclePause,
+  ClipboardList,
+  Eye,
+  Settings2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import type { Course } from "@/types/course";
 
 interface AdminCourseHeaderProps {
   course: Course;
   courseId: number;
 }
 
-export default function AdminCourseHeader({ course, courseId }: AdminCourseHeaderProps) {
-  const router = useRouter();
+export default function AdminCourseHeader({
+  course,
+  courseId,
+}: AdminCourseHeaderProps) {
+  const description =
+    course.description?.trim() ||
+    "Manage members, topics, documents, and assessments for this learning space.";
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-      {/* Back button + title */}
-      <div className="flex items-start gap-3 flex-1 min-w-0">
-        <button
-          onClick={() => router.push("/admin/courses")}
-          className="hover:text-muted-foreground size-10 flex items-center justify-center hover:bg-muted rounded-lg transition-colors flex-shrink-0"
-        >
-          <CornerDownLeft />
-        </button>
+    <header className="flex flex-col gap-5 border-b border-ink/10 pb-7">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button asChild variant="ghost" size="icon" className="size-11 shrink-0 rounded-xl">
+              <Link href="/admin/courses" aria-label="Back to course library">
+                <ArrowLeft aria-hidden="true" className="size-4" />
+              </Link>
+            </Button>
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
+              Course Administration
+            </p>
+          </div>
 
-        <div className="flex-1 min-w-0 space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <GraduationCap className="w-7 h-7 text-ink" /> {course.title}
+          <div className="mt-3 flex flex-wrap items-center gap-2.5">
+            <h1 className="min-w-0 font-[family-name:var(--font-display)] text-4xl leading-none tracking-[-0.035em] text-balance text-ink sm:text-5xl">
+              {course.title}
             </h1>
-            <Badge variant="secondary" className="text-xs">
-              Admin View
+            <Badge
+              variant={course.isActive ? "proficient" : "secondary"}
+              className="gap-1.5"
+            >
+              {course.isActive ? (
+                <CheckCircle2 aria-hidden="true" className="size-3.5" />
+              ) : (
+                <CirclePause aria-hidden="true" className="size-3.5" />
+              )}
+              {course.isActive ? "Live for students" : "Paused"}
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
-            {course.description}
+
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate">
+            {course.code ? (
+              <span className="font-mono text-xs font-semibold tracking-[0.14em] text-ink">
+                {course.code}
+              </span>
+            ) : null}
+            {course.code ? <span aria-hidden="true">·</span> : null}
+            <span>{course.instructor?.name || "Unassigned instructor"}</span>
+          </div>
+
+          <p className="mt-3 max-w-2xl text-pretty text-sm leading-6 text-slate">
+            {description}
           </p>
         </div>
-      </div>
 
-      {/* Action buttons */}
-      <div className="flex gap-2 flex-wrap flex-shrink-0">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push(`/course/${course.id}`)}
-          className="gap-2"
-        >
-          <Eye className="w-4 h-4" />
-          <span className="hidden sm:inline">Student View</span>
-          <span className="sm:hidden">View</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push(`/admin/course/${courseId}/assessments`)}
-          className="gap-2"
-        >
-          <ClipboardList className="w-4 h-4" />
-          <span className="hidden sm:inline">Assessments</span>
-          <span className="sm:hidden">Tests</span>
-        </Button>
-        <Button
-          size="sm"
-          onClick={() => router.push(`/admin/course/${course.id}/manage`)}
-          className="gap-2"
-        >
-          <Settings className="w-4 h-4" />
-          <span className="hidden sm:inline">Manage Course</span>
-          <span className="sm:hidden">Manage</span>
-        </Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
+          <Button asChild variant="outline" className="h-11 justify-center gap-2 rounded-xl">
+            <Link href={`/course/${course.id}`}>
+              <Eye aria-hidden="true" className="size-4" />
+              Student View
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="h-11 justify-center gap-2 rounded-xl">
+            <Link href={`/admin/course/${courseId}/assessments`}>
+              <ClipboardList aria-hidden="true" className="size-4" />
+              Assessments
+            </Link>
+          </Button>
+          <Button asChild className="h-11 justify-center gap-2 rounded-xl">
+            <Link href={`/admin/course/${course.id}/manage`}>
+              <Settings2 aria-hidden="true" className="size-4" />
+              Manage Course
+            </Link>
+          </Button>
+        </div>
       </div>
-    </div>
+    </header>
   );
 }

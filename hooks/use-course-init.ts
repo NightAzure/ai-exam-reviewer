@@ -7,6 +7,7 @@ import type { Course, Topic, TopicSubtopic } from '@/types/course';
 
 type CourseRow = {
   id: number;
+  code?: string | null;
   title: string;
   description: string | null;
   thumbnail_url?: string | null;
@@ -86,8 +87,8 @@ const mapCourseRow = (course: CourseRow, topics: Topic[]): Course => {
 
   return {
     id: course.id,
-    // Join codes are deliberately never sent to the learner workspace.
-    code: "",
+    // Admin/manage surfaces need the join code. Student UI must not display it.
+    code: course.code ?? "",
     title: course.title,
     description: course.description ?? '',
     thumbnail: course.thumbnail_url ?? undefined,
@@ -123,6 +124,7 @@ export function useCourseInit(courseId?: number) {
         .from('courses')
         .select(`
           id,
+          code,
           title,
           description,
           thumbnail_url,

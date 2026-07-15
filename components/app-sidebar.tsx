@@ -51,6 +51,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
   const initials = (user?.first_name?.[0] ?? "") + (user?.second_name?.[0] ?? "");
   const fullName = [user?.first_name, user?.second_name].filter(Boolean).join(" ");
   const role = user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "";
+  const accountName = fullName || user?.username || "Signed-in student";
 
   const handleSignOut = async () => {
     try { await supabase.auth.signOut(); } catch {}
@@ -343,7 +344,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[13px] font-bold leading-tight text-[#fffaf2]">
-                  {fullName || "Account"}
+                  {accountName}
                 </span>
                 <span className="mt-1 block truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-[#aeb8c6]">
                   {role || "Student"}
@@ -366,7 +367,7 @@ export const AppSidebar = React.memo(function AppSidebar() {
             <button
               type="button"
               onClick={() => router.push("/account")}
-              title={fullName || "Account"}
+              title={accountName}
               aria-label="Open account settings"
               className="group relative flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#b94a54] to-[#80303b] text-[13px] font-bold text-white shadow-[0_5px_16px_rgba(128,48,59,0.38)] transition-transform hover:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--shell-focus-ring)]"
             >

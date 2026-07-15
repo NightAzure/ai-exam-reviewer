@@ -5,9 +5,12 @@ export interface DashboardMetricPoint {
 }
 
 export interface DashboardCoursePerformancePoint {
+  courseId: number;
   topic: string;
   avgScore: number;
   students: number;
+  completedAttempts: number;
+  isActive: boolean;
 }
 
 export interface DashboardDistributionPoint {

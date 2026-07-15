@@ -33,6 +33,7 @@ import {
 } from "recharts";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAdminDashboard } from "@/hooks/use-admin-dashboard";
+import { AdminDashboardOverview } from "./admin-dashboard-overview";
 
 function MetricCard({
   title,
@@ -107,6 +108,8 @@ const insightToneStyles = {
   },
 };
 
+const useOperationsOverview = () => true;
+
 export default function AdminDashboardPage() {
   const { analytics, error, isLoading } = useAdminDashboard();
 
@@ -164,6 +167,10 @@ export default function AdminDashboardPage() {
         </Alert>
       </div>
     );
+  }
+
+  if (useOperationsOverview()) {
+    return <AdminDashboardOverview analytics={analytics} />;
   }
 
   return (
