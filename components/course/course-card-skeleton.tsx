@@ -6,9 +6,12 @@ export default function CourseCardSkeleton() {
       <Skeleton className="h-36 w-full rounded-none bg-ink/10" />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-3/4 bg-ink/10" />
-          <Skeleton className="h-3 w-1/2 bg-ink/8" />
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1 space-y-2">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-3 w-1/2 bg-ink/8" />
+          </div>
+          <Skeleton className="size-10 shrink-0 rounded-lg" />
         </div>
 
         <div className="rounded-xl border border-ink/10 bg-canvas/50 p-4 space-y-3">

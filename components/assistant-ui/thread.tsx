@@ -330,27 +330,27 @@ const Composer: FC<ThreadProps> = ({course, activeChatId}) => {
 };
 
 const SkeletonLine: FC<{ className?: string }> = ({ className }) => (
-  <div className={cn("h-3 animate-pulse rounded-full bg-muted", className)} />
+  <div className={cn("h-3 animate-pulse rounded-full bg-ink/10 motion-reduce:animate-none", className)} />
 );
 
 const ThreadRestoreSkeleton: FC = () => {
   return (
-    <div className="mx-auto flex w-full max-w-[var(--thread-max-width)] flex-1 flex-col gap-6 px-[var(--thread-padding-x)] py-8">
+    <div className="mx-auto flex w-full max-w-[var(--thread-max-width)] flex-1 flex-col gap-6 px-[var(--thread-padding-x)] py-8" aria-busy="true" aria-label="Loading conversation">
       <div className="space-y-2">
         <SkeletonLine className="w-36" />
         <SkeletonLine className="w-56" />
       </div>
 
       <div className="flex justify-end">
-        <div className="w-[min(78%,34rem)] space-y-2 rounded-2xl bg-primary/10 px-4 py-3">
-          <SkeletonLine className="ml-auto w-11/12 bg-primary/15" />
-          <SkeletonLine className="ml-auto w-7/12 bg-primary/15" />
+        <div className="w-[min(78%,34rem)] space-y-2 rounded-2xl border border-ink/10 bg-ink/[0.06] px-5 py-2.5">
+          <SkeletonLine className="ml-auto w-11/12" />
+          <SkeletonLine className="ml-auto w-7/12" />
         </div>
       </div>
 
-      <div className="grid grid-cols-[auto_1fr] gap-3">
-        <div className="size-8 animate-pulse rounded-full bg-muted" />
-        <div className="space-y-3 rounded-2xl border border-border bg-muted/40 px-4 py-4">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3">
+        <div className="size-8 animate-pulse rounded-full bg-ink/10 motion-reduce:animate-none" />
+        <div className="space-y-3">
           <SkeletonLine className="w-11/12" />
           <SkeletonLine className="w-full" />
           <SkeletonLine className="w-8/12" />
@@ -358,9 +358,9 @@ const ThreadRestoreSkeleton: FC = () => {
       </div>
 
       <div className="flex justify-end">
-        <div className="w-[min(64%,28rem)] space-y-2 rounded-2xl bg-primary/10 px-4 py-3">
-          <SkeletonLine className="ml-auto w-full bg-primary/15" />
-          <SkeletonLine className="ml-auto w-5/12 bg-primary/15" />
+        <div className="w-[min(64%,28rem)] space-y-2 rounded-2xl border border-ink/10 bg-ink/[0.06] px-5 py-2.5">
+          <SkeletonLine className="ml-auto w-full" />
+          <SkeletonLine className="ml-auto w-5/12" />
         </div>
       </div>
     </div>

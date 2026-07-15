@@ -102,7 +102,7 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
       >
         <Image src="/Microsoft.svg" alt="" width={20} height={20} aria-hidden="true" />
         <span>
-          {isMicrosoftLoading ? "Connecting to Microsoft…" : "Sign in with Microsoft"}
+          {isMicrosoftLoading ? "Connecting to Microsoft…" : "Sign In with Microsoft"}
         </span>
       </Button>
 
@@ -111,7 +111,9 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
           <div className="w-full border-t border-ink/10" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-surface px-2 text-slate">or continue with email</span>
+          <span className="bg-surface px-2 font-semibold uppercase tracking-[0.12em] text-slate">
+            Or
+          </span>
         </div>
       </div>
 
@@ -208,7 +210,7 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
         onClick={handleDemoStudentLogin}
       >
         <GraduationCap aria-hidden="true" className="size-4" />
-        Try demo student account
+        Login as Student (Demo)
       </Button>
     </form>
   );

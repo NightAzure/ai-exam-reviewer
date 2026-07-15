@@ -66,6 +66,7 @@ function AccountSettingsSkeleton() {
           <div className="space-y-2">
             <div className="h-3 w-16 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
             <div className="h-8 w-40 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-4 w-full max-w-md animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
           </div>
           <div className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm sm:p-6">
             <div className="flex items-center gap-4 border-b border-ink/10 pb-5">
@@ -87,14 +88,33 @@ function AccountSettingsSkeleton() {
           </div>
         </section>
 
-        <div className="h-64 animate-pulse rounded-2xl bg-ink/90 motion-reduce:animate-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:h-72" />
+        <aside className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <div className="overflow-hidden rounded-2xl bg-ink p-5 shadow-[0_18px_40px_rgb(24_36_58/0.16)] sm:p-6">
+            <div className="h-3 w-20 animate-pulse rounded bg-white/20 motion-reduce:animate-none" />
+            <div className="mt-3 h-8 w-44 animate-pulse rounded bg-white/20 motion-reduce:animate-none" />
+            <div className="mt-2 h-4 w-full max-w-xs animate-pulse rounded bg-white/15 motion-reduce:animate-none" />
+            <div className="mt-6 space-y-4">
+              <div className="h-20 animate-pulse rounded-xl border border-white/12 bg-white/6 motion-reduce:animate-none" />
+              <div className="h-20 animate-pulse rounded-xl border border-white/12 bg-white/6 motion-reduce:animate-none" />
+            </div>
+          </div>
+        </aside>
 
         <section className="space-y-5 lg:col-start-1 lg:row-start-2">
           <div className="space-y-2">
             <div className="h-3 w-24 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
             <div className="h-8 w-28 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-4 w-full max-w-md animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
           </div>
-          <div className="h-24 animate-pulse rounded-2xl border border-ink/10 bg-white motion-reduce:animate-none" />
+          <div className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="h-5 w-24 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+                <div className="h-4 w-full max-w-sm animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+              </div>
+              <div className="h-11 w-full animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none sm:w-28" />
+            </div>
+          </div>
         </section>
       </div>
     </main>

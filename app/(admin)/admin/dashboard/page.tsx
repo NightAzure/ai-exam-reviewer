@@ -112,21 +112,25 @@ export default function AdminDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <div className="space-y-2">
+      <div className="space-y-8" aria-busy="true" aria-label="Loading admin dashboard">
+        <div>
           <Skeleton className="h-9 w-36" />
-          <Skeleton className="h-4 w-64" />
+          <Skeleton className="mt-1 h-4 w-64" />
         </div>
-        {/* Metric cards */}
         <div className="grid gap-4 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl p-4 space-y-3" style={{ background: "linear-gradient(135deg, #f3f4f6 0%, rgb(36 51 76 / 12%) 100%)" }}>
-              <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-5 rounded" />
-                <Skeleton className="h-4 w-24" />
+            <div
+              key={i}
+              className="relative overflow-hidden rounded-2xl border border-ink/10 bg-ink p-5 shadow-sm"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5 rounded bg-white/20" />
+                  <Skeleton className="h-4 w-24 bg-white/20" />
+                </div>
+                <Skeleton className="h-8 w-20 bg-white/20" />
+                <Skeleton className="h-3 w-28 bg-white/20" />
               </div>
-              <Skeleton className="h-8 w-20" />
-              <Skeleton className="h-3 w-28" />
             </div>
           ))}
         </div>

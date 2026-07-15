@@ -14,7 +14,7 @@ import QuickPracticeSheet from "./quick-practice-sheet";
 import DiagnosticSheet from "./diagnostic-sheet";
 import FlashcardSheet from "@/components/flashcard-sheet";
 import { useCourseAnalytics } from "@/hooks/use-course-analytics";
-import { Skeleton } from "@/components/ui/skeleton";
+import CoursePageSkeleton from "./course-page-skeleton";
 import type { Topic } from "@/types/course";
 import { getTopicMasteryForTopic } from "@/lib/topic-mastery";
 
@@ -54,70 +54,8 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
     setSelectedTopicId(null);
   };
 
-  // Handle loading/not found
   if (!course) {
-    return (
-      <div className="space-y-8 pb-6">
-        <header className="border-b border-ink/10 pb-7">
-          <Skeleton className="h-11 w-36 rounded-xl" />
-          <Skeleton className="mt-5 h-3 w-24" />
-          <Skeleton className="mt-3 h-11 w-3/4 max-w-xl sm:h-14" />
-          <Skeleton className="mt-3 h-4 w-full max-w-2xl" />
-        </header>
-
-        <section className="rounded-3xl bg-ink px-6 py-7 sm:px-8 sm:py-8">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
-            <div className="space-y-3">
-              <Skeleton className="h-3 w-32 bg-white/10" />
-              <Skeleton className="h-10 w-3/4 bg-white/10" />
-              <Skeleton className="h-4 w-full max-w-xl bg-white/10" />
-              <Skeleton className="h-11 w-36 rounded-xl bg-white/10" />
-            </div>
-            <Skeleton className="h-36 rounded-2xl bg-white/10" />
-          </div>
-        </section>
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.4fr)]">
-          {/* Left column */}
-          <div className="space-y-5">
-            <div className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Skeleton className="h-5 w-5 rounded" />
-                  <Skeleton className="h-5 w-28" />
-                </div>
-                <Skeleton className="h-3 w-24" />
-              </div>
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="space-y-2 border-t border-ink/10 pt-4">
-                  <div className="flex items-center justify-between">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-5 w-10 rounded-full" />
-                  </div>
-                  <Skeleton className="h-2 w-full rounded-full" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right column */}
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <Skeleton className="h-10 w-full rounded-xl" />
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-border/60 p-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Skeleton className="h-4 w-40" />
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                  </div>
-                  <Skeleton className="h-3 w-24" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <CoursePageSkeleton />;
   }
 
   const normalizedCourse = {

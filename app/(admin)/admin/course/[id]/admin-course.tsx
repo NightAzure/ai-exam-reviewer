@@ -23,7 +23,7 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
   // Handle loading/not found
   if (!course) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-8" aria-busy="true" aria-label="Loading course">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start gap-4">
           <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -96,8 +96,10 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
 
           {/* Right column */}
           <div className="space-y-6">
-            {/* Tabs bar */}
-            <Skeleton className="h-10 w-full rounded-xl" />
+            <div className="grid h-auto w-full grid-cols-2 gap-1 rounded-xl bg-muted p-1">
+              <Skeleton className="h-10 rounded-lg" />
+              <Skeleton className="h-10 rounded-lg" />
+            </div>
 
             {/* Table header */}
             <div className="flex items-center justify-between gap-4">
