@@ -31,9 +31,9 @@ interface FlashcardSheetProps {
 }
 
 const RATING_CONFIG: Record<Rating, { label: string; className: string; next: string }> = {
-  hard: { label: "Hard", className: "border-red-300 text-red-700 hover:bg-red-50", next: "tomorrow" },
+  hard: { label: "Hard", className: "border-red-300 text-needs-focus hover:bg-needs-focus/8", next: "tomorrow" },
   medium: { label: "Medium", className: "border-yellow-300 text-yellow-700 hover:bg-yellow-50", next: "in a few days" },
-  easy: { label: "Easy", className: "border-green-300 text-green-700 hover:bg-green-50", next: "next week+" },
+  easy: { label: "Easy", className: "border-green-300 text-proficient hover:bg-proficient/10", next: "next week+" },
 };
 
 export default function FlashcardSheet({ open, onOpenChange, courseId, topicId }: FlashcardSheetProps) {
@@ -110,10 +110,10 @@ export default function FlashcardSheet({ open, onOpenChange, courseId, topicId }
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="[&>button:last-child]:hidden min-w-[85vw] sm:min-w-[70vw] md:min-w-[55vw] lg:min-w-[45vw] flex flex-col p-0 gap-0">
         {/* Header */}
-        <div className="flex items-center justify-between py-4 px-5 border-b bg-secondary/50">
+        <div className="flex items-center justify-between py-4 px-5 border-b bg-canvas/70">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Layers className="size-5 text-primary" />
+            <div className="p-2 bg-ink/10 rounded-lg">
+              <Layers className="size-5 text-ink" />
             </div>
             <div>
               <h2 className="text-base font-semibold">Flashcard Review</h2>
@@ -150,11 +150,11 @@ export default function FlashcardSheet({ open, onOpenChange, courseId, topicId }
             </div>
           ) : done ? (
             <div className="flex flex-col items-center justify-center h-full gap-6 text-center">
-              <div className="p-4 bg-green-50 rounded-full">
-                <CheckCircle className="size-12 text-green-500" />
+              <div className="p-4 bg-proficient/10 rounded-full">
+                <CheckCircle className="size-12 text-proficient" />
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Session Complete!</h3>
+                <h3 className="text-xl font-bold mb-1">Session Complete</h3>
                 <p className="text-sm text-muted-foreground">You reviewed {cards.length} cards</p>
               </div>
               <div className="flex gap-4 text-sm">
@@ -196,8 +196,8 @@ export default function FlashcardSheet({ open, onOpenChange, courseId, topicId }
                   </Button>
                 ) : (
                   <div className="border-t pt-4 space-y-3">
-                    <div className="rounded-lg bg-green-50 border border-green-200 px-4 py-3">
-                      <p className="text-xs font-semibold text-green-700 mb-1">Correct Answer</p>
+                    <div className="rounded-lg bg-proficient/10 border border-proficient/20 px-4 py-3">
+                      <p className="text-xs font-semibold text-proficient mb-1">Correct Answer</p>
                       <p className="text-sm font-medium text-green-900">{current.correctAnswer}</p>
                     </div>
                     {current.explanation && (

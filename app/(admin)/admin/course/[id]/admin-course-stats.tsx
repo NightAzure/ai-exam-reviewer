@@ -29,14 +29,14 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50 border border-blue-100">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-evidence/10 border border-blue-100">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-500/10 p-2 rounded-lg">
-              <Users className="w-5 h-5 text-blue-600" />
+            <div className="bg-evidence/100/10 p-2 rounded-lg">
+              <Users className="w-5 h-5 text-evidence" />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground">{stats.totalEnrolled} Students</p>
-              <p className="text-xs text-blue-600">Enrolled in course</p>
+              <p className="text-xs text-evidence">Enrolled in course</p>
             </div>
           </div>
         </div>
@@ -53,20 +53,20 @@ export default function AdminCourseStats({ course }: AdminCourseStatsProps) {
           </div>
           <div className="w-full bg-purple-100 rounded-full h-2">
             <div
-              className="bg-purple-600 h-2 rounded-full transition-all"
+              className="bg-purple-600 h-2 rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform]"
               style={{ width: `${Math.max(0, Math.min(100, stats.avgScore))}%` }}
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-3 rounded-xl bg-green-50 border border-green-100">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-proficient/10 border border-green-100">
           <div className="flex items-center gap-3">
-            <div className="bg-green-500/10 p-2 rounded-lg">
-              <Award className="w-5 h-5 text-green-600" />
+            <div className="bg-proficient/100/10 p-2 rounded-lg">
+              <Award className="w-5 h-5 text-proficient" />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground">{stats.completionRate}%</p>
-              <p className="text-xs text-green-600">Completion rate</p>
+              <p className="text-xs text-proficient">Completion rate</p>
             </div>
           </div>
         </div>

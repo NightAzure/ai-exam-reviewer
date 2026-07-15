@@ -63,7 +63,7 @@ export const Thread: FC<ThreadProps> = ({course, activeChatId}) => {
     <CourseIdContext.Provider value={course.id}>
     <ThreadPrimitive.Root
       // aui-thread-root
-      className="bg-background flex h-full flex-col"
+      className="bg-canvas flex h-full flex-col"
       style={{
         ["--thread-max-width" as string]: "48rem",
         ["--thread-padding-x" as string]: "1rem",
@@ -256,7 +256,7 @@ const Composer: FC<ThreadProps> = ({course, activeChatId}) => {
 
   return (
     // aui-composer-wrapper
-    <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] pb-4 md:pb-6">
+    <div className="bg-canvas relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] pb-4 md:pb-6">
       <ThreadScrollToBottom />
       {!isRestoringThread && (
         <ThreadPrimitive.Empty>
@@ -395,7 +395,7 @@ const AssistantMessage: FC = () => {
         </div>
 
         {/* aui-assistant-message-content */}
-        <div className="text-foreground col-start-2 row-start-1 ml-4 min-w-0 max-w-full overflow-hidden leading-7 break-words [overflow-wrap:anywhere]">
+        <div className="text-ink col-start-2 row-start-1 ml-4 min-w-0 max-w-[min(42rem,100%)] overflow-hidden leading-7 break-words [overflow-wrap:anywhere]">
           <MessagePrimitive.Content
             components={{
               Text: MarkdownText,
@@ -590,7 +590,7 @@ const UserMessage: FC = () => {
         <UserActionBar />
 
         {/* aui-user-message-content */}
-        <div className="bg-muted text-foreground col-start-2 max-w-[min(36rem,82vw)] min-w-0 overflow-hidden rounded-3xl px-5 py-2.5 break-words [overflow-wrap:anywhere]">
+        <div className="bg-ink/[0.06] text-ink col-start-2 max-w-[min(36rem,82vw)] min-w-0 overflow-hidden rounded-2xl border border-ink/10 px-5 py-2.5 break-words [overflow-wrap:anywhere]">
           <MessagePrimitive.Content components={{ Text: MarkdownText }} />
         </div>
 

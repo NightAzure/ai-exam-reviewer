@@ -381,8 +381,11 @@ export default function Chat({ courseId, activeChatId }: ChatProps) {
         onRouteIssue={handleThreadRouteIssue}
       />
       <>
-        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-canvas">
           <div className="flex-1 overflow-hidden relative pt-10">
+            <div className="absolute left-4 top-3 z-10 hidden rounded-full border border-ink/10 bg-surface/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-oxblood shadow-sm sm:inline-flex">
+              AI Tutor
+            </div>
             <ChatStatusBanner
               activeChatId={activeChatId}
               routeIssue={threadRouteIssue}

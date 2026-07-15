@@ -56,9 +56,9 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
                 </div>
               </div>
               {[
-                "bg-blue-50",
+                "bg-evidence/10",
                 "bg-purple-50",
-                "bg-green-50",
+                "bg-proficient/10",
                 "bg-orange-50",
               ].map((bg, i) => (
                 <div key={i} className={`p-3 rounded-xl ${bg} space-y-2`}>
@@ -145,10 +145,10 @@ export default function AdminCoursePage({ id }: AdminCoursePageProps) {
         <div className="space-y-6 min-w-0">
           <Tabs defaultValue="students" className="w-full">
             <TabsList className="grid grid-cols-2 w-full mb-4 rounded-xl bg-muted p-1 h-auto">
-              <TabsTrigger value="students" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+              <TabsTrigger value="students" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
                 Students
               </TabsTrigger>
-              <TabsTrigger value="insights" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+              <TabsTrigger value="insights" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
                 Insights
               </TabsTrigger>
             </TabsList>

@@ -92,7 +92,7 @@ export function SettingsTab({
               <Label htmlFor="enrollment-toggle" className="cursor-pointer">
                 Self-Enrollment
               </Label>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-slate">
                 Allow students to join using the course code
               </p>
             </div>
@@ -109,7 +109,7 @@ export function SettingsTab({
                 <Label htmlFor="approval-toggle" className="cursor-pointer">
                   Require Enrollment Approval
                 </Label>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-slate">
                   Students must be approved before they can access the course
                 </p>
               </div>
@@ -150,7 +150,7 @@ export function SettingsTab({
                   {disabled ? "Enable This Course" : "Disable This Course"}
                 </h3>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-slate">
                 {disabled
                   ? "Re-enable this course to allow students to access materials, submit assignments, and participate in course activities."
                   : "Disabling this course will prevent all students from accessing course materials, submitting assignments, and participating in any course activities. This action can be reversed."}
@@ -193,7 +193,7 @@ export function SettingsTab({
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="space-y-2 text-sm text-slate">
             <p>
               Deleting a course removes the course record and its connected learning data, including
               assessments, attempts, notes, chat history, documents, and memberships.

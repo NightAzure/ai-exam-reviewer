@@ -136,15 +136,15 @@ export function DocumentsTab({ courseId }: DocumentsTabProps) {
       <CardContent className="space-y-5">
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-lg border bg-muted/20 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Documents</p>
+            <p className="text-xs uppercase tracking-wide text-slate">Documents</p>
             <p className="mt-2 text-2xl font-semibold">{stats.total}</p>
           </div>
           <div className="rounded-lg border bg-muted/20 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Stored Size</p>
+            <p className="text-xs uppercase tracking-wide text-slate">Stored Size</p>
             <p className="mt-2 text-2xl font-semibold">{formatFileSize(stats.totalSize)}</p>
           </div>
           <div className="rounded-lg border bg-muted/20 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Ready</p>
+            <p className="text-xs uppercase tracking-wide text-slate">Ready</p>
             <p className="mt-2 text-2xl font-semibold">{stats.ready}</p>
           </div>
         </div>
@@ -176,9 +176,9 @@ export function DocumentsTab({ courseId }: DocumentsTabProps) {
                 void handleUpload(files);
               }}
             >
-              <FileUp className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
+              <FileUp className="mx-auto mb-3 h-10 w-10 text-slate" />
               <p className="mb-1 text-sm font-medium">Drop files here or click to browse</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-slate">
                 PDF, DOCX, TXT, and MD files supported. Maximum file size is 50 MB each.
               </p>
               <div className="mt-4 flex justify-center">
@@ -211,7 +211,7 @@ export function DocumentsTab({ courseId }: DocumentsTabProps) {
         {isMutating && activeOperation === "upload" && (
           <div className="flex items-center justify-center gap-2 py-4">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
-            <span className="text-sm text-muted-foreground">Uploading documents...</span>
+            <span className="text-sm text-slate">Uploading documents...</span>
           </div>
         )}
 
@@ -221,15 +221,15 @@ export function DocumentsTab({ courseId }: DocumentsTabProps) {
           </div>
 
           {isLoading ? (
-            <div className="rounded-lg border py-12 text-center text-muted-foreground">
+            <div className="rounded-lg border py-12 text-center text-slate">
               <Loader2 className="mx-auto mb-2 h-12 w-12 animate-spin opacity-50" />
               <p className="text-sm">Loading documents...</p>
             </div>
           ) : documents.length === 0 ? (
-            <div className="rounded-lg border py-12 text-center text-muted-foreground">
+            <div className="rounded-lg border py-12 text-center text-slate">
               <FolderOpen className="mx-auto mb-2 h-12 w-12 opacity-50" />
               <p className="text-sm font-medium">No documents uploaded yet</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-slate">
                 Upload files here to build the course document library.
               </p>
             </div>
@@ -248,11 +248,11 @@ export function DocumentsTab({ courseId }: DocumentsTabProps) {
                           <p className="truncate text-sm font-medium">{doc.originalFilename}</p>
                           <Badge variant="outline">{getStatusLabel(doc.processingStatus)}</Badge>
                         </div>
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="mt-1 text-xs text-slate">
                           {formatFileSize(doc.fileSizeBytes)} {" • "}Uploaded{" "}
                           {new Date(doc.uploadedAt).toLocaleDateString()}
                         </p>
-                        <p className="mt-1 text-xs text-muted-foreground">{doc.mimeType || "Unknown type"}</p>
+                        <p className="mt-1 text-xs text-slate">{doc.mimeType || "Unknown type"}</p>
                       </div>
                     </div>
 

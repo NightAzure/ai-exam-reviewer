@@ -84,31 +84,31 @@ const useCopyToClipboard = ({
 
 const defaultComponents = memoizeMarkdownComponents({
   h1: ({ className, ...props }) => (
-    <h1 className={cn("mb-8 scroll-m-20 text-4xl font-extrabold tracking-tight last:mb-0", className)} {...props} />
+    <h1 className={cn("mb-6 scroll-m-20 font-[family-name:var(--font-display)] text-3xl font-medium tracking-tight text-ink last:mb-0", className)} {...props} />
   ),
   h2: ({ className, ...props }) => (
-    <h2 className={cn("mb-4 mt-8 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 last:mb-0", className)} {...props} />
+    <h2 className={cn("mb-4 mt-8 scroll-m-20 font-[family-name:var(--font-display)] text-2xl font-medium tracking-tight text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   h3: ({ className, ...props }) => (
-    <h3 className={cn("mb-4 mt-6 scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0 last:mb-0", className)} {...props} />
+    <h3 className={cn("mb-3 mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   h4: ({ className, ...props }) => (
-    <h4 className={cn("mb-4 mt-6 scroll-m-20 text-xl font-semibold tracking-tight first:mt-0 last:mb-0", className)} {...props} />
+    <h4 className={cn("mb-3 mt-5 scroll-m-20 text-lg font-semibold tracking-tight text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   h5: ({ className, ...props }) => (
-    <h5 className={cn("my-4 text-lg font-semibold first:mt-0 last:mb-0", className)} {...props} />
+    <h5 className={cn("my-4 text-base font-semibold text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   h6: ({ className, ...props }) => (
-    <h6 className={cn("my-4 font-semibold first:mt-0 last:mb-0", className)} {...props} />
+    <h6 className={cn("my-4 text-sm font-semibold text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   p: ({ className, ...props }) => (
-    <p className={cn("mb-5 mt-5 leading-7 first:mt-0 last:mb-0", className)} {...props} />
+    <p className={cn("mb-4 mt-4 text-[15px] leading-7 text-ink first:mt-0 last:mb-0", className)} {...props} />
   ),
   a: ({ className, ...props }) => (
-    <a className={cn("text-primary font-medium underline underline-offset-4", className)} {...props} />
+    <a className={cn("font-medium text-oxblood underline underline-offset-4 hover:text-oxblood-strong", className)} {...props} />
   ),
   blockquote: ({ className, ...props }) => (
-    <blockquote className={cn("border-l-2 pl-6 italic", className)} {...props} />
+    <blockquote className={cn("border-l-2 border-oxblood/40 pl-6 text-slate italic", className)} {...props} />
   ),
   ul: ({ className, ...props }) => (
     <ul className={cn("my-5 ml-6 list-disc [&>li]:mt-2", className)} {...props} />

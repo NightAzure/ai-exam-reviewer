@@ -55,46 +55,46 @@ function roleLabel(role: string) {
 function AccountSettingsSkeleton() {
   return (
     <main className="space-y-8 pb-6" aria-busy="true" aria-label="Loading account settings">
-      <header className="border-b border-[#24334c]/10 pb-7">
-        <div className="h-3 w-20 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-        <div className="mt-3 h-10 w-56 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none sm:h-12 sm:w-72" />
-        <div className="mt-3 h-4 w-72 max-w-full animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+      <header className="border-b border-ink/10 pb-7">
+        <div className="h-3 w-20 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+        <div className="mt-3 h-10 w-56 animate-pulse rounded bg-ink/8 motion-reduce:animate-none sm:h-12 sm:w-72" />
+        <div className="mt-3 h-4 w-72 max-w-full animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
       </header>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,340px)] lg:items-start">
         <section className="space-y-5 lg:col-start-1 lg:row-start-1">
           <div className="space-y-2">
-            <div className="h-3 w-16 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-            <div className="h-8 w-40 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="h-3 w-16 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-8 w-40 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
           </div>
-          <div className="rounded-2xl border border-[#24334c]/10 bg-white p-5 shadow-sm sm:p-6">
-            <div className="flex items-center gap-4 border-b border-[#24334c]/10 pb-5">
-              <div className="size-14 shrink-0 animate-pulse rounded-2xl bg-[#18243a]/8 motion-reduce:animate-none" />
+          <div className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex items-center gap-4 border-b border-ink/10 pb-5">
+              <div className="size-14 shrink-0 animate-pulse rounded-2xl bg-ink/8 motion-reduce:animate-none" />
               <div className="min-w-0 flex-1 space-y-2">
-                <div className="h-5 w-40 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-                <div className="h-4 w-28 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+                <div className="h-5 w-40 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+                <div className="h-4 w-28 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
               </div>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
-              <div className="h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+              <div className="h-11 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
+              <div className="h-11 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
             </div>
-            <div className="mt-4 h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="mt-4 h-11 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
             <div className="mt-6 flex justify-end gap-2">
-              <div className="h-11 w-24 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
-              <div className="h-11 w-32 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+              <div className="h-11 w-24 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
+              <div className="h-11 w-32 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
             </div>
           </div>
         </section>
 
-        <div className="h-64 animate-pulse rounded-2xl bg-[#18243a]/90 motion-reduce:animate-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:h-72" />
+        <div className="h-64 animate-pulse rounded-2xl bg-ink/90 motion-reduce:animate-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:h-72" />
 
         <section className="space-y-5 lg:col-start-1 lg:row-start-2">
           <div className="space-y-2">
-            <div className="h-3 w-24 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-            <div className="h-8 w-28 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="h-3 w-24 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-8 w-28 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
           </div>
-          <div className="h-24 animate-pulse rounded-2xl border border-[#24334c]/10 bg-white motion-reduce:animate-none" />
+          <div className="h-24 animate-pulse rounded-2xl border border-ink/10 bg-white motion-reduce:animate-none" />
         </section>
       </div>
     </main>
@@ -217,24 +217,24 @@ export default function AccountSettings() {
       <main className="pb-6">
         <section
           aria-labelledby="account-signed-out-heading"
-          className="rounded-3xl border border-[#a0363d]/15 bg-white px-6 py-12 text-center shadow-sm"
+          className="rounded-3xl border border-needs-focus/15 bg-white px-6 py-12 text-center shadow-sm"
         >
-          <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#a0363d]/8 text-[#8e3039]">
+          <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-needs-focus/8 text-oxblood">
             <AlertCircle aria-hidden="true" className="size-5" />
           </span>
           <h1
             id="account-signed-out-heading"
-            className="mt-4 font-[family-name:var(--font-display)] text-2xl text-[#18243a]"
+            className="mt-4 font-[family-name:var(--font-display)] text-2xl text-ink"
           >
             Sign In Required
           </h1>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#647087]">
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate">
             You need an active session to view and update account settings.
           </p>
           <Button
             type="button"
             onClick={() => router.push("/auth")}
-            className="mt-5 h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]"
+            className="mt-5 h-11 rounded-xl bg-ink px-4 text-white hover:bg-ink-raised"
           >
             Go to Sign In
           </Button>
@@ -245,15 +245,15 @@ export default function AccountSettings() {
 
   return (
     <main className="space-y-8 pb-6">
-      <header className="border-b border-[#24334c]/10 pb-7">
-        <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+      <header className="border-b border-ink/10 pb-7">
+        <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
           <UserRound aria-hidden="true" className="size-3.5" />
           Account
         </p>
-        <h1 className="mt-2 text-pretty font-[family-name:var(--font-display)] text-4xl leading-none tracking-[-0.035em] text-[#18243a] sm:text-5xl">
+        <h1 className="mt-2 text-pretty font-[family-name:var(--font-display)] text-4xl leading-none tracking-[-0.035em] text-ink sm:text-5xl">
           Account Settings
         </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-[#647087]">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-slate">
           Update the name shown in your courses and review how you sign in.
         </p>
       </header>
@@ -264,40 +264,40 @@ export default function AccountSettings() {
           className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-1"
         >
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
               Profile
             </p>
             <h2
               id="profile-heading"
-              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-ink sm:text-3xl"
             >
               Your Details
             </h2>
-            <p className="mt-2 text-sm leading-6 text-[#647087]">
+            <p className="mt-2 text-sm leading-6 text-slate">
               This name and username appear across your review space.
             </p>
           </div>
 
           <form
             onSubmit={(event) => void handleSave(event)}
-            className="rounded-2xl border border-[#24334c]/10 bg-white p-5 shadow-sm sm:p-6"
+            className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm sm:p-6"
             noValidate
           >
-            <div className="flex items-center gap-4 border-b border-[#24334c]/10 pb-5">
+            <div className="flex items-center gap-4 border-b border-ink/10 pb-5">
               <div
                 aria-hidden="true"
-                className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#18243a] font-[family-name:var(--font-display)] text-xl tracking-tight text-[#f4ece2]"
+                className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-ink font-[family-name:var(--font-display)] text-xl tracking-tight text-canvas"
               >
                 {initials}
               </div>
               <div className="min-w-0 space-y-1.5">
-                <p className="truncate font-semibold text-[#18243a]">{displayName}</p>
+                <p className="truncate font-semibold text-ink">{displayName}</p>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex h-7 items-center rounded-full border border-[#24334c]/12 bg-[#18243a]/[0.03] px-2.5 text-xs font-semibold text-[#59677c]">
+                  <span className="inline-flex h-7 items-center rounded-full border border-ink/12 bg-ink/[0.03] px-2.5 text-xs font-semibold text-slate">
                     {roleLabel(role)}
                   </span>
                   {username.trim() ? (
-                    <span className="truncate font-mono text-xs tracking-wide text-[#647087]">
+                    <span className="truncate font-mono text-xs tracking-wide text-slate">
                       @{username.trim()}
                     </span>
                   ) : null}
@@ -307,7 +307,7 @@ export default function AccountSettings() {
 
             <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-[#18243a]">
+                <Label htmlFor="firstName" className="text-ink">
                   First Name
                 </Label>
                 <Input
@@ -325,7 +325,7 @@ export default function AccountSettings() {
                   aria-invalid={Boolean(fieldErrors.firstName)}
                   aria-describedby={fieldErrors.firstName ? "firstName-error" : undefined}
                   className={cn(
-                    "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                    "h-11 rounded-xl border-ink/15 bg-white shadow-sm",
                     fieldErrors.firstName && "border-destructive",
                   )}
                 />
@@ -337,7 +337,7 @@ export default function AccountSettings() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-[#18243a]">
+                <Label htmlFor="lastName" className="text-ink">
                   Last Name
                 </Label>
                 <Input
@@ -355,7 +355,7 @@ export default function AccountSettings() {
                   aria-invalid={Boolean(fieldErrors.lastName)}
                   aria-describedby={fieldErrors.lastName ? "lastName-error" : undefined}
                   className={cn(
-                    "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                    "h-11 rounded-xl border-ink/15 bg-white shadow-sm",
                     fieldErrors.lastName && "border-destructive",
                   )}
                 />
@@ -368,7 +368,7 @@ export default function AccountSettings() {
             </div>
 
             <div className="mt-5 space-y-2">
-              <Label htmlFor="username" className="text-[#18243a]">
+              <Label htmlFor="username" className="text-ink">
                 Username
               </Label>
               <Input
@@ -386,7 +386,7 @@ export default function AccountSettings() {
                 aria-invalid={Boolean(fieldErrors.username)}
                 aria-describedby={fieldErrors.username ? "username-error" : "username-help"}
                 className={cn(
-                  "h-11 rounded-xl border-[#24334c]/15 bg-white shadow-sm",
+                  "h-11 rounded-xl border-ink/15 bg-white shadow-sm",
                   fieldErrors.username && "border-destructive",
                 )}
               />
@@ -395,13 +395,13 @@ export default function AccountSettings() {
                   {fieldErrors.username}
                 </p>
               ) : (
-                <p id="username-help" className="text-xs leading-5 text-[#647087]">
+                <p id="username-help" className="text-xs leading-5 text-slate">
                   3–30 characters. Lowercase letters, numbers, and underscores only.
                 </p>
               )}
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 border-t border-[#24334c]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-6 flex flex-col gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-h-5 min-w-0" aria-live="polite">
                 {status ? (
                   <p
@@ -418,7 +418,7 @@ export default function AccountSettings() {
                     <span>{status.msg}</span>
                   </p>
                 ) : lastUpdated ? (
-                  <p className="text-xs text-[#647087]">Last updated {lastUpdated}</p>
+                  <p className="text-xs text-slate">Last updated {lastUpdated}</p>
                 ) : null}
               </div>
 
@@ -428,14 +428,14 @@ export default function AccountSettings() {
                   variant="outline"
                   onClick={handleReset}
                   disabled={!isDirty || isSaving}
-                  className="h-11 rounded-xl border-[#24334c]/15 bg-white px-4 text-[#18243a] shadow-sm hover:bg-[#18243a]/[0.03]"
+                  className="h-11 rounded-xl border-ink/15 bg-white px-4 text-ink shadow-sm hover:bg-ink/[0.03]"
                 >
                   Discard Changes
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSaving}
-                  className="h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]"
+                  className="h-11 rounded-xl bg-ink px-4 text-white hover:bg-ink-raised"
                 >
                   {isSaving ? (
                     <>
@@ -454,9 +454,9 @@ export default function AccountSettings() {
         <aside className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-6">
           <section
             aria-labelledby="security-heading"
-            className="overflow-hidden rounded-2xl bg-[#18243a] p-5 text-white shadow-[0_18px_40px_rgb(24_36_58/0.16)] sm:p-6"
+            className="overflow-hidden rounded-2xl bg-ink p-5 text-white shadow-[0_18px_40px_rgb(24_36_58/0.16)] sm:p-6"
           >
-            <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#e4b57a]">
+            <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-brass">
               <Shield aria-hidden="true" className="size-3.5" />
               Security
             </p>
@@ -485,7 +485,7 @@ export default function AccountSettings() {
                   Authentication Method
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
-                  <KeyRound aria-hidden="true" className="size-4 shrink-0 text-[#e4b57a]" />
+                  <KeyRound aria-hidden="true" className="size-4 shrink-0 text-brass" />
                   Microsoft SSO
                 </div>
               </div>
@@ -498,25 +498,25 @@ export default function AccountSettings() {
           className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-2"
         >
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
               Account Actions
             </p>
             <h2
               id="account-actions-heading"
-              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-ink sm:text-3xl"
             >
               Session
             </h2>
-            <p className="mt-2 text-sm leading-6 text-[#647087]">
+            <p className="mt-2 text-sm leading-6 text-slate">
               End your current session when you finish studying on this device.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#24334c]/10 bg-white shadow-sm">
+          <div className="rounded-2xl border border-ink/10 bg-white shadow-sm">
             <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
               <div className="min-w-0">
-                <p className="font-semibold text-[#18243a]">Sign Out</p>
-                <p className="mt-1 text-sm leading-6 text-[#647087]">
+                <p className="font-semibold text-ink">Sign Out</p>
+                <p className="mt-1 text-sm leading-6 text-slate">
                   Ends your session on this device. Your courses and progress stay saved.
                 </p>
               </div>
@@ -525,7 +525,7 @@ export default function AccountSettings() {
                 variant="outline"
                 onClick={() => void handleSignOut()}
                 disabled={isSigningOut}
-                className="h-11 w-full shrink-0 rounded-xl border-[#24334c]/15 bg-white px-4 text-[#18243a] shadow-sm hover:bg-[#18243a]/[0.03] sm:w-auto"
+                className="h-11 w-full shrink-0 rounded-xl border-ink/15 bg-white px-4 text-ink shadow-sm hover:bg-ink/[0.03] sm:w-auto"
               >
                 {isSigningOut ? (
                   <>

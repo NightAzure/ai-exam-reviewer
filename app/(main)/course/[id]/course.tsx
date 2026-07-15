@@ -58,14 +58,14 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
   if (!course) {
     return (
       <div className="space-y-8 pb-6">
-        <header className="border-b border-[#24334c]/10 pb-7">
+        <header className="border-b border-ink/10 pb-7">
           <Skeleton className="h-11 w-36 rounded-xl" />
           <Skeleton className="mt-5 h-3 w-24" />
           <Skeleton className="mt-3 h-11 w-3/4 max-w-xl sm:h-14" />
           <Skeleton className="mt-3 h-4 w-full max-w-2xl" />
         </header>
 
-        <section className="rounded-3xl bg-[#18243a] px-6 py-7 sm:px-8 sm:py-8">
+        <section className="rounded-3xl bg-ink px-6 py-7 sm:px-8 sm:py-8">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
             <div className="space-y-3">
               <Skeleton className="h-3 w-32 bg-white/10" />
@@ -80,7 +80,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.4fr)]">
           {/* Left column */}
           <div className="space-y-5">
-            <div className="rounded-2xl border border-[#24334c]/10 bg-white p-5 shadow-sm space-y-4">
+            <div className="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Skeleton className="h-5 w-5 rounded" />
@@ -89,7 +89,7 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
                 <Skeleton className="h-3 w-24" />
               </div>
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="space-y-2 border-t border-[#24334c]/10 pt-4">
+                <div key={i} className="space-y-2 border-t border-ink/10 pt-4">
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-4 w-32" />
                     <Skeleton className="h-5 w-10 rounded-full" />
@@ -204,12 +204,12 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
         />
         <section aria-labelledby="course-content-heading" className="min-w-0">
           <div className="mb-5">
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
               Study Materials
             </p>
             <h2
               id="course-content-heading"
-              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-[#18243a] sm:text-3xl"
+              className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-[-0.025em] text-ink sm:text-3xl"
             >
               Assessments & Notes
             </h2>
@@ -219,16 +219,16 @@ export default function CourseContentPage({ id }: CourseContentPageProps) {
             onValueChange={(v) => setActiveTab(v as "assessments" | "notes")}
             className="w-full"
           >
-            <TabsList className="grid h-auto w-full grid-cols-2 rounded-xl border border-[#24334c]/10 bg-white p-1">
+            <TabsList className="grid h-auto w-full grid-cols-2 rounded-xl border border-ink/10 bg-ink/[0.05] p-1">
               <TabsTrigger
                 value="assessments"
-                className="rounded-lg py-2.5 text-sm font-semibold text-[#647087] transition-[background-color,color,box-shadow] data-[state=active]:bg-[#18243a] data-[state=active]:text-white data-[state=active]:shadow-sm"
+                className="rounded-lg py-2.5 text-sm font-semibold text-ink transition-[color,background-color,box-shadow] duration-150 motion-reduce:transition-none data-[state=active]:bg-oxblood data-[state=active]:text-white data-[state=active]:shadow-sm"
               >
                 Assessments
               </TabsTrigger>
               <TabsTrigger
                 value="notes"
-                className="rounded-lg py-2.5 text-sm font-semibold text-[#647087] transition-[background-color,color,box-shadow] data-[state=active]:bg-[#18243a] data-[state=active]:text-white data-[state=active]:shadow-sm"
+                className="rounded-lg py-2.5 text-sm font-semibold text-ink transition-[color,background-color,box-shadow] duration-150 motion-reduce:transition-none data-[state=active]:bg-oxblood data-[state=active]:text-white data-[state=active]:shadow-sm"
               >
                 Notes
               </TabsTrigger>

@@ -133,27 +133,36 @@ export default function JoinClassDialog({
         </DialogTrigger>
       )}
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="rounded-3xl border-ink/10 bg-surface sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-base font-semibold flex items-center">
-            <Tag className="w-4 h-4 mr-2" />
+          <DialogTitle className="flex items-center font-[family-name:var(--font-display)] text-xl text-ink">
+            <Tag aria-hidden="true" className="mr-2 size-4 text-oxblood" />
             Join a Class
           </DialogTitle>
-          <DialogDescription>
-            Enter the class code provided by your instructor to join the class.
+          <DialogDescription className="text-slate">
+            Enter the 6-character code from your instructor.
           </DialogDescription>
         </DialogHeader>
 
         {joinStatus === "pending" ? (
           <div className="flex flex-col items-center gap-3 py-4 text-center">
-            <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-              <Clock className="h-6 w-6 text-muted-foreground" />
+            <div className="flex size-12 items-center justify-center rounded-full bg-evidence/10">
+              <Clock aria-hidden="true" className="size-6 text-evidence" />
             </div>
             <div className="space-y-1">
-              <p className="font-semibold text-sm text-foreground">Request sent</p>
-              <p className="text-xs text-muted-foreground">Waiting for the instructor to accept your request.</p>
+              <p className="text-sm font-semibold text-ink">Request sent</p>
+              <p className="text-xs leading-5 text-slate">
+                Waiting for the instructor to accept your request.
+              </p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => { resetForm(); setIsOpen(false); }} className="mt-1">
+            <Button
+              variant="outline"
+              onClick={() => {
+                resetForm();
+                setIsOpen(false);
+              }}
+              className="mt-1"
+            >
               Close
             </Button>
           </div>
@@ -161,13 +170,18 @@ export default function JoinClassDialog({
           <div className="space-y-4">
             <div className="space-y-3">
               <div className="space-y-1.5">
-                <Label htmlFor="class-code">Class Code</Label>
+                <Label htmlFor="class-code" className="text-ink">
+                  Class code
+                </Label>
                 <div className="relative">
-                  <Tag className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                  <Tag
+                    aria-hidden="true"
+                    className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate"
+                  />
                   <Input
                     id="class-code"
                     name="class-code"
-                    placeholder="e.g. ABC123"
+                    placeholder="e.g. ABC123…"
                     value={classCode}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyPress}
@@ -183,16 +197,16 @@ export default function JoinClassDialog({
                     aria-describedby={error ? "class-code-error" : undefined}
                   />
                 </div>
-                {error && (
+                {error ? (
                   <div
                     id="class-code-error"
                     role="alert"
-                    className="flex items-center text-destructive text-sm mt-1"
+                    className="mt-1 flex items-center text-sm text-destructive"
                   >
-                    <AlertCircle className="w-4 h-4 mr-1" />
+                    <AlertCircle aria-hidden="true" className="mr-1 size-4" />
                     {error}
                   </div>
-                )}
+                ) : null}
               </div>
 
               <Button
@@ -202,21 +216,21 @@ export default function JoinClassDialog({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 aria-hidden="true" className="mr-2 size-4 animate-spin" />
                     Joining…
                   </>
                 ) : (
                   <>
-                    <ArrowRight className="w-4 h-4 mr-2" />
+                    <ArrowRight aria-hidden="true" className="mr-2 size-4" />
                     Join Class
                   </>
                 )}
               </Button>
             </div>
 
-            <div className="pt-3 border-t text-center">
-              <p className="text-xs text-muted-foreground mb-1">Need help?</p>
-              <p className="text-xs text-muted-foreground">
+            <div className="border-t border-ink/10 pt-3 text-center">
+              <p className="mb-1 text-xs text-slate">Need help?</p>
+              <p className="text-xs text-slate">
                 Contact your instructor for the class code.
               </p>
             </div>

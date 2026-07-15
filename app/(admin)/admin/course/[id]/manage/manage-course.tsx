@@ -124,19 +124,19 @@ export default function ManageCoursePage({ id }: ManageCoursePageProps) {
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Manage Course</h1>
-          <p className="text-sm text-muted-foreground">{name}</p>
+          <p className="text-sm text-slate">{name}</p>
         </div>
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 rounded-xl bg-muted p-1 h-auto">
-          <TabsTrigger value="general" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">General</TabsTrigger>
-          <TabsTrigger value="documents" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+          <TabsTrigger value="general" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">General</TabsTrigger>
+          <TabsTrigger value="documents" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">
             <span className="sm:hidden">Documents</span>
             <span className="hidden sm:inline">RAG Documents</span>
           </TabsTrigger>
-          <TabsTrigger value="members" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Members</TabsTrigger>
-          <TabsTrigger value="settings" className="rounded-lg py-2.5 text-sm font-medium text-muted-foreground transition-all duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Settings</TabsTrigger>
+          <TabsTrigger value="members" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Members</TabsTrigger>
+          <TabsTrigger value="settings" className="rounded-lg py-2.5 text-sm font-medium text-slate transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-150 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm">Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">

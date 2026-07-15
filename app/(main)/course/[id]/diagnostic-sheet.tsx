@@ -197,8 +197,8 @@ export default function DiagnosticSheet({
               {/* Hero card */}
               <div className="rounded-[24px] border border-border bg-muted/50 p-5 space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-primary/10">
-                    <Brain className="size-5 text-primary" />
+                  <div className="p-2.5 rounded-xl bg-ink/10">
+                    <Brain className="size-5 text-ink" />
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-foreground">Discover your knowledge level</h2>
@@ -216,7 +216,7 @@ export default function DiagnosticSheet({
               </div>
 
               {/* Topics covered */}
-              <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-3">
+              <div className="rounded-[24px] border border-primary/20 bg-ink/5 px-5 py-4 space-y-3">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   Topics covered
                 </p>
@@ -239,7 +239,7 @@ export default function DiagnosticSheet({
                 </div>
               )}
               {fetchStatus === "error" && (
-                <div className="rounded-[24px] border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                <div className="rounded-[24px] border border-needs-focus/20 bg-needs-focus/8 p-4 text-sm text-red-800">
                   Failed to load questions. Check your connection and try again.
                 </div>
               )}
@@ -248,7 +248,7 @@ export default function DiagnosticSheet({
               <button
                 disabled={fetchStatus !== "ready"}
                 onClick={handleStart}
-                className="group w-full rounded-2xl border border-primary bg-primary px-4 py-4 text-left transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group w-full rounded-2xl border border-primary bg-ink px-4 py-4 text-left transition-[color,background-color,border-color,box-shadow,opacity,transform] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
@@ -271,14 +271,14 @@ export default function DiagnosticSheet({
           {phase === "quiz" && q && (
             <div className="space-y-4">
               {/* Progress card */}
-              <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-2">
+              <div className="rounded-[24px] border border-primary/20 bg-ink/5 px-5 py-4 space-y-2">
                 <div className="flex items-center justify-between text-xs text-muted-foreground/70">
                   <span>Question {current + 1} of {questions.length}</span>
                   <span className="font-medium text-muted-foreground">{q.topicName}</span>
                 </div>
-                <div className="h-2 rounded-full bg-primary/15 overflow-hidden">
+                <div className="h-2 rounded-full bg-ink/15 overflow-hidden">
                   <motion.div
-                    className="h-full rounded-full bg-primary"
+                    className="h-full rounded-full bg-ink"
                     initial={{ width: `${progressPct}%` }}
                     animate={{ width: `${((current + 1) / questions.length) * 100}%` }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
@@ -301,14 +301,14 @@ export default function DiagnosticSheet({
                       disabled={submitted}
                       onClick={() => setSelected(option)}
                       className={cn(
-                        "w-full rounded-2xl border px-4 py-3.5 text-left text-sm transition-all",
+                        "w-full rounded-2xl border px-4 py-3.5 text-left text-sm transition-[color,background-color,border-color,box-shadow,opacity,transform]",
                         !submitted && [
                           "cursor-pointer",
                           isSelected
-                            ? "border-primary bg-primary/5 text-foreground font-medium"
+                            ? "border-primary bg-ink/5 text-foreground font-medium"
                             : "border-border bg-card text-foreground/80 hover:border-border hover:bg-muted/50",
                         ],
-                        submitted && isSelected && "border-primary bg-primary/5 text-foreground font-medium",
+                        submitted && isSelected && "border-primary bg-ink/5 text-foreground font-medium",
                         submitted && !isSelected && "opacity-45 border-border/60 bg-card cursor-default",
                       )}
                     >
@@ -320,9 +320,9 @@ export default function DiagnosticSheet({
 
               {/* Locked answer cue */}
               {submitted && (
-                <div className="rounded-[24px] border border-primary/20 bg-primary/5 p-4 space-y-1 text-sm text-foreground/80">
+                <div className="rounded-[24px] border border-primary/20 bg-ink/5 p-4 space-y-1 text-sm text-foreground/80">
                   <p className="font-semibold flex items-center gap-1.5 text-foreground">
-                    <CheckCircle2 className="size-4 text-primary" />
+                    <CheckCircle2 className="size-4 text-ink" />
                     Answer saved
                   </p>
                   <p className="leading-relaxed">
@@ -337,7 +337,7 @@ export default function DiagnosticSheet({
                   <button
                     disabled={!selected}
                     onClick={handleSubmitAnswer}
-                    className="group w-full rounded-2xl border border-primary bg-primary px-4 py-4 text-left transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="group w-full rounded-2xl border border-primary bg-ink px-4 py-4 text-left transition-[color,background-color,border-color,box-shadow,opacity,transform] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="font-medium text-white">Submit Answer</div>
@@ -347,7 +347,7 @@ export default function DiagnosticSheet({
                 ) : (
                   <button
                     onClick={handleNext}
-                    className="group w-full rounded-2xl border border-primary bg-primary px-4 py-4 text-left transition-all hover:opacity-90"
+                    className="group w-full rounded-2xl border border-primary bg-ink px-4 py-4 text-left transition-[color,background-color,border-color,box-shadow,opacity,transform] hover:opacity-90"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="font-medium text-white">
@@ -364,8 +364,8 @@ export default function DiagnosticSheet({
           {/* ── Submitting ── */}
           {phase === "submitting" && (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
-              <div className="p-4 rounded-2xl bg-primary/10">
-                <Loader2 className="size-7 text-primary animate-spin" />
+              <div className="p-4 rounded-2xl bg-ink/10">
+                <Loader2 className="size-7 text-ink animate-spin" />
               </div>
               <p className="text-sm text-muted-foreground">Saving your results...</p>
             </div>
@@ -374,7 +374,7 @@ export default function DiagnosticSheet({
           {/* ── Submit error ── */}
           {phase === "submit-error" && (
             <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
-              <div className="p-4 rounded-2xl bg-red-50 border border-red-200">
+              <div className="p-4 rounded-2xl bg-needs-focus/8 border border-needs-focus/20">
                 <XCircle className="size-7 text-red-400" />
               </div>
               <div>
@@ -385,7 +385,7 @@ export default function DiagnosticSheet({
               </div>
               <button
                 onClick={() => void handleFinish()}
-                className="group flex items-center gap-2 rounded-2xl border border-border bg-card px-5 py-3 text-sm font-medium text-foreground/80 hover:bg-muted/50 transition-all"
+                className="group flex items-center gap-2 rounded-2xl border border-border bg-card px-5 py-3 text-sm font-medium text-foreground/80 hover:bg-muted/50 transition-[color,background-color,border-color,box-shadow,opacity,transform]"
               >
                 <RotateCcw className="size-4" />
                 Retry
@@ -418,9 +418,9 @@ export default function DiagnosticSheet({
                     <span>Overall score</span>
                     <span>{questions.length > 0 ? Math.round((finalScore / questions.length) * 100) : 0}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-primary/15 overflow-hidden">
+                  <div className="h-2 rounded-full bg-ink/15 overflow-hidden">
                     <motion.div
-                      className="h-full rounded-full bg-primary"
+                      className="h-full rounded-full bg-ink"
                       initial={{ width: 0 }}
                       animate={{ width: `${questions.length > 0 ? Math.round((finalScore / questions.length) * 100) : 0}%` }}
                       transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
@@ -430,7 +430,7 @@ export default function DiagnosticSheet({
               </div>
 
               {/* Results by topic */}
-              <div className="rounded-[24px] border border-primary/20 bg-primary/5 px-5 py-4 space-y-3">
+              <div className="rounded-[24px] border border-primary/20 bg-ink/5 px-5 py-4 space-y-3">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   Results by topic
                 </p>
@@ -463,7 +463,7 @@ export default function DiagnosticSheet({
               {/* Back button */}
               <button
                 onClick={() => onOpenChange(false)}
-                className="group w-full rounded-2xl border border-primary bg-primary px-4 py-4 text-left transition-all hover:opacity-90"
+                className="group w-full rounded-2xl border border-primary bg-ink px-4 py-4 text-left transition-[color,background-color,border-color,box-shadow,opacity,transform] hover:opacity-90"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>

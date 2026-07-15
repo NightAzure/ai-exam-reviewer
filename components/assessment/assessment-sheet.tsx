@@ -473,11 +473,11 @@ export default function AssessmentSheet({
     <div className="rounded-lg border bg-card p-5 space-y-3">
       <p className="font-medium text-sm leading-relaxed">{item.question_text}</p>
       <div className="flex flex-wrap gap-2 text-sm">
-        <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 border border-red-200 text-red-700">
+        <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-needs-focus/8 border border-needs-focus/20 text-needs-focus">
           <XCircle className="size-3.5" />
           Your answer: {item.student_answer || "No answer"}
         </span>
-        <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-green-50 border border-green-200 text-green-700">
+        <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-proficient/10 border border-proficient/20 text-proficient">
           <CheckCircle className="size-3.5" />
           Correct: {item.correct_answer}
         </span>
@@ -504,9 +504,9 @@ export default function AssessmentSheet({
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold border-2 ${
               getQuestionStatus(questionIndex) === "correct"
-                ? "bg-green-100 border-green-500 text-green-700"
+                ? "bg-green-100 border-green-500 text-proficient"
                 : getQuestionStatus(questionIndex) === "incorrect"
-                  ? "bg-red-100 border-red-500 text-red-700"
+                  ? "bg-red-100 border-red-500 text-needs-focus"
                   : getQuestionStatus(questionIndex) === "answered"
                     ? "bg-blue-100 border-blue-500 text-blue-700"
                     : "bg-muted border-border text-muted-foreground"
@@ -572,11 +572,11 @@ export default function AssessmentSheet({
                   key={`${question.id}-${option}`}
                   className={`flex items-center space-x-3 p-4 rounded-lg border transition-colors ${
                     status === "correct"
-                      ? "bg-green-50 border-green-200"
+                      ? "bg-proficient/10 border-proficient/20"
                       : status === "incorrect"
-                        ? "bg-red-50 border-red-200"
+                        ? "bg-needs-focus/8 border-needs-focus/20"
                         : userAnswers[questionIndex] === option
-                          ? "bg-blue-50 border-blue-200"
+                          ? "bg-evidence/10 border-evidence/20"
                           : "bg-background hover:bg-muted/50"
                   }`}
                 >
@@ -593,10 +593,10 @@ export default function AssessmentSheet({
                   {isSubmitted && showAnswers ? (
                     <div className="ml-2">
                       {status === "correct" ? (
-                        <CheckCircle className="size-5 text-green-600" />
+                        <CheckCircle className="size-5 text-proficient" />
                       ) : null}
                       {status === "incorrect" ? (
-                        <XCircle className="size-5 text-red-600" />
+                        <XCircle className="size-5 text-needs-focus" />
                       ) : null}
                     </div>
                   ) : null}
@@ -616,7 +616,7 @@ export default function AssessmentSheet({
           ) : null}
 
           {isSubmitted && showAnswers && question.explanation ? (
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-6 p-4 bg-evidence/10 border border-evidence/20 rounded-lg">
               <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
                 <AlertCircle className="size-4" />
                 Explanation
@@ -635,7 +635,7 @@ export default function AssessmentSheet({
         <div className="flex items-center justify-between py-5 px-7 border-b bg-gradient-to-r from-primary/5 to-primary/10">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <BookOpen className="size-5 text-primary" />
+              <BookOpen className="size-5 text-ink" />
               <div>
                 <h1 className="text-lg font-bold">{assessment?.title ?? "Assessment"}</h1>
                 <p className="text-sm text-muted-foreground">
@@ -781,11 +781,11 @@ export default function AssessmentSheet({
                         currentQuestion === index
                           ? ""
                           : status === "correct"
-                            ? "text-green-600 hover:text-green-700"
+                            ? "text-proficient hover:text-proficient"
                             : status === "incorrect"
-                              ? "text-red-600 hover:text-red-700"
+                              ? "text-needs-focus hover:text-needs-focus"
                               : status === "answered"
-                                ? "text-blue-600 hover:text-blue-700"
+                                ? "text-evidence hover:text-blue-700"
                                 : "text-muted-foreground"
                       }`}
                       onClick={() => setCurrentQuestion(index)}
@@ -798,9 +798,9 @@ export default function AssessmentSheet({
                         <div
                           className={`absolute -bottom-1 -right-1 size-2 rounded-full ${
                             status === "correct"
-                              ? "bg-green-500"
+                              ? "bg-proficient/100"
                               : status === "incorrect"
-                                ? "bg-red-500"
+                                ? "bg-needs-focus/80"
                                 : "bg-muted-foreground/50"
                           }`}
                         />
@@ -838,7 +838,7 @@ export default function AssessmentSheet({
               {isSubmitted && aiReview && aiReview.length > 0 ? (
                 <div className="max-w-5xl mx-auto mb-8 mt-5">
                   <h3 className="text-base font-semibold mb-4 flex items-center gap-2">
-                    <Brain className="size-4 text-primary" />
+                    <Brain className="size-4 text-ink" />
                     AI Review — Wrong Answers ({aiReview.length})
                   </h3>
                   <div className="space-y-4">
@@ -939,7 +939,7 @@ export default function AssessmentSheet({
                         <div className="text-sm text-muted-foreground">Your Score</div>
                         <div
                           className={`text-lg font-bold ${
-                            score >= 70 ? "text-green-600" : "text-red-600"
+                            score >= 70 ? "text-proficient" : "text-needs-focus"
                           }`}
                         >
                           {score}%

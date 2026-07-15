@@ -115,24 +115,24 @@ export default function CourseAssessment({ course }: CourseProps) {
 
   return (
     <>
-      <Card className="gap-0 rounded-2xl border-[#24334c]/10 bg-white py-0 shadow-sm">
-        <CardHeader className="border-b border-[#24334c]/10 py-5">
-          <CardTitle className="flex items-center gap-2 font-[family-name:var(--font-display)] text-2xl tracking-[-0.02em] text-[#18243a]">
-            <ClipboardList className="size-5 text-[#8e3039]" />
+      <Card className="gap-0 rounded-2xl border-ink/10 bg-white py-0 shadow-sm">
+        <CardHeader className="border-b border-ink/10 py-5">
+          <CardTitle className="flex items-center gap-2 font-[family-name:var(--font-display)] text-2xl tracking-[-0.02em] text-ink">
+            <ClipboardList className="size-5 text-oxblood" />
             Course Assessments
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 py-5">
           {attemptsError ? (
-            <div className="rounded-xl border border-[#a0363d]/20 bg-[#8e3039]/8 p-4 text-sm text-[#8e3039]">
+            <div className="rounded-xl border border-needs-focus/20 bg-oxblood/8 p-4 text-sm text-oxblood">
               {attemptsError}
             </div>
           ) : null}
 
           {assessments.length === 0 ? (
-            <div className="py-10 text-center text-[#647087]">
-              <ClipboardList className="mx-auto mb-3 size-8 text-[#8e3039]/45" />
-              <p className="font-semibold text-[#18243a]">No assessments available</p>
+            <div className="py-10 text-center text-slate">
+              <ClipboardList className="mx-auto mb-3 size-8 text-oxblood/45" />
+              <p className="font-semibold text-ink">No assessments available</p>
               <p className="mt-1 text-sm">Check back later for a new assessment from your instructor.</p>
             </div>
           ) : (
@@ -151,7 +151,7 @@ export default function CourseAssessment({ course }: CourseProps) {
                 score == null ? "" :
                 score >= 75 ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
                 score >= 60 ? "border-amber-200 bg-amber-50 text-amber-800" :
-                "border-[#a0363d]/20 bg-[#8e3039]/8 text-[#8e3039]";
+                "border-needs-focus/20 bg-oxblood/8 text-oxblood";
 
               return (
                 <div
@@ -160,25 +160,25 @@ export default function CourseAssessment({ course }: CourseProps) {
                     setOpenPreview(true);
                   }}
                   key={assessment.id}
-                  className="group rounded-xl border border-[#24334c]/10 bg-white p-4 transition-[border-color,box-shadow] hover:border-[#24334c]/20 hover:shadow-sm"
+                  className="group rounded-xl border border-ink/10 bg-white p-4 transition-[border-color,box-shadow] hover:border-ink/20 hover:shadow-sm"
                 >
                   <div className="flex justify-between items-start gap-3">
                     <div className="space-y-2 flex-1 min-w-0">
-                      <p className="truncate font-semibold text-[#18243a]">
+                      <p className="truncate font-semibold text-ink">
                         {assessment.title}
                       </p>
                       <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
+                        <span className="inline-flex items-center gap-1 text-xs text-slate">
                           <Clock className="w-3 h-3" />
                           {assessment.deadline
                             ? new Intl.DateTimeFormat("en-PH", { month: "short", day: "numeric", year: "numeric" }).format(new Date(assessment.deadline))
                             : "No deadline"}
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
+                        <span className="inline-flex items-center gap-1 text-xs text-slate">
                           <Hash className="w-3 h-3" />
                           {questionCount} questions
                         </span>
-                        <span className="inline-flex items-center gap-1 text-xs text-[#647087]">
+                        <span className="inline-flex items-center gap-1 text-xs text-slate">
                           <Trophy className="w-3 h-3" />
                           {attempts.length}/{assessment.maxAttempts} attempts
                         </span>
@@ -188,16 +188,16 @@ export default function CourseAssessment({ course }: CourseProps) {
                           Latest: {score}%
                         </span>
                       ) : attemptsLoading ? (
-                        <span className="text-xs text-[#647087]">Loading…</span>
+                        <span className="text-xs text-slate">Loading…</span>
                       ) : (
-                        <span className="text-xs text-[#647087]">Not yet taken</span>
+                        <span className="text-xs text-slate">Not yet taken</span>
                       )}
                     </div>
                     {latestAttempt ? (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-11 shrink-0 rounded-xl border-[#24334c]/15 bg-white text-xs text-[#18243a] hover:bg-[#18243a]/[0.03]"
+                        className="h-11 shrink-0 rounded-xl border-ink/15 bg-white text-xs text-ink hover:bg-ink/[0.03]"
                         onClick={(event) => {
                           event.stopPropagation();
                           setCurrentAssessment(assessment);
@@ -209,7 +209,7 @@ export default function CourseAssessment({ course }: CourseProps) {
                     ) : (
                       <Button
                         size="sm"
-                        className="h-11 shrink-0 rounded-xl bg-[#18243a] text-xs text-white hover:bg-[#293752]"
+                        className="h-11 shrink-0 rounded-xl bg-ink text-xs text-white hover:bg-ink-raised"
                         disabled={!canStartAssessment(assessment, attempts)}
                         onClick={(event) => {
                           event.stopPropagation();

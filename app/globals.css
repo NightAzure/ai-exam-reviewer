@@ -58,6 +58,21 @@
   --color-admin-primary: var(--admin-primary);
   --color-admin-primary-dark: var(--admin-primary-dark);
   --color-admin-accent: var(--admin-accent);
+  /* Exam Studio canonical aliases (prefer these in product UI) */
+  --color-ink: var(--ink);
+  --color-ink-raised: var(--ink-raised);
+  --color-canvas: var(--canvas);
+  --color-porcelain: var(--porcelain);
+  --color-surface: var(--surface);
+  --color-slate: var(--slate);
+  --color-oxblood: var(--oxblood);
+  --color-oxblood-strong: var(--oxblood-strong);
+  --color-brass: var(--brass);
+  --color-needs-focus: var(--needs-focus);
+  --color-building-confidence: var(--building-confidence);
+  --color-proficient: var(--proficient);
+  --color-evidence: var(--evidence);
+  /* Temporary aliases during rollout — map to canonical tokens */
   --color-page: var(--page);
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
@@ -75,60 +90,81 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
+  --radius: 0.75rem; /* 12px — Exam Studio control radius */
+
+  /*
+   * Exam Studio canonical tokens (source of truth).
+   * Prefer --ink / --canvas / --oxblood / --slate / --surface in product UI.
+   * Temporary aliases (--page, --brand, --shell) remain for rollout compatibility.
+   */
+  --ink: #18243a;
+  --ink-raised: #293752;
+  --canvas: #f4ece2;
+  --porcelain: #f4ece2;
+  --surface: #ffffff;
+  --slate: #647087;
+  --border-subtle: rgb(36 51 76 / 10%);
+  --oxblood: #8e3039;
+  --oxblood-strong: #6f2730;
+  --brass: #e4b57a;
+  --needs-focus: #a0363d;
+  --building-confidence: #b45309;
+  --proficient: #047857;
+  --evidence: #0369a1;
+  --shell-focus-ring: #e3aaad;
+  --shell-depth: #142037;
+
+  /* Semantic theme — primary maps to ink (not default oklch) */
+  --background: var(--surface);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: #f8f5f0;
+  --secondary: color-mix(in srgb, var(--ink) 6%, white);
+  --secondary-foreground: var(--ink);
+  --muted: color-mix(in srgb, var(--ink) 5%, white);
+  --muted-foreground: var(--slate);
+  --accent: color-mix(in srgb, var(--oxblood) 8%, white);
+  --accent-foreground: var(--ink);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
+  --border: var(--border-subtle);
+  --input: var(--border-subtle);
+  --ring: color-mix(in srgb, var(--oxblood) 55%, transparent);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.705 0.015 286.067);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: #f8f5f0;
+  --sidebar-accent: color-mix(in srgb, var(--ink) 5%, white);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: color-mix(in srgb, var(--oxblood) 55%, transparent);
 
-  /*CUSTOM COLORS*/
-  /* Admin Theme Colors - Royal Red */
-  --admin-primary: oklch(55.922% 0.22185 25.687);
-  --admin-primary-dark: oklch(0.42 0.22 25);
-  --admin-accent: oklch(1 0 0);
+  /* Admin Theme Colors — scoped accent only */
+  --admin-primary: var(--oxblood);
+  --admin-primary-dark: var(--oxblood-strong);
+  --admin-accent: var(--surface);
 
-  /* Student canvas: warm porcelain behind the dark app chrome. */
-  --page: oklch(0.974 0.009 84);
-
-  /* Refined oxblood accent for primary study actions and active states. */
-  --brand: oklch(0.49 0.155 20);
-  --brand-strong: oklch(0.42 0.14 20);
+  /* Temporary aliases → canonical (remove after full migration) */
+  --page: var(--canvas);
+  --brand: var(--oxblood);
+  --brand-strong: var(--oxblood-strong);
 
   /* Dark application chrome (navbar + sidebar) */
-  --shell: oklch(0.225 0.025 262);
-  --shell-foreground: oklch(1 0 0);
-  --shell-muted: oklch(1 0 0 / 55%);
-  --shell-faint: oklch(1 0 0 / 32%);
-  --shell-border: oklch(1 0 0 / 8%);
-  --shell-hover: oklch(1 0 0 / 7%);
-  --shell-active: oklch(0.505 0.194 27.5 / 22%);
+  --shell: var(--ink);
+  --shell-foreground: #ffffff;
+  --shell-muted: rgb(255 255 255 / 55%);
+  --shell-faint: rgb(255 255 255 / 32%);
+  --shell-border: rgb(255 255 255 / 8%);
+  --shell-hover: rgb(255 255 255 / 7%);
+  --shell-active: color-mix(in srgb, var(--oxblood) 22%, transparent);
 
   /* Assessment Card Gradients - Better contrast with the --page background */
   --gradient-blue-start: oklch(0.95 0.02 240);

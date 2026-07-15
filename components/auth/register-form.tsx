@@ -38,7 +38,7 @@ export function RegisterForm() {
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
     const labels = ["Weak", "Fair", "Good", "Strong"];
-    const colors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-green-500"];
+    const colors = ["bg-needs-focus", "bg-building-confidence", "bg-brass", "bg-proficient"];
     return { strength, label: labels[strength - 1] || "", color: colors[strength - 1] || "" };
   };
 
@@ -153,10 +153,10 @@ export function RegisterForm() {
               {[1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
-                  className={`h-1 flex-1 rounded-full transition-all ${
+                  className={`h-1 flex-1 rounded-full transition-[background-color] duration-150 motion-reduce:transition-none ${
                     level <= passwordStrength.strength
                       ? passwordStrength.color
-                      : "bg-muted"
+                      : "bg-ink/10"
                   }`}
                 />
               ))}
@@ -206,7 +206,7 @@ export function RegisterForm() {
             animate={{ opacity: 1 }}
           >
             {formData.password === formData.confirmPassword ? (
-              <div className="flex items-center gap-1 text-xs text-green-600">
+              <div className="flex items-center gap-1 text-xs text-proficient">
                 <CheckCircle2 className="size-3" />
                 <span>Passwords match</span>
               </div>
@@ -223,7 +223,7 @@ export function RegisterForm() {
           <li className="flex items-center gap-1.5">
             <CheckCircle2
               className={`size-3 ${
-                formData.password.length >= 8 ? "text-green-600" : "text-muted-foreground"
+                formData.password.length >= 8 ? "text-proficient" : "text-slate"
               }`}
             />
             At least 8 characters
@@ -232,8 +232,8 @@ export function RegisterForm() {
             <CheckCircle2
               className={`size-3 ${
                 /[a-z]/.test(formData.password) && /[A-Z]/.test(formData.password)
-                  ? "text-green-600"
-                  : "text-muted-foreground"
+                  ? "text-proficient"
+                  : "text-slate"
               }`}
             />
             Uppercase and lowercase letters
@@ -241,7 +241,7 @@ export function RegisterForm() {
           <li className="flex items-center gap-1.5">
             <CheckCircle2
               className={`size-3 ${
-                /[0-9]/.test(formData.password) ? "text-green-600" : "text-muted-foreground"
+                /[0-9]/.test(formData.password) ? "text-proficient" : "text-slate"
               }`}
             />
             At least one number

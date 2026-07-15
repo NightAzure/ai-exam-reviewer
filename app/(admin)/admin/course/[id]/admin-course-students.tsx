@@ -158,11 +158,11 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "excellent":
-        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Excellent</Badge>;
+        return <Badge className="bg-green-100 text-proficient hover:bg-green-100">Excellent</Badge>;
       case "active":
         return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Active</Badge>;
       case "at-risk":
-        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100">At Risk</Badge>;
+        return <Badge className="bg-red-100 text-needs-focus hover:bg-red-100">At Risk</Badge>;
       default:
         return <Badge variant="secondary">Active</Badge>;
     }
@@ -171,9 +171,9 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "up":
-        return <TrendingUp className="w-4 h-4 text-green-600" />;
+        return <TrendingUp className="w-4 h-4 text-proficient" />;
       case "down":
-        return <TrendingDown className="w-4 h-4 text-red-600" />;
+        return <TrendingDown className="w-4 h-4 text-needs-focus" />;
       default:
         return <Minus className="w-4 h-4 text-muted-foreground/70" />;
     }
@@ -189,7 +189,7 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
               <p className="text-sm text-muted-foreground mt-1">
                 {isLoading ? "Loading students..." : `${filteredAndSortedStudents.length} students found`}
               </p>
-              {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+              {error && <p className="text-sm text-needs-focus mt-1">{error}</p>}
             </div>
             <Button className="gap-2 shadow-sm" onClick={() => setAddStudentOpen(true)}>
               <UserPlus className="w-4 h-4" />
@@ -367,10 +367,10 @@ export default function AdminCourseStudents({ course }: AdminCourseStudentsProps
                             <span
                               className={`font-bold tabular-nums ${
                                 student.avgScore >= 80
-                                  ? "text-green-600"
+                                  ? "text-proficient"
                                   : student.avgScore >= 60
                                     ? "text-yellow-600"
-                                    : "text-red-600"
+                                    : "text-needs-focus"
                               }`}
                             >
                               {student.avgScore}%

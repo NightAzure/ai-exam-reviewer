@@ -14,7 +14,6 @@ import {
   AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
-import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -40,43 +39,41 @@ function MetricCard({
   value,
   growth,
   icon: Icon,
-  color,
-  index,
+  tone = "ink",
 }: {
   title: string;
   value: number;
   growth: number;
-  color: string;
-  index: number;
+  tone?: "ink" | "oxblood" | "slate" | "brass";
   icon: LucideIcon;
 }) {
-  const [hoveredMetric, setHoveredMetric] = useState<number | null>(null);
+  const toneClass =
+    tone === "oxblood"
+      ? "bg-oxblood"
+      : tone === "slate"
+        ? "bg-ink-raised"
+        : tone === "brass"
+          ? "bg-[#3d4f6b]"
+          : "bg-ink";
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl p-4 transition-all duration-300 cursor-pointer ${
-        hoveredMetric === index ? "scale-105 shadow-lg" : "shadow-md"
-      }`}
-      style={{
-        background: `linear-gradient(135deg, ${color}f0 0%, ${color}d0 100%)`,
-      }}
-      onMouseEnter={() => setHoveredMetric(index)}
-      onMouseLeave={() => setHoveredMetric(null)}
+      className={`relative overflow-hidden rounded-2xl border border-ink/10 p-5 text-white shadow-sm transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transform-none motion-reduce:transition-none ${toneClass}`}
     >
-      <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8 opacity-20">
-        <Icon className="w-full h-full" />
+      <div className="absolute top-0 right-0 w-28 h-28 translate-x-8 -translate-y-8 opacity-15">
+        <Icon className="w-full h-full" aria-hidden="true" />
       </div>
       <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-2">
-          <Icon className="h-5 w-5 text-white" />
+        <div className="mb-2 flex items-center gap-2">
+          <Icon className="h-5 w-5 text-brass" aria-hidden="true" />
           <span className="text-sm font-medium text-white/90">{title}</span>
         </div>
-        <div className="text-3xl font-bold text-white mb-1">
-          {value.toLocaleString()}
+        <div className="mb-1 font-[family-name:var(--font-display)] text-3xl font-medium tabular-nums">
+          {value.toLocaleString("en-PH")}
         </div>
         <div className="flex items-center gap-1">
-          <TrendingUp className="h-3 w-3 text-white/80" />
-          <span className="text-sm font-semibold text-white/90">
+          <TrendingUp className="h-3 w-3 text-white/80" aria-hidden="true" />
+          <span className="text-sm font-semibold tabular-nums text-white/90">
             {growth >= 0 ? "+" : ""}
             {growth}%
           </span>
@@ -89,24 +86,24 @@ function MetricCard({
 
 const insightToneStyles = {
   success: {
-    wrapper: "bg-green-50 border-green-100",
+    wrapper: "bg-proficient/10 border-proficient/20",
     icon: CheckCircle2,
-    iconClass: "text-green-600",
+    iconClass: "text-proficient",
   },
   warning: {
-    wrapper: "bg-yellow-50 border-yellow-100",
+    wrapper: "bg-building-confidence/10 border-building-confidence/20",
     icon: AlertTriangle,
-    iconClass: "text-yellow-600",
+    iconClass: "text-building-confidence",
   },
   info: {
-    wrapper: "bg-blue-50 border-blue-100",
+    wrapper: "bg-evidence/10 border-evidence/20",
     icon: Activity,
-    iconClass: "text-blue-600",
+    iconClass: "text-evidence",
   },
   highlight: {
-    wrapper: "bg-purple-50 border-purple-100",
+    wrapper: "bg-oxblood/10 border-oxblood/20",
     icon: Award,
-    iconClass: "text-purple-600",
+    iconClass: "text-oxblood",
   },
 };
 
@@ -123,7 +120,7 @@ export default function AdminDashboardPage() {
         {/* Metric cards */}
         <div className="grid gap-4 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl p-4 space-y-3" style={{ background: "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)" }}>
+            <div key={i} className="rounded-xl p-4 space-y-3" style={{ background: "linear-gradient(135deg, #f3f4f6 0%, rgb(36 51 76 / 12%) 100%)" }}>
               <div className="flex items-center gap-2">
                 <Skeleton className="h-5 w-5 rounded" />
                 <Skeleton className="h-4 w-24" />
@@ -156,7 +153,7 @@ export default function AdminDashboardPage() {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">Platform overview</p>
+          <p className="text-sm text-slate mt-1">Platform overview</p>
         </div>
         <Alert variant="destructive">
           <AlertDescription>{error ?? "Unable to load dashboard analytics."}</AlertDescription>
@@ -168,9 +165,11 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Welcome back! Here&apos;s an overview of your platform
+        <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
+          Dashboard
+        </h1>
+        <p className="mt-1 text-sm text-slate">
+          Course health, enrollments, and recent platform activity
         </p>
       </div>
 
@@ -180,32 +179,28 @@ export default function AdminDashboardPage() {
           value={analytics.totalUsers}
           growth={analytics.totalUsersGrowth}
           icon={Users}
-          color="#3b82f6"
-          index={0}
+          tone="ink"
         />
         <MetricCard
           title="Courses"
           value={analytics.totalCourses}
           growth={analytics.totalCoursesGrowth}
           icon={BookOpen}
-          color="#8b5cf6"
-          index={1}
+          tone="oxblood"
         />
         <MetricCard
           title="Assessments"
           value={analytics.assessments}
           growth={analytics.assessmentsGrowth}
           icon={ClipboardList}
-          color="#10b981"
-          index={2}
+          tone="slate"
         />
         <MetricCard
           title="Messages"
           value={analytics.messages}
           growth={analytics.messagesGrowth}
           icon={MessageCircle}
-          color="#f59e0b"
-          index={3}
+          tone="brass"
         />
       </div>
 
@@ -215,7 +210,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               User Growth Trend
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Total users vs active sign-ins over 6 months
             </p>
           </CardHeader>
@@ -230,21 +225,21 @@ export default function AdminDashboardPage() {
               >
                 <defs>
                   <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#18243a" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#18243a" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#8e3039" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8e3039" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgb(36 51 76 / 12%)" />
+                <XAxis dataKey="month" stroke="#647087" />
+                <YAxis stroke="#647087" />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid rgb(36 51 76 / 12%)",
                     borderRadius: "8px",
                   }}
                 />
@@ -252,14 +247,14 @@ export default function AdminDashboardPage() {
                 <Area
                   type="monotone"
                   dataKey="users"
-                  stroke="#3b82f6"
+                  stroke="#18243a"
                   fillOpacity={1}
                   fill="url(#colorUsers)"
                 />
                 <Area
                   type="monotone"
                   dataKey="active"
-                  stroke="#8b5cf6"
+                  stroke="#8e3039"
                   fillOpacity={1}
                   fill="url(#colorActive)"
                 />
@@ -273,7 +268,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               Assessment Completion
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Student progress across enrolled learners
             </p>
           </CardHeader>
@@ -283,7 +278,7 @@ export default function AdminDashboardPage() {
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid rgb(36 51 76 / 12%)",
                     borderRadius: "8px",
                   }}
                 />
@@ -294,7 +289,7 @@ export default function AdminDashboardPage() {
                   labelLine={false}
                   label={({ name, value }) => `${name} ${value}%`}
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="#647087"
                   dataKey="value"
                 >
                   {analytics.assessmentCompletionData.map((entry, index) => (
@@ -313,30 +308,30 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               Course Performance
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Enrollment volume with average assessment score by course
             </p>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <ComposedChart data={analytics.coursePerformanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="topic" stroke="#6b7280" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgb(36 51 76 / 12%)" />
+                <XAxis dataKey="topic" stroke="#647087" />
                 <YAxis
                   yAxisId="students"
-                  stroke="#10b981"
+                  stroke="#047857"
                   allowDecimals={false}
                 />
                 <YAxis
                   yAxisId="score"
                   orientation="right"
                   domain={[0, 100]}
-                  stroke="#3b82f6"
+                  stroke="#18243a"
                 />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid rgb(36 51 76 / 12%)",
                     borderRadius: "8px",
                   }}
                 />
@@ -344,7 +339,7 @@ export default function AdminDashboardPage() {
                 <Bar
                   yAxisId="students"
                   dataKey="students"
-                  fill="#10b981"
+                  fill="#047857"
                   name="Students Enrolled"
                   radius={[6, 6, 0, 0]}
                 />
@@ -352,9 +347,9 @@ export default function AdminDashboardPage() {
                   yAxisId="score"
                   type="monotone"
                   dataKey="avgScore"
-                  stroke="#3b82f6"
+                  stroke="#18243a"
                   strokeWidth={2}
-                  dot={{ fill: "#3b82f6", r: 4 }}
+                  dot={{ fill: "#18243a", r: 4 }}
                   name="Avg Score"
                 />
               </ComposedChart>
@@ -367,7 +362,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               Student Performance
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Distribution of student performance levels
             </p>
           </CardHeader>
@@ -385,14 +380,14 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="w-full bg-muted rounded-full h-3">
                     <div
-                      className={`h-3 rounded-full transition-all ${
+                      className={`h-3 rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform] ${
                         index === 0
-                          ? "bg-green-500"
+                          ? "bg-proficient/100"
                           : index === 1
-                            ? "bg-blue-500"
+                            ? "bg-evidence/100"
                             : index === 2
                               ? "bg-yellow-500"
-                              : "bg-red-500"
+                              : "bg-needs-focus/80"
                       }`}
                       style={{ width: `${item.percentage}%` }}
                     />
@@ -400,12 +395,12 @@ export default function AdminDashboardPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-5 p-3 rounded-lg bg-blue-50 border border-blue-100">
+            <div className="mt-5 p-3 rounded-lg bg-evidence/10 border border-blue-100">
               <p className="text-sm text-foreground/80">
                 <span className="font-semibold text-foreground">Tracked Students:</span>{" "}
                 {analytics.studentPerformanceData.reduce((sum, item) => sum + item.count, 0)}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-slate mt-1">
                 Distribution is based on average completed assessment scores.
               </p>
             </div>
@@ -419,29 +414,29 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               Weekly Platform Activity
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Active users by week
             </p>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={analytics.weeklyActivityData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="label" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgb(36 51 76 / 12%)" />
+                <XAxis dataKey="label" stroke="#647087" />
+                <YAxis stroke="#647087" />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid rgb(36 51 76 / 12%)",
                     borderRadius: "8px",
                   }}
                 />
                 <Line
                   type="monotone"
                   dataKey="activeUsers"
-                  stroke="#8b5cf6"
+                  stroke="#8e3039"
                   strokeWidth={2}
-                  dot={{ fill: "#8b5cf6", r: 5 }}
+                  dot={{ fill: "#8e3039", r: 5 }}
                   activeDot={{ r: 7 }}
                 />
               </LineChart>
@@ -454,7 +449,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg font-semibold">
               Platform Signals
             </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Derived trends and areas to watch
             </p>
           </CardHeader>
@@ -474,7 +469,7 @@ export default function AdminDashboardPage() {
                       <p className="font-semibold text-foreground text-sm">
                         {insight.title}
                       </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-slate mt-0.5">
                         {insight.description}
                       </p>
                     </div>

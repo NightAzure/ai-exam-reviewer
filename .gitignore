@@ -92,3 +92,6 @@ Thumbs.db
 /supabase/*
 !/supabase/migrations/
 !/supabase/migrations/**
+
+.vercel
+.env*

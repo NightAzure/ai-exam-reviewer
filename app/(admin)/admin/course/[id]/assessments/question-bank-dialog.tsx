@@ -92,9 +92,9 @@ const emptyDraft = (): QuestionBankMutationInput => ({
 });
 
 const difficultyInfo = (level: number): { label: string; className: string } => {
-  if (level <= 2) return { label: "Easy", className: "bg-green-100 text-green-700" };
+  if (level <= 2) return { label: "Easy", className: "bg-green-100 text-proficient" };
   if (level <= 3) return { label: "Medium", className: "bg-yellow-100 text-yellow-700" };
-  return { label: "Hard", className: "bg-red-100 text-red-700" };
+  return { label: "Hard", className: "bg-red-100 text-needs-focus" };
 };
 
 type CourseTopicOption = {
@@ -623,7 +623,7 @@ export function QuestionBankDialog({
                   return (
                     <Card
                       key={question.id}
-                      className={`cursor-pointer transition-all ${
+                      className={`cursor-pointer transition-[color,background-color,border-color,box-shadow,opacity,transform] ${
                         selectedQuestions.has(question.id)
                           ? "ring-2 ring-admin-primary shadow-md"
                           : "hover:shadow-md"
@@ -674,7 +674,7 @@ export function QuestionBankDialog({
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-red-600 hover:text-red-700"
+                              className="h-8 w-8 text-needs-focus hover:text-needs-focus"
                               title="Delete question"
                               onClick={(event) => {
                                 event.stopPropagation();
@@ -700,7 +700,7 @@ export function QuestionBankDialog({
                                 key={L}
                                 className={`flex gap-2 rounded-md border px-2 py-1.5 text-sm ${
                                   isCorrect
-                                    ? "border-green-400 bg-green-50 text-green-900"
+                                    ? "border-green-400 bg-proficient/10 text-green-900"
                                     : text
                                       ? "bg-background"
                                       : "border-dashed text-muted-foreground/70"
@@ -1103,7 +1103,7 @@ export function QuestionBankDialog({
               </div>
             ) : genStatus === "polling" ? (
               <div className="flex-1 flex flex-col items-center justify-center gap-4 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <Loader2 className="w-8 h-8 animate-spin text-ink" />
                 <p className="text-sm font-medium">Generating questions…</p>
                 <p className="text-xs text-muted-foreground">This may take a minute. You can leave this dialog open.</p>
               </div>
@@ -1117,10 +1117,15 @@ export function QuestionBankDialog({
               /* done — show draft questions */
               <div className="flex-1 flex flex-col overflow-hidden">
                 <div className="flex items-center justify-between mb-3 pt-2 shrink-0">
-                  <p className="text-sm font-medium">
-                    {draftQuestions.length} question{draftQuestions.length !== 1 ? "s" : ""} generated
-                    · {approvedIndices.size} approved
-                  </p>
+                  <div>
+                    <p className="text-sm font-semibold text-ink">
+                      AI drafts awaiting review
+                    </p>
+                    <p className="text-xs text-slate">
+                      {draftQuestions.length} generated · {approvedIndices.size} approved ·{" "}
+                      {rejectedIndices.size} rejected. Approve before they enter the bank.
+                    </p>
+                  </div>
                   <Button variant="outline" size="sm" onClick={resetGenTab}>Generate More</Button>
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-3">
@@ -1128,11 +1133,26 @@ export function QuestionBankDialog({
                     if (rejectedIndices.has(idx)) return null;
                     const approved = approvedIndices.has(idx);
                     return (
-                      <Card key={idx} className={approved ? "opacity-60" : ""}>
+                      <Card
+                        key={idx}
+                        className={
+                          approved
+                            ? "border-proficient/30 bg-proficient/5 opacity-90"
+                            : "border-building-confidence/30 bg-building-confidence/5"
+                        }
+                      >
                         <CardContent className="p-4 space-y-3">
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex flex-wrap gap-1.5 items-center">
-                              <Badge className="text-xs bg-blue-100 text-blue-700 hover:bg-blue-100">{q.subject}</Badge>
+                              <Badge
+                                variant={approved ? "proficient" : "confidence"}
+                                className="text-xs"
+                              >
+                                {approved ? "Approved" : "AI Draft"}
+                              </Badge>
+                              <Badge className="text-xs bg-evidence/10 text-evidence hover:bg-evidence/10">
+                                {q.subject}
+                              </Badge>
                               <Badge variant="outline" className="text-xs">{q.subtopic ?? q.topic}</Badge>
                               <Badge variant="outline" className="text-xs">{q.generation_source === "rag" ? "RAG" : "Baseline"}</Badge>
                               <Badge variant="outline" className="text-xs">{difficultyInfo(q.difficulty_level).label}</Badge>
@@ -1141,7 +1161,7 @@ export function QuestionBankDialog({
                               <Button
                                 variant={approved ? "default" : "outline"}
                                 size="sm"
-                                className="gap-1 h-7 text-xs"
+                                className="gap-1 h-9 min-h-9 text-xs"
                                 disabled={approved || approvingIdx === idx}
                                 onClick={() => void handleApproveQuestion(idx, q)}
                               >
@@ -1154,15 +1174,16 @@ export function QuestionBankDialog({
                               </Button>
                               <Button
                                 variant="ghost"
-                                size="sm"
-                                className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+                                size="icon"
+                                className="size-9 min-h-9 min-w-9 text-slate hover:text-destructive"
+                                aria-label="Reject draft question"
                                 onClick={() => setRejectedIndices((prev) => new Set([...prev, idx]))}
                               >
                                 <X className="w-3.5 h-3.5" />
                               </Button>
                             </div>
                           </div>
-                          <p className="text-sm leading-relaxed">{q.question}</p>
+                          <p className="text-sm leading-relaxed text-ink">{q.question}</p>
                           <ul className="grid gap-1">
                             {(["A", "B", "C", "D"] as const).map((letter) => {
                               const text = q.choices[letter];
@@ -1171,18 +1192,24 @@ export function QuestionBankDialog({
                                 <li
                                   key={letter}
                                   className={`flex gap-2 rounded-md border px-2 py-1 text-sm ${
-                                    isCorrect ? "border-green-400 bg-green-50 text-green-900" : "bg-background"
+                                    isCorrect
+                                      ? "border-proficient/40 bg-proficient/10 text-proficient"
+                                      : "border-ink/10 bg-surface text-ink"
                                   }`}
                                 >
-                                  <span className="font-mono font-bold w-5 shrink-0">{letter}.</span>
+                                  <span className="font-mono font-bold w-5 shrink-0 tabular-nums">{letter}.</span>
                                   <span className="flex-1">{text}</span>
-                                  {isCorrect && <Badge className="shrink-0 text-[10px] bg-green-600 hover:bg-green-600">Correct</Badge>}
+                                  {isCorrect ? (
+                                    <Badge variant="proficient" className="shrink-0 text-[10px]">
+                                      Correct
+                                    </Badge>
+                                  ) : null}
                                 </li>
                               );
                             })}
                           </ul>
                           {q.explanation ? (
-                            <p className="text-xs text-muted-foreground border-t pt-2">{q.explanation}</p>
+                            <p className="text-xs text-slate border-t border-ink/10 pt-2">{q.explanation}</p>
                           ) : null}
                         </CardContent>
                       </Card>

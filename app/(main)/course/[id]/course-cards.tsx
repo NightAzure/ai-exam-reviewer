@@ -41,11 +41,11 @@ export const CourseAICTA = ({
 
   return (
     <section aria-labelledby="study-session-heading" className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-      <article className="relative overflow-hidden rounded-3xl bg-[#18243a] p-6 text-white shadow-[0_18px_40px_rgb(24_36_58/0.18)] sm:p-7">
+      <article className="relative overflow-hidden rounded-3xl bg-ink p-6 text-white shadow-[0_18px_40px_rgb(24_36_58/0.18)] sm:p-7">
         <div aria-hidden="true" className="absolute -right-16 -top-20 size-56 rounded-full border border-white/10" />
-        <div aria-hidden="true" className="absolute -bottom-28 right-16 size-52 rounded-full bg-[#8e3039]/30 blur-3xl" />
+        <div aria-hidden="true" className="absolute -bottom-28 right-16 size-52 rounded-full bg-oxblood/30 blur-3xl" />
         <div className="relative">
-          <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#e4b57a]">
+          <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-brass">
             <Compass aria-hidden="true" className="size-3.5" />
             Today&apos;s Focus
           </p>
@@ -69,7 +69,7 @@ export const CourseAICTA = ({
               <Button
                 type="button"
                 onClick={onDiagnostic}
-                className="h-11 rounded-xl bg-[#f4ece2] px-4 text-[#18243a] hover:bg-white"
+                className="h-11 rounded-xl bg-canvas px-4 text-ink hover:bg-white"
               >
                 Take Diagnostic
               </Button>
@@ -78,7 +78,7 @@ export const CourseAICTA = ({
                 type="button"
                 onClick={() => onPractice(weakestTopic)}
                 disabled={!weakestTopic}
-                className="h-11 rounded-xl bg-[#f4ece2] px-4 text-[#18243a] hover:bg-white"
+                className="h-11 rounded-xl bg-canvas px-4 text-ink hover:bg-white"
               >
                 {weakestTopic ? `Practice ${weakestTopic.name}` : "Choose a Topic"}
               </Button>
@@ -87,7 +87,7 @@ export const CourseAICTA = ({
               <button
                 type="button"
                 onClick={onFlashcards}
-                className="text-sm font-semibold text-white/70 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e3aaad]"
+                className="text-sm font-semibold text-white/70 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--shell-focus-ring)]"
               >
                 Review flashcards
               </button>
@@ -103,37 +103,37 @@ export const CourseAICTA = ({
 
       </article>
 
-      <aside className="relative overflow-hidden rounded-3xl border border-[#24334c]/10 bg-white p-6 shadow-sm sm:p-7">
-        <div aria-hidden="true" className="absolute -right-12 -top-10 size-40 rounded-full bg-[#8e3039]/8 blur-2xl" />
+      <aside className="relative overflow-hidden rounded-3xl border border-ink/10 bg-white p-6 shadow-sm sm:p-7">
+        <div aria-hidden="true" className="absolute -right-12 -top-10 size-40 rounded-full bg-oxblood/8 blur-2xl" />
         <div className="relative flex h-full flex-col">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">
+              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">
                 <Bot aria-hidden="true" className="size-3.5" />
                 Need a Hand?
               </p>
-              <h2 className="mt-3 text-pretty font-[family-name:var(--font-display)] text-2xl leading-[1.08] tracking-[-0.025em] text-[#18243a] sm:text-3xl">
+              <h2 className="mt-3 text-pretty font-[family-name:var(--font-display)] text-2xl leading-[1.08] tracking-[-0.025em] text-ink sm:text-3xl">
                 Ask Your AI Tutor
               </h2>
             </div>
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#18243a] text-[#e4b57a]">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-ink text-brass">
               <Sparkles aria-hidden="true" className="size-5" />
             </span>
           </div>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-[#647087]">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-slate">
             Get an explanation, a quick quiz, or help preparing for your next assessment.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Button asChild className="h-11 rounded-xl bg-[#18243a] px-4 text-white hover:bg-[#293752]">
+            <Button asChild className="h-11 rounded-xl bg-ink px-4 text-white hover:bg-ink-raised">
               <Link href={tutorHref}>
                 Ask AI Tutor
                 <ArrowUpRight aria-hidden="true" className="size-4" />
               </Link>
             </Button>
             {weakestTopic ? (
-              <p className="text-xs leading-5 text-[#647087]">
-                Starts with <span className="font-semibold text-[#18243a]">{weakestTopic.name}</span> context.
+              <p className="text-xs leading-5 text-slate">
+                Starts with <span className="font-semibold text-ink">{weakestTopic.name}</span> context.
               </p>
             ) : null}
           </div>

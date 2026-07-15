@@ -80,15 +80,15 @@ export function ForgotPasswordModal({
         handleClose();
       }}
     >
-      <DialogContent className="w-[calc(100vw-1.5rem)] max-w-md rounded-[28px] border-white/70 bg-white/98 p-0 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)] sm:w-full">
+      <DialogContent className="w-[calc(100vw-1.5rem)] max-w-md rounded-3xl border-ink/10 bg-surface p-0 shadow-[0_24px_80px_-40px_rgb(24_36_58/0.35)] sm:w-full">
         {!isSuccess ? (
           <>
-            <DialogHeader className="border-b border-slate-200/70 px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
-              <DialogTitle className="text-xl sm:text-2xl">
+            <DialogHeader className="border-b border-ink/10 px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
+              <DialogTitle className="font-[family-name:var(--font-display)] text-xl text-ink sm:text-2xl">
                 Reset Your Password
               </DialogTitle>
-              <DialogDescription>
-                Enter your email and we&apos;ll send you a reset link
+              <DialogDescription className="text-slate">
+                Enter your email and we&apos;ll send you a reset link.
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
@@ -160,8 +160,8 @@ export function ForgotPasswordModal({
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
               className="flex justify-center"
             >
-              <div className="size-20 rounded-full bg-green-500/10 flex items-center justify-center">
-                <CheckCircle className="size-10 text-green-500" />
+              <div className="flex size-20 items-center justify-center rounded-full bg-proficient/10">
+                <CheckCircle className="size-10 text-proficient" />
               </div>
             </motion.div>
 

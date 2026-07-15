@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import { X, Zap, RotateCcw, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -43,14 +43,16 @@ export default function QuickPracticeSheet({
   useEffect(() => {
     if (!open || !topic) return;
 
-    setPhase("loading");
-    setQuestions([]);
-    setCurrent(0);
-    setScore(0);
-    setSelected(null);
-    setSubmitted(false);
-
     const controller = new AbortController();
+
+    startTransition(() => {
+      setPhase("loading");
+      setQuestions([]);
+      setCurrent(0);
+      setScore(0);
+      setSelected(null);
+      setSubmitted(false);
+    });
 
     fetch(`/api/course/${courseId}/topics/${topic.id}/practice-questions?count=10`, {
       signal: controller.signal,
@@ -101,10 +103,10 @@ export default function QuickPracticeSheet({
         side="right"
       >
         {/* Header */}
-        <div className="flex items-center justify-between py-4 px-5 border-b bg-secondary/50 backdrop-blur-sm">
+        <div className="flex items-center justify-between py-4 px-5 border-b bg-canvas/70 backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 p-2 bg-primary/10 rounded-lg">
-              <Zap className="size-5 text-primary" />
+            <div className="flex-shrink-0 p-2 bg-ink/10 rounded-lg">
+              <Zap className="size-5 text-ink" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">Quick Practice</h2>
@@ -193,11 +195,11 @@ export default function QuickPracticeSheet({
                         !submitted && [
                           "hover:bg-accent cursor-pointer",
                           isSelected
-                            ? "border-primary bg-primary/5 text-foreground"
+                            ? "border-primary bg-ink/5 text-foreground"
                             : "border-border text-foreground",
                         ],
-                        submitted && isCorrect && "border-green-500 bg-green-50 text-green-800 font-medium",
-                        submitted && isSelected && !isCorrect && "border-red-500 bg-red-50 text-red-800",
+                        submitted && isCorrect && "border-green-500 bg-proficient/10 text-green-800 font-medium",
+                        submitted && isSelected && !isCorrect && "border-red-500 bg-needs-focus/8 text-red-800",
                         submitted && !isSelected && !isCorrect && "opacity-40 cursor-default",
                       )}
                     >
@@ -209,10 +211,10 @@ export default function QuickPracticeSheet({
 
               {/* Explanation (shown after submit) */}
               {submitted && q.explanation && (
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 space-y-1">
+                <div className="rounded-lg border border-evidence/20 bg-evidence/10 p-4 text-sm text-blue-800 space-y-1">
                   <p className="font-semibold flex items-center gap-1.5">
                     {selected === q.correctAnswer ? (
-                      <CheckCircle2 className="size-4 text-green-600" />
+                      <CheckCircle2 className="size-4 text-proficient" />
                     ) : (
                       <XCircle className="size-4 text-red-500" />
                     )}

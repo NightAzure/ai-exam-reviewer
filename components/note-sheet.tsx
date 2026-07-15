@@ -9,7 +9,7 @@ import { CourseNote, Note } from "@/types/course";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import NoteEditor from "./note-editor";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface NoteProps {
   open: boolean;
@@ -27,11 +27,10 @@ export default function NoteSheet({ open, currentNote, setOpen, onSave, isSaving
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
 
-  useEffect(() => {
-    if (!open) {
-      setIsEditing(false);
-    }
-  }, [open]);
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) setIsEditing(false);
+    setOpen(nextOpen);
+  };
 
   const handleEditStart = () => {
     const note = currentNote as CourseNote | undefined;
@@ -64,13 +63,13 @@ export default function NoteSheet({ open, currentNote, setOpen, onSave, isSaving
   const noteContent = (currentNote as CourseNote | undefined)?.content ?? currentNote?.preview ?? "";
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent className="[&>button:last-child]:hidden min-w-[85vw] sm:min-w-[80vw] md:min-w-[70vw] lg:min-w-[60vw] xl:min-w-[60vw] flex flex-col p-0 gap-0">
         {/* Header */}
-        <div className="flex items-center justify-between py-4 px-5 border-b bg-secondary/50 backdrop-blur-sm">
+        <div className="flex items-center justify-between py-4 px-5 border-b bg-canvas/70 backdrop-blur-sm">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="flex-shrink-0 p-2 bg-primary/10 rounded-lg">
-              <FileText className="size-5 text-primary" />
+            <div className="flex-shrink-0 p-2 bg-ink/10 rounded-lg">
+              <FileText className="size-5 text-ink" />
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="text-lg font-semibold text-foreground truncate">

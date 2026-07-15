@@ -1,10 +1,16 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { CheckCircle, XCircle, ArrowLeft, ArrowRight, RotateCcw, HelpCircle } from "lucide-react";
-import { Quiz } from "@/types/quiz";
+import {
+  CheckCircle,
+  XCircle,
+  ArrowLeft,
+  ArrowRight,
+  RotateCcw,
+  HelpCircle,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { Quiz } from "@/types/quiz";
 
 interface QuizCompletionProps {
   quiz: Quiz;
@@ -23,56 +29,85 @@ export function QuizCompletion({
   onQuestionSelect,
   onPrevious,
   onNext,
-  onRestart
+  onRestart,
 }: QuizCompletionProps) {
-  const score = quiz.questions.filter((question) => 
-    selectedAnswers[question.id] === question.correctAnswer
+  const answeredCount = Object.keys(selectedAnswers).length;
+  const hasResults = answeredCount > 0;
+  const score = quiz.questions.filter(
+    (question) => selectedAnswers[question.id] === question.correctAnswer,
   ).length;
-  const percentage = Math.round((score / quiz.questions.length) * 100);
+  const percentage = hasResults
+    ? Math.round((score / quiz.questions.length) * 100)
+    : null;
   const currentQuestion = quiz.questions[currentQuestionIndex];
+  const isCurrentCorrect =
+    selectedAnswers[currentQuestion.id] === currentQuestion.correctAnswer;
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl">Quiz Completed!</CardTitle>
-          <CardDescription className="text-lg">{quiz.title}</CardDescription>
-        </CardHeader>
-        <CardContent className="text-center space-y-6">
-          {/* Score Display */}
-          <div className="inline-flex flex-col items-center justify-center w-32 h-32 bg-gradient-to-br from-primary/20 to-primary/30 rounded-full">
-            <div className="text-4xl font-bold text-primary">{percentage}%</div>
-            <div className="text-sm text-muted-foreground">Your Score</div>
-          </div>
-          
-          <p className="text-xl">
-            You got <span className="font-bold text-green-600">{score}</span> out of{" "}
-            <span className="font-bold">{quiz.questions.length}</span> questions correct
+    <div className="mx-auto w-full max-w-4xl space-y-6">
+      <section className="rounded-2xl border border-ink/10 bg-surface p-6 shadow-sm sm:p-8">
+        <div className="text-center">
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-oxblood">
+            Results
           </p>
+          <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink text-pretty">
+            {hasResults ? "Review Your Results" : "No Answers Recorded"}
+          </h1>
+          <p className="mt-2 text-sm leading-6 text-slate">{quiz.title}</p>
+        </div>
 
-          <Separator />
+        <div className="mt-8 flex flex-col items-center gap-4">
+          {hasResults && percentage !== null ? (
+            <>
+              <div className="flex size-32 flex-col items-center justify-center rounded-full border border-ink/10 bg-canvas">
+                <p className="font-[family-name:var(--font-display)] text-4xl tabular-nums text-ink">
+                  {percentage}%
+                </p>
+                <p className="text-xs font-medium text-slate">Score</p>
+              </div>
+              <p className="text-base text-ink">
+                You got{" "}
+                <span className="font-semibold tabular-nums text-proficient">{score}</span>{" "}
+                out of{" "}
+                <span className="font-semibold tabular-nums">{quiz.questions.length}</span>{" "}
+                questions correct.
+              </p>
+            </>
+          ) : (
+            <p className="max-w-md text-sm leading-6 text-slate">
+              There is no scored attempt to show yet. Restart the quiz to generate
+              evidence-backed results.
+            </p>
+          )}
+        </div>
 
-          {/* Review Section */}
-          <div className="text-left">
-            <h3 className="text-xl font-semibold mb-4">Review Your Answers</h3>
-            
-            {/* Question Navigation Grid */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {quiz.questions.map((_, index) => {
-                const question = quiz.questions[index];
-                const isCorrect = selectedAnswers[question.id] === question.correctAnswer;
+        {hasResults ? (
+          <div className="mt-8 border-t border-ink/10 pt-8 text-left">
+            <h2 className="font-[family-name:var(--font-display)] text-xl text-ink">
+              Review Your Answers
+            </h2>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {quiz.questions.map((question, index) => {
+                const isCorrect =
+                  selectedAnswers[question.id] === question.correctAnswer;
                 const isViewing = index === currentQuestionIndex;
-                
+
                 return (
                   <Button
-                    key={index}
-                    variant={isViewing ? "default" : "outline"}
-                    size="sm"
-                    className={`w-10 h-10 p-0 ${
+                    key={question.id}
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    aria-label={`Question ${index + 1}, ${isCorrect ? "correct" : "incorrect"}`}
+                    aria-current={isViewing ? "true" : undefined}
+                    className={cn(
+                      "size-11 min-h-11 min-w-11 rounded-xl tabular-nums",
                       isCorrect
-                        ? 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200'
-                        : 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200'
-                    } ${isViewing ? 'ring-2 ring-primary ring-offset-2' : ''}`}
+                        ? "border-emerald-700/30 bg-emerald-700/10 text-emerald-950 hover:bg-emerald-700/15"
+                        : "border-needs-focus/30 bg-needs-focus/8 text-[#7d252d] hover:bg-needs-focus/12",
+                      isViewing && "ring-2 ring-oxblood/40 ring-offset-2 ring-offset-canvas",
+                    )}
                     onClick={() => onQuestionSelect(index)}
                   >
                     {index + 1}
@@ -81,94 +116,115 @@ export function QuizCompletion({
               })}
             </div>
 
-            {/* Current Question Review */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-lg">
-                  Question {currentQuestionIndex + 1} of {quiz.questions.length}
-                </CardTitle>
-                <Badge variant={selectedAnswers[currentQuestion.id] === currentQuestion.correctAnswer ? "default" : "destructive"}>
-                  {selectedAnswers[currentQuestion.id] === currentQuestion.correctAnswer ? (
-                    <><CheckCircle className="w-3 h-3 mr-1" /> Correct</>
+            <article className="mt-6 rounded-2xl border border-ink/10 bg-canvas/40 p-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="text-lg font-semibold text-ink">
+                  Question{" "}
+                  <span className="tabular-nums">
+                    {currentQuestionIndex + 1}
+                  </span>{" "}
+                  of{" "}
+                  <span className="tabular-nums">{quiz.questions.length}</span>
+                </h3>
+                <Badge variant={isCurrentCorrect ? "proficient" : "needs-focus"}>
+                  {isCurrentCorrect ? (
+                    <>
+                      <CheckCircle aria-hidden="true" className="size-3" /> Correct
+                    </>
                   ) : (
-                    <><XCircle className="w-3 h-3 mr-1" /> Incorrect</>
+                    <>
+                      <XCircle aria-hidden="true" className="size-3" /> Incorrect
+                    </>
                   )}
                 </Badge>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-lg font-medium">{currentQuestion.question}</p>
-                
-                {/* Answer Options */}
-                <div className="space-y-3">
-                  {currentQuestion.options.map((option, optionIndex) => {
-                    const isSelected = selectedAnswers[currentQuestion.id] === optionIndex;
-                    const isCorrect = optionIndex === currentQuestion.correctAnswer;
-                    
-                    let cardClass = "p-4 border-2 transition-all cursor-default ";
-                    
-                    if (isCorrect) {
-                      cardClass += "border-green-500 bg-green-50 text-green-900";
-                    } else if (isSelected && !isCorrect) {
-                      cardClass += "border-red-500 bg-red-50 text-red-900";
-                    } else {
-                      cardClass += "border-muted bg-muted/30 opacity-60";
-                    }
+              </div>
 
-                    return (
-                      <div key={optionIndex} className={cardClass + " rounded-lg"}>
-                        <div className="flex items-center gap-3">
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            isCorrect ? 'border-green-500 bg-green-500' :
-                            isSelected && !isCorrect ? 'border-red-500 bg-red-500' :
-                            'border-muted-foreground/50'
-                          }`}>
-                            {(isSelected || isCorrect) && (
-                              <div className="w-2 h-2 rounded-full bg-white"></div>
-                            )}
-                          </div>
-                          <span className="font-medium">{option}</span>
-                        </div>
+              <p className="mt-4 text-base font-medium leading-7 text-ink">
+                {currentQuestion.question}
+              </p>
+
+              <div className="mt-4 space-y-3">
+                {currentQuestion.options.map((option, optionIndex) => {
+                  const isSelected =
+                    selectedAnswers[currentQuestion.id] === optionIndex;
+                  const isCorrect = optionIndex === currentQuestion.correctAnswer;
+
+                  return (
+                    <div
+                      key={optionIndex}
+                      className={cn(
+                        "rounded-xl border px-4 py-3.5",
+                        isCorrect &&
+                          "border-emerald-700/40 bg-emerald-700/10 text-emerald-950",
+                        isSelected &&
+                          !isCorrect &&
+                          "border-needs-focus/40 bg-needs-focus/8 text-[#7d252d]",
+                        !isSelected &&
+                          !isCorrect &&
+                          "border-ink/10 bg-surface/60 text-slate opacity-70",
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            "flex size-5 shrink-0 items-center justify-center rounded-full border-2",
+                            isCorrect && "border-emerald-700 bg-emerald-700",
+                            isSelected &&
+                              !isCorrect &&
+                              "border-needs-focus bg-needs-focus",
+                            !isSelected &&
+                              !isCorrect &&
+                              "border-slate/50",
+                          )}
+                        >
+                          {(isSelected || isCorrect) && (
+                            <span className="size-2 rounded-full bg-white" />
+                          )}
+                        </span>
+                        <span className="font-medium">{option}</span>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-                {/* Explanation */}
-                <Alert>
-                  <HelpCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    <span className="font-semibold">Explanation:</span> {currentQuestion.explanation}
+              {currentQuestion.explanation ? (
+                <Alert className="mt-4 border-ink/10 bg-surface">
+                  <HelpCircle className="size-4 text-evidence" />
+                  <AlertDescription className="text-sm leading-6 text-ink">
+                    <span className="font-semibold">Explanation: </span>
+                    {currentQuestion.explanation}
                   </AlertDescription>
                 </Alert>
-              </CardContent>
-            </Card>
+              ) : null}
+            </article>
           </div>
-        </CardContent>
-      </Card>
+        ) : null}
+      </section>
 
-      {/* Navigation Footer */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Button
           variant="outline"
           onClick={onPrevious}
           disabled={currentQuestionIndex === 0}
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft aria-hidden="true" className="size-4" />
           Previous
         </Button>
-        
-        <Button onClick={onRestart} className="px-8">
-          <RotateCcw className="w-4 h-4 mr-2" />
+
+        <Button onClick={onRestart}>
+          <RotateCcw aria-hidden="true" className="size-4" />
           Take Quiz Again
         </Button>
-        
+
         <Button
           variant="outline"
           onClick={onNext}
           disabled={currentQuestionIndex === quiz.questions.length - 1}
         >
           Next
-          <ArrowRight className="w-4 h-4 ml-2" />
+          <ArrowRight aria-hidden="true" className="size-4" />
         </Button>
       </div>
     </div>

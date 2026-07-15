@@ -107,7 +107,7 @@ export function GeneralTab({
             <div className="flex items-center justify-between p-3 rounded-lg bg-muted border">
               <div>
                 <p className="font-mono font-semibold tracking-widest text-sm">{code || "—"}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Share this code with students</p>
+                <p className="text-xs text-slate mt-0.5">Share this code with students</p>
               </div>
               <Button
                 variant="outline"
@@ -158,7 +158,7 @@ export function GeneralTab({
                   onChange={handleThumbnailUpload}
                   className="cursor-pointer"
                 />
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-slate mt-1">
                   Recommended: 16:9 aspect ratio, max 5MB
                 </p>
               </div>

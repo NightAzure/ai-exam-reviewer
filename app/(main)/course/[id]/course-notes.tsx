@@ -149,10 +149,10 @@ export default function CourseNotes({ course }: CourseProps) {
 
   return (
     <>
-      <Card className="gap-0 rounded-2xl border-[#24334c]/10 bg-white py-0 shadow-sm">
-        <CardHeader className="flex flex-row items-center justify-between border-b border-[#24334c]/10 py-5">
-          <CardTitle className="flex items-center gap-2 font-[family-name:var(--font-display)] text-2xl tracking-[-0.02em] text-[#18243a]">
-            <NotebookPen className="size-5 text-[#8e3039]" />
+      <Card className="gap-0 rounded-2xl border-ink/10 bg-white py-0 shadow-sm">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-ink/10 py-5">
+          <CardTitle className="flex items-center gap-2 font-[family-name:var(--font-display)] text-2xl tracking-[-0.02em] text-ink">
+            <NotebookPen className="size-5 text-oxblood" />
             Course Notes
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function CourseNotes({ course }: CourseProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-11 rounded-xl border-[#24334c]/15 bg-white text-xs text-[#18243a] hover:bg-[#18243a]/[0.03]"
+                    className="h-11 rounded-xl border-ink/15 bg-white text-xs text-ink hover:bg-ink/[0.03]"
                     disabled={generatingTopicId !== null}
                   >
                     {generatingTopicId !== null ? (
@@ -187,7 +187,7 @@ export default function CourseNotes({ course }: CourseProps) {
             )}
             <Button
               size="sm"
-              className="h-11 rounded-xl bg-[#18243a] text-xs text-white hover:bg-[#293752]"
+              className="h-11 rounded-xl bg-ink text-xs text-white hover:bg-ink-raised"
               onClick={openCreateDialog}
             >
               <Plus className="w-3.5 h-3.5" />
@@ -207,7 +207,7 @@ export default function CourseNotes({ course }: CourseProps) {
                   placeholder="Search notes…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-11 rounded-xl border-[#24334c]/15 bg-white pl-9 text-sm shadow-sm"
+                  className="h-11 rounded-xl border-ink/15 bg-white pl-9 text-sm shadow-sm"
                 />
               </div>
               {course.topics && course.topics.length > 0 && (
@@ -215,7 +215,7 @@ export default function CourseNotes({ course }: CourseProps) {
                   value={topicFilter === null ? "all" : String(topicFilter)}
                   onValueChange={(v) => setTopicFilter(v === "all" ? null : Number(v))}
                 >
-                  <SelectTrigger className="h-11 w-36 rounded-xl border-[#24334c]/15 bg-white text-xs shadow-sm">
+                  <SelectTrigger className="h-11 w-36 rounded-xl border-ink/15 bg-white text-xs shadow-sm">
                     <SelectValue placeholder="All topics" />
                   </SelectTrigger>
                   <SelectContent>
@@ -236,7 +236,7 @@ export default function CourseNotes({ course }: CourseProps) {
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                className="flex items-start justify-between rounded-xl border border-[#24334c]/10 bg-white p-4"
+                className="flex items-start justify-between rounded-xl border border-ink/10 bg-white p-4"
                 >
                   <div className="space-y-2 flex-1">
                     <Skeleton className="h-4 w-2/5" />
@@ -250,13 +250,13 @@ export default function CourseNotes({ course }: CourseProps) {
             </div>
           ) : filteredNotes.length === 0 ? (
             searchQuery || topicFilter !== null ? (
-              <p className="py-6 text-center text-sm text-[#647087]">
+              <p className="py-6 text-center text-sm text-slate">
                 No notes match your search.
               </p>
             ) : (
-              <div className="py-10 text-center text-[#647087]">
-                <NotebookPen className="mx-auto mb-3 size-8 text-[#8e3039]/45" />
-                <p className="font-semibold text-[#18243a]">No notes yet</p>
+              <div className="py-10 text-center text-slate">
+                <NotebookPen className="mx-auto mb-3 size-8 text-oxblood/45" />
+                <p className="font-semibold text-ink">No notes yet</p>
                 <p className="mt-1 text-sm">
                   Create personal notes while reviewing this course.
                 </p>
@@ -270,16 +270,16 @@ export default function CourseNotes({ course }: CourseProps) {
                   setNote(note);
                 }}
                 key={note.id}
-                className="group flex cursor-pointer items-start justify-between rounded-xl border border-[#24334c]/10 bg-white p-4 transition-[border-color,box-shadow] hover:border-[#24334c]/20 hover:shadow-sm"
+                className="group flex cursor-pointer items-start justify-between rounded-xl border border-ink/10 bg-white p-4 transition-[border-color,box-shadow] hover:border-ink/20 hover:shadow-sm"
               >
                 <div className="space-y-1.5 flex-1 min-w-0 pr-2">
-                  <p className="truncate text-sm font-semibold text-[#18243a]">
+                  <p className="truncate text-sm font-semibold text-ink">
                     {note.title}
                   </p>
-                  <p className="text-xs text-[#647087]">
+                  <p className="text-xs text-slate">
                     Updated {new Intl.DateTimeFormat("en-PH", { month: "short", day: "numeric", year: "numeric" }).format(new Date(note.updatedAt))}
                   </p>
-                  <p className="line-clamp-2 text-xs leading-relaxed text-[#647087]">
+                  <p className="line-clamp-2 text-xs leading-relaxed text-slate">
                     {note.content.replace(/[#*`_~>]/g, "").trim() || "No content"}
                   </p>
                 </div>
@@ -288,7 +288,7 @@ export default function CourseNotes({ course }: CourseProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-11 shrink-0 rounded-xl p-0 opacity-100 transition-[background-color] hover:bg-[#18243a]/[0.04]"
+                      className="size-11 shrink-0 rounded-xl p-0 opacity-100 transition-[background-color] hover:bg-ink/[0.04]"
                       onClick={(event) => event.stopPropagation()}
                     >
                       <MoreVertical className="h-4 w-4" />

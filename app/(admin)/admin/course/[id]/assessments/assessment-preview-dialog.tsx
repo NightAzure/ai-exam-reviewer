@@ -294,7 +294,7 @@ export function AssessmentPreviewDialog({
                             {isCorrect ? (
                               <Badge
                                 variant="outline"
-                                className="border-green-200 bg-green-50 text-green-700"
+                                className="border-proficient/20 bg-proficient/10 text-proficient"
                               >
                                 Correct
                               </Badge>

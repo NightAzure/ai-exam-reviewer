@@ -182,7 +182,7 @@ export function TopicsManagement({ courseId, initialTopics }: TopicsManagementPr
         </div>
 
         {topics.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-slate">
             No topics added yet. Add your first topic above.
           </div>
         ) : (
@@ -198,7 +198,7 @@ export function TopicsManagement({ courseId, initialTopics }: TopicsManagementPr
               <TableBody>
                 {topics.map((topic, index) => (
                   <TableRow key={topic.id}>
-                    <TableCell className="font-medium text-muted-foreground align-top">
+                    <TableCell className="font-medium text-slate align-top">
                       {index + 1}
                     </TableCell>
                     <TableCell>

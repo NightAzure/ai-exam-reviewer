@@ -64,14 +64,14 @@ function CourseGridSkeleton() {
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={index}
-          className="overflow-hidden rounded-2xl border border-[#24334c]/10 bg-white shadow-sm"
+          className="overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-sm"
         >
-          <div className="h-36 animate-pulse bg-[#18243a]/8 motion-reduce:animate-none" />
+          <div className="h-36 animate-pulse bg-ink/8 motion-reduce:animate-none" />
           <div className="space-y-4 p-5">
-            <div className="h-3 w-24 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-            <div className="h-7 w-3/4 animate-pulse rounded bg-[#18243a]/8 motion-reduce:animate-none" />
-            <div className="h-20 animate-pulse rounded-xl bg-[#18243a]/6 motion-reduce:animate-none" />
-            <div className="h-11 animate-pulse rounded-xl bg-[#18243a]/8 motion-reduce:animate-none" />
+            <div className="h-3 w-24 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-7 w-3/4 animate-pulse rounded bg-ink/8 motion-reduce:animate-none" />
+            <div className="h-20 animate-pulse rounded-xl bg-ink/6 motion-reduce:animate-none" />
+            <div className="h-11 animate-pulse rounded-xl bg-ink/8 motion-reduce:animate-none" />
           </div>
         </div>
       ))}
@@ -144,21 +144,21 @@ export default function Dashboard() {
       {error ? (
         <section
           aria-labelledby="courses-error-heading"
-          className="rounded-3xl border border-[#a0363d]/15 bg-white p-8 text-center shadow-sm"
+          className="rounded-3xl border border-needs-focus/15 bg-white p-8 text-center shadow-sm"
         >
-          <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#a0363d]/8 text-[#8e3039]">
+          <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-needs-focus/8 text-oxblood">
             <AlertCircle aria-hidden="true" className="size-5" />
           </span>
-          <h2 id="courses-error-heading" className="mt-4 font-[family-name:var(--font-display)] text-2xl text-[#18243a]">
+          <h2 id="courses-error-heading" className="mt-4 font-[family-name:var(--font-display)] text-2xl text-ink">
             We Couldn’t Load Your Courses
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#647087]">
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate">
             Check your connection, then try loading your review space again.
           </p>
           <Button
             type="button"
             onClick={() => mutate()}
-            className="mt-5 h-11 rounded-xl bg-[#18243a] px-4 hover:bg-[#293752]"
+            className="mt-5 h-11 rounded-xl bg-ink px-4 hover:bg-ink-raised"
           >
             <RotateCcw aria-hidden="true" className="size-4" />
             Try Again
@@ -169,15 +169,15 @@ export default function Dashboard() {
       ) : courses.length === 0 ? (
         <section
           aria-labelledby="empty-courses-heading"
-          className="rounded-3xl border border-dashed border-[#24334c]/20 bg-white px-6 py-14 text-center shadow-sm"
+          className="rounded-3xl border border-dashed border-ink/20 bg-white px-6 py-14 text-center shadow-sm"
         >
-          <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#18243a] text-[#f4ece2] shadow-sm">
+          <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-ink text-canvas shadow-sm">
             <BookOpenCheck aria-hidden="true" className="size-6" />
           </span>
-          <h2 id="empty-courses-heading" className="mt-5 font-[family-name:var(--font-display)] text-3xl tracking-[-0.025em] text-[#18243a]">
+          <h2 id="empty-courses-heading" className="mt-5 font-[family-name:var(--font-display)] text-3xl tracking-[-0.025em] text-ink">
             Your Review Studio Starts Here
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#647087]">
+          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate">
             Join a class with the code from your instructor. It will appear here with a personal study signal once you begin.
           </p>
         </section>
@@ -188,11 +188,11 @@ export default function Dashboard() {
           <section aria-labelledby="course-collection-heading" className="space-y-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#8e3039]">Your Courses</p>
-                <h2 id="course-collection-heading" className="mt-1 font-[family-name:var(--font-display)] text-3xl tracking-[-0.025em] text-[#18243a]">
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-oxblood">Your Courses</p>
+                <h2 id="course-collection-heading" className="mt-1 font-[family-name:var(--font-display)] text-3xl tracking-[-0.025em] text-ink">
                   Continue Your Review
                 </h2>
-                <p className="mt-1 text-sm text-[#647087]">Choose a course, or follow the recommendation above.</p>
+                <p className="mt-1 text-sm text-slate">Choose a course, or follow the recommendation above.</p>
               </div>
               <label className="relative block w-full lg:max-w-xs">
                 <span className="sr-only">Search courses</span>
@@ -204,13 +204,13 @@ export default function Dashboard() {
                   onChange={(event) => updateSearchParams({ query: event.target.value })}
                   placeholder="Search courses…"
                   autoComplete="off"
-                  className="h-11 rounded-xl border-[#24334c]/15 bg-white pl-10 text-sm shadow-sm placeholder:text-[#8390a3]"
+                  className="h-11 rounded-xl border-ink/15 bg-white pl-10 text-sm shadow-sm placeholder:text-slate"
                 />
               </label>
             </div>
 
-            <div className="flex flex-col gap-3 border-y border-[#24334c]/10 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2 text-sm text-[#647087]">
+            <div className="flex flex-col gap-3 border-y border-ink/10 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 text-sm text-slate">
                 <SlidersHorizontal aria-hidden="true" className="size-4" />
                 <span>{filteredCourses.length} {filteredCourses.length === 1 ? "course" : "courses"}</span>
               </div>
@@ -224,10 +224,10 @@ export default function Dashboard() {
                       aria-pressed={isActive}
                       onClick={() => updateSearchParams({ filter: option.value })}
                       className={cn(
-                        "h-10 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-[background-color,border-color,color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8e3039]/50",
+                        "h-10 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-[background-color,border-color,color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-oxblood/50",
                         isActive
-                          ? "border-[#18243a] bg-[#18243a] text-white shadow-sm"
-                          : "border-[#24334c]/12 bg-white text-[#59677c] hover:border-[#24334c]/25 hover:text-[#18243a]",
+                          ? "border-ink bg-ink text-white shadow-sm"
+                          : "border-ink/12 bg-white text-slate hover:border-ink/25 hover:text-ink",
                       )}
                     >
                       {option.label}
@@ -244,16 +244,16 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-3xl border border-dashed border-[#24334c]/18 bg-white px-6 py-12 text-center">
-                <Search aria-hidden="true" className="mx-auto size-5 text-[#8e3039]" />
-                <h3 className="mt-3 text-base font-semibold text-[#18243a]">No Courses Match That View</h3>
-                <p className="mt-1 text-sm text-[#647087]">Try a different search or return to all of your courses.</p>
+              <div className="rounded-3xl border border-dashed border-ink/18 bg-white px-6 py-12 text-center">
+                <Search aria-hidden="true" className="mx-auto size-5 text-oxblood" />
+                <h3 className="mt-3 text-base font-semibold text-ink">No Courses Match That View</h3>
+                <p className="mt-1 text-sm text-slate">Try a different search or return to all of your courses.</p>
                 {hasActiveFilters && (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => updateSearchParams({ filter: "all", query: "" })}
-                    className="mt-4 h-10 rounded-xl border-[#24334c]/15 bg-white"
+                    className="mt-4 h-10 rounded-xl border-ink/15 bg-white"
                   >
                     Clear Filters
                   </Button>

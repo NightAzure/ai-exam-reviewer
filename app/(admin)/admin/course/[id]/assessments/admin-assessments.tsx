@@ -386,7 +386,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
 
   const getStatusBadge = (assessment: AssessmentListItem) => {
     if (assessment.taken) {
-      return <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Completed</Badge>;
+      return <Badge className="bg-green-100 text-proficient hover:bg-green-100">Completed</Badge>;
     }
     if (!assessment.isEnabled) {
       return <Badge className="bg-muted text-foreground/80 hover:bg-muted">Disabled</Badge>;
@@ -472,8 +472,8 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
       {/* Stats */}
       <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Total Assessments", value: stats.total, icon: BarChart3, accent: "bg-blue-50 text-blue-600" },
-          { label: "Completed", value: stats.completed, icon: BarChart3, accent: "bg-green-50 text-green-600" },
+          { label: "Total Assessments", value: stats.total, icon: BarChart3, accent: "bg-evidence/10 text-evidence" },
+          { label: "Completed", value: stats.completed, icon: BarChart3, accent: "bg-proficient/10 text-proficient" },
           { label: "In Progress", value: stats.pending, icon: Clock, accent: "bg-amber-50 text-amber-600" },
           { label: "Avg Score", value: `${stats.avgScore.toFixed(1)}%`, icon: TrendingUp, accent: "bg-purple-50 text-purple-600" },
         ].map(({ label, value, icon: Icon, accent }) => (
@@ -544,7 +544,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
                       <div className="flex gap-6 text-sm shrink-0">
                         <div>
                           <p className="text-xs text-muted-foreground/70">Correct Rate</p>
-                          <p className="font-semibold text-red-600">{question.correctRate.toFixed(1)}%</p>
+                          <p className="font-semibold text-needs-focus">{question.correctRate.toFixed(1)}%</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground/70">Misses</p>
@@ -630,8 +630,8 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-border/60">
                       {[
                         { label: "Enrolled", value: assessment.stats.totalStudents, color: "text-foreground" },
-                        { label: "Completed", value: assessment.stats.completedStudents, color: "text-green-600" },
-                        { label: "Avg Score", value: `${assessment.stats.averageScore.toFixed(1)}%`, color: "text-blue-600" },
+                        { label: "Completed", value: assessment.stats.completedStudents, color: "text-proficient" },
+                        { label: "Avg Score", value: `${assessment.stats.averageScore.toFixed(1)}%`, color: "text-evidence" },
                         { label: "Completion", value: `${assessment.stats.completionRate.toFixed(1)}%`, color: "text-purple-600" },
                       ].map(({ label, value, color }) => (
                         <div key={label} className="bg-muted/50 rounded-xl px-3 py-2">
@@ -665,7 +665,7 @@ export default function AdminAssessmentsPage({ id }: AdminAssessmentsPageProps) 
                         <Eye className="w-4 h-4 mr-2" />Preview
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-red-600" onClick={() => setDeleteAssessmentId(assessment.id)}>
+                      <DropdownMenuItem className="text-needs-focus" onClick={() => setDeleteAssessmentId(assessment.id)}>
                         <Trash2 className="w-4 h-4 mr-2" />Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

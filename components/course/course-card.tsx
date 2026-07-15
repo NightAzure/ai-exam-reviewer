@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Course } from "@/types/new_course";
 import {
@@ -13,14 +15,7 @@ import {
   Settings,
   Ban,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,13 +26,14 @@ import {
 import ShareCourseDialog from "./share-course-dialog";
 import ViewMembersDialog from "./view-members-dialog";
 import { useFavorites } from "@/hooks/use-favorites";
+import { cn } from "@/lib/utils";
 
 const FALLBACK_COURSE_THUMBNAIL =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f3f4f6'/%3E%3Cpath d='M0 300c120-40 200-60 320-40s180 50 280 36 120-48 200-72v176H0Z' fill='%23dbeafe'/%3E%3C/svg%3E";
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%2318243a'/%3E%3Cpath d='M0 300c120-40 200-60 320-40s180 50 280 36 120-48 200-72v176H0Z' fill='%238e3039' fill-opacity='0.35'/%3E%3C/svg%3E";
 
 type CourseCardCourse = Course & {
   stats?: {
-    averageProgress?: number;
+    averageProgress?: number | null;
     proficient?: number;
     needsReview?: number;
   };
@@ -56,159 +52,187 @@ export default function CourseCard({
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [viewMembersOpen, setViewMembersOpen] = useState(false);
 
-  const router = useRouter();
-
-  // Handle potential undefined values
   if (!course || !course.id) {
     return null;
   }
 
   const isDisabled = !course.is_active;
+  const hasProgressEvidence =
+    course.stats?.averageProgress != null &&
+    !Number.isNaN(course.stats.averageProgress);
+  const progressValue = hasProgressEvidence
+    ? course.stats!.averageProgress!
+    : null;
+  const courseHref =
+    variant === "admin"
+      ? `/admin/course/${course.id}`
+      : `/course/${course.id}`;
 
   return (
-    <Card
-      className={`hover:shadow-md h-full gap-4 transition-all pt-0 pb-5 cursor-pointer border-primary/20 hover:border-primary/30 overflow-hidden ${
-        isDisabled ? "opacity-90" : ""
-      }`}
+    <article
+      className={cn(
+        "group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-surface shadow-sm transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-[0_16px_36px_rgb(24_34_52/0.12)] motion-reduce:transform-none motion-reduce:transition-none",
+        isDisabled && "opacity-90",
+      )}
     >
-      <div className="relative w-full h-32">
+      <div className="relative h-36 w-full">
         <Image
           src={course.thumbnail_url || FALLBACK_COURSE_THUMBNAIL}
-          alt={course.title}
+          alt=""
           fill
           unoptimized
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-background/70 via-background/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/20 to-transparent" />
 
-        <div className="absolute bottom-2 left-2 flex items-center gap-2">
-          {variant === "admin" && (
-            <span className="flex items-center gap-1.5 bg-background/80 text-foreground text-xs font-semibold px-2 py-1 rounded-md shadow-sm backdrop-blur-sm">
-              <BookOpen className="h-3.5 w-3.5 text-primary" />
-              {course.code}
+        <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2">
+          {variant === "admin" ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-ink/70 px-2.5 py-1 text-xs font-semibold text-canvas backdrop-blur-sm">
+              <BookOpen aria-hidden="true" className="size-3.5" />
+              <span className="font-mono tracking-wide">{course.code}</span>
             </span>
-          )}
-          {isDisabled && (
-            <span className="flex items-center gap-1.5 bg-destructive/90 text-destructive-foreground text-xs font-semibold px-2 py-1 rounded-md shadow-sm backdrop-blur-sm">
-              <Ban className="h-3.5 w-3.5" />
+          ) : null}
+          {isDisabled ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-destructive/90 px-2.5 py-1 text-xs font-semibold text-white">
+              <Ban aria-hidden="true" className="size-3.5" />
               Disabled
             </span>
-          )}
+          ) : null}
         </div>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={isFavorited(course.id) ? "Unpin course" : "Pin course"}
+          className="absolute right-3 top-3 size-10 min-h-10 min-w-10 rounded-full border border-white/15 bg-ink/65 text-white hover:bg-white hover:text-oxblood"
+          onClick={() => toggleFavorite(course.id)}
+        >
+          <Star
+            aria-hidden="true"
+            className={cn(
+              "size-4",
+              isFavorited(course.id) && "fill-current text-brass",
+            )}
+          />
+        </Button>
       </div>
 
-      <CardHeader className="pb-2 px-4 gap-0">
-        <div className="flex justify-between items-center">
-          <div className="space-y-1">
-            <p className="text-md font-medium text-foreground">{course.title}</p>
-            <p className="text-xs text-muted-foreground">
-              Instructor: {course.instructor?.first_name} {course.instructor?.second_name|| 'Unknown'}
+      <div className="flex flex-1 flex-col gap-4 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 space-y-1">
+            <h3 className="line-clamp-2 font-[family-name:var(--font-display)] text-xl leading-snug tracking-tight text-ink">
+              <Link
+                href={courseHref}
+                className="rounded-sm outline-none transition-colors hover:text-oxblood focus-visible:ring-2 focus-visible:ring-oxblood/50"
+              >
+                {course.title}
+              </Link>
+            </h3>
+            <p className="text-xs font-medium text-slate">
+              Instructor:{" "}
+              {[course.instructor?.first_name, course.instructor?.second_name]
+                .filter(Boolean)
+                .join(" ") || "Not listed"}
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="size-8"
-              onClick={() => toggleFavorite(course.id)}
-            >
-              <motion.div
-                key={isFavorited(course.id).toString()}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              >
-                <Star
-                  className={`${
-                    isFavorited(course.id)
-                      ? "text-yellow-500 fill-current"
-                      : "text-foreground"
-                  }`}
-                />
-              </motion.div>
-            </Button>
-            {variant == "admin" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <EllipsisVertical className="h-4 w-4" />
-                    <span className="sr-only">Open course menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setShareDialogOpen(true)}>
-                    <Share2 className="mr-2 h-4 w-4" />
-                    Share Course Code
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setViewMembersOpen(true)}>
-                    <Users className="mr-2 h-4 w-4" />
-                    View Members
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/admin/course/${course.id}/manage`)
-                    }
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
+
+          {variant === "admin" ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-10 min-h-10 min-w-10 shrink-0"
+                  aria-label="Open course menu"
+                >
+                  <EllipsisVertical aria-hidden="true" className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="rounded-xl">
+                <DropdownMenuItem onClick={() => setShareDialogOpen(true)}>
+                  <Share2 className="mr-2 size-4" />
+                  Share Course Code
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setViewMembersOpen(true)}>
+                  <Users className="mr-2 size-4" />
+                  View Members
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={`/admin/course/${course.id}/manage`}>
+                    <Settings className="mr-2 size-4" />
                     Manage Course
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
+        </div>
+
+        <div className="rounded-xl border border-ink/10 bg-canvas/50 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate">
+              Class Progress
+            </p>
+            {hasProgressEvidence ? (
+              <p className="text-sm font-semibold tabular-nums text-ink">
+                {progressValue}%
+              </p>
+            ) : (
+              <p className="text-xs font-medium text-evidence">Not Assessed</p>
             )}
           </div>
+          {hasProgressEvidence ? (
+            <>
+              <Progress
+                value={progressValue ?? undefined}
+                aria-label={`${course.title} average progress`}
+                className="mt-3 h-1.5"
+              />
+              <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate">
+                <span className="inline-flex items-center gap-1.5">
+                  <BarChart3
+                    aria-hidden="true"
+                    className="size-3.5 text-proficient"
+                  />
+                  <span className="tabular-nums">
+                    {course.stats?.proficient ?? 0}
+                  </span>{" "}
+                  proficient
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <BarChart3
+                    aria-hidden="true"
+                    className="size-3.5 text-needs-focus"
+                  />
+                  <span className="tabular-nums">
+                    {course.stats?.needsReview ?? 0}
+                  </span>{" "}
+                  need review
+                </span>
+              </div>
+            </>
+          ) : (
+            <p className="mt-2 text-xs leading-5 text-slate">
+              Average progress appears after students complete assessed work.
+            </p>
+          )}
         </div>
-      </CardHeader>
 
-      <CardContent className="space-y-3 px-4">
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <div>
-              <p className="text-xs font-medium text-muted-foreground mb-1">
-                Overall Progress
-              </p>
-              <Progress value={course.stats?.averageProgress || 0} />
-              <p className="text-xs text-muted-foreground mt-1">
-                {course.stats?.averageProgress || 0}% complete
-              </p>
-            </div>
-          </HoverCardTrigger>
-          <HoverCardContent>
-            {/*TODO*/}
-            <div className="flex justify-between text-xs font-medium flex-col">
-              <div className="flex items-center gap-1.5">
-                <BarChart3 className="h-3.5 w-3.5 text-green-600" />
-                <span>{course.stats?.proficient || 0} Proficient</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <BarChart3 className="h-3.5 w-3.5 text-red-600" />
-                <span>{course.stats?.needsReview || 0} Needs Review</span>
-              </div>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
-
-        {variant != "admin" && (
-          <Button
-            onClick={() => router.push("/course/" + course.id)}
-            size="sm"
-            className="w-full"
-            disabled={isDisabled}
-          >
-            {isDisabled ? "Course Disabled" : "Go to Course"}
+        {isDisabled ? (
+          <Button className="mt-auto w-full" disabled>
+            Course Disabled
+          </Button>
+        ) : (
+          <Button asChild className="mt-auto w-full">
+            <Link href={courseHref}>
+              {variant === "admin" ? "Open Course" : "Go to Course"}
+            </Link>
           </Button>
         )}
+      </div>
 
-        {variant == "admin" && (
-          <Button
-            onClick={() => router.push("/admin/course/" + course.id)}
-            size="sm"
-            className="w-full"
-          >
-            Go to Course
-          </Button>
-        )}
-      </CardContent>
       <ShareCourseDialog
         isOpen={shareDialogOpen}
         onOpenChange={setShareDialogOpen}
@@ -221,6 +245,6 @@ export default function CourseCard({
         courseName={course.title}
         courseId={course.id.toString()}
       />
-    </Card>
+    </article>
   );
 }

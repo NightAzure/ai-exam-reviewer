@@ -50,9 +50,9 @@ function CircularProgress({
   const offset = circumference - (value / 100) * circumference;
 
   const getColor = (score: number) => {
-    if (score >= 80) return "#22c55e";
-    if (score >= 70) return "#eab308";
-    return "#ef4444";
+    if (score >= 75) return "var(--proficient)";
+    if (score >= 60) return "var(--building-confidence)";
+    return "var(--needs-focus)";
   };
 
   return (
@@ -62,7 +62,7 @@ function CircularProgress({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#e5e7eb"
+          stroke="var(--border-subtle)"
           strokeWidth={strokeWidth}
           fill="transparent"
         />
@@ -76,12 +76,12 @@ function CircularProgress({
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          className="transition-all duration-500 ease-in-out"
+          className="transition-[stroke-dashoffset] duration-500 ease-out motion-reduce:transition-none"
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-2xl font-bold" style={{ color: getColor(value) }}>
+          <div className="text-2xl font-bold tabular-nums" style={{ color: getColor(value) }}>
             {value}%
           </div>
         </div>
@@ -136,56 +136,56 @@ export default function AssessmentPreviewSheet({
       case "completed":
         return {
           icon: CheckCircle,
-          color: "text-green-600",
-          bgColor: "bg-green-50 border-green-200",
+          color: "text-proficient",
+          bgColor: "bg-proficient/10 border-proficient/20",
           badge: "Completed",
-          badgeVariant: "default" as const,
+          badgeVariant: "proficient" as const,
         };
       case "retry-available":
         return {
           icon: RotateCcw,
-          color: "text-blue-600",
-          bgColor: "bg-blue-50 border-blue-200",
+          color: "text-evidence",
+          bgColor: "bg-evidence/10 border-evidence/20",
           badge: "Retry Available",
-          badgeVariant: "secondary" as const,
+          badgeVariant: "evidence" as const,
         };
       case "upcoming":
         return {
           icon: Calendar,
-          color: "text-yellow-600",
-          bgColor: "bg-yellow-50 border-yellow-200",
+          color: "text-building-confidence",
+          bgColor: "bg-building-confidence/10 border-building-confidence/20",
           badge: "Upcoming",
-          badgeVariant: "outline" as const,
+          badgeVariant: "confidence" as const,
         };
       case "available":
         return {
           icon: Play,
-          color: "text-blue-600",
-          bgColor: "bg-blue-50 border-blue-200",
+          color: "text-ink",
+          bgColor: "bg-ink/[0.06] border-ink/15",
           badge: "Available",
-          badgeVariant: "default" as const,
+          badgeVariant: "secondary" as const,
         };
       case "expired":
         return {
           icon: AlertCircle,
-          color: "text-red-600",
-          bgColor: "bg-red-50 border-red-200",
+          color: "text-needs-focus",
+          bgColor: "bg-needs-focus/8 border-needs-focus/20",
           badge: "Expired",
-          badgeVariant: "destructive" as const,
+          badgeVariant: "needs-focus" as const,
         };
       case "disabled":
         return {
           icon: Clock,
-          color: "text-muted-foreground",
-          bgColor: "bg-muted/50 border-border",
+          color: "text-slate",
+          bgColor: "bg-ink/[0.04] border-ink/10",
           badge: "Disabled",
           badgeVariant: "outline" as const,
         };
       default:
         return {
           icon: Clock,
-          color: "text-muted-foreground",
-          bgColor: "bg-muted/50 border-border",
+          color: "text-slate",
+          bgColor: "bg-ink/[0.04] border-ink/10",
           badge: "Unknown",
           badgeVariant: "outline" as const,
         };
@@ -200,22 +200,29 @@ export default function AssessmentPreviewSheet({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="[&>button:last-child]:hidden min-w-[90vw] sm:min-w-[80vw] md:min-w-[60vw] lg:min-w-[50vw] xl:min-w-[45vw] flex flex-col p-0 gap-0">
-        <div className="flex items-center justify-between py-5 px-6 border-b bg-gradient-to-r from-primary/5 to-primary/10">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className={`flex-shrink-0 p-2 rounded-lg border ${statusConfig.bgColor}`}>
+        <div className="flex items-center justify-between border-b border-ink/10 bg-canvas/60 px-6 py-5">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <div className={`flex-shrink-0 rounded-xl border p-2 ${statusConfig.bgColor}`}>
               <StatusIcon className={`size-5 ${statusConfig.color}`} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-lg font-bold text-foreground truncate">{assessment.title}</h2>
+              <div className="mb-1 flex items-center gap-2">
+                <h2 className="truncate font-[family-name:var(--font-display)] text-lg text-ink">
+                  {assessment.title}
+                </h2>
                 <Badge variant={statusConfig.badgeVariant} className="text-xs">
                   {statusConfig.badge}
                 </Badge>
               </div>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="size-8 p-0">
-            <X className="size-4" />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setOpen(false)}
+            aria-label="Close assessment preview"
+          >
+            <X aria-hidden="true" className="size-4" />
           </Button>
         </div>
 

@@ -110,7 +110,7 @@ export default function NoteEditor({
               }}
               className={cn(
                 "p-1.5 rounded transition-colors hover:bg-muted",
-                tool.active ? "bg-muted text-foreground" : "text-muted-foreground",
+                tool.active ? "bg-muted text-foreground" : "text-slate",
               )}
             >
               <tool.Icon className="w-3.5 h-3.5" />

@@ -14,7 +14,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
     <Card className="border border-border rounded-2xl bg-card/90 backdrop-blur-sm shadow-sm hover:shadow-md transition p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="w-5 h-5 text-primary" />
+          <Target className="w-5 h-5 text-ink" />
           <CardTitle className="text-base font-semibold m-0">
             Topic Performance
           </CardTitle>
@@ -27,17 +27,17 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
           course.topics.map((topic) => {
             const colorClass =
               topic.progress < 40
-                ? "bg-red-500"
+                ? "bg-needs-focus/80"
                 : topic.progress < 75
                 ? "bg-yellow-500"
-                : "bg-green-500";
+                : "bg-proficient/100";
 
             const badgeClass =
               topic.progress < 40
-                ? "bg-red-100 text-red-700"
+                ? "bg-red-100 text-needs-focus"
                 : topic.progress < 75
                 ? "bg-yellow-100 text-yellow-700"
-                : "bg-green-100 text-green-700";
+                : "bg-green-100 text-proficient";
 
             const status =
               topic.progress < 40
@@ -48,11 +48,11 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
 
             const icon =
               topic.progress < 40 ? (
-                <AlertTriangle className="w-4 h-4 text-red-600" />
+                <AlertTriangle className="w-4 h-4 text-needs-focus" />
               ) : topic.progress < 75 ? (
                 <TrendingUp className="w-4 h-4 text-yellow-600" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                <CheckCircle2 className="w-4 h-4 text-proficient" />
               );
 
             return (
@@ -90,7 +90,7 @@ export default function AdminCourseTopics({ course }: AdminCourseTopicsProps) {
 
                 <div className="w-full h-2 bg-border rounded-full overflow-hidden">
                   <div
-                    className={`${colorClass} h-full rounded-full transition-all duration-500`}
+                    className={`${colorClass} h-full rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-500`}
                     style={{ width: `${topic.progress}%` }}
                   />
                 </div>

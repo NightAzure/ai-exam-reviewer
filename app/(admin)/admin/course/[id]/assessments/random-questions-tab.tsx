@@ -174,14 +174,14 @@ export function RandomQuestionsTab({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 mt-6 text-red-600 hover:text-red-700"
+                        className="h-8 w-8 mt-6 text-needs-focus hover:text-needs-focus"
                         onClick={() => removeSubject(selection.id)}
                       >
                         <X className="w-4 h-4" />
                       </Button>
                     </div>
                     {errors[selection.id] && (
-                      <p className="text-sm text-red-600 mt-2">{errors[selection.id]}</p>
+                      <p className="text-sm text-needs-focus mt-2">{errors[selection.id]}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -196,7 +196,7 @@ export function RandomQuestionsTab({
                   Total: {totalQuestions} questions
                 </Badge>
                 {Object.keys(errors).length > 0 && (
-                  <Badge className="bg-red-100 text-red-700">
+                  <Badge className="bg-red-100 text-needs-focus">
                     {Object.keys(errors).length} error(s)
                   </Badge>
                 )}

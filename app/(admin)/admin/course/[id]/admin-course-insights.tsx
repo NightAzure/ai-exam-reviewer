@@ -24,11 +24,11 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "success":
-        return <div className="bg-green-100 p-2 rounded-lg"><Award className="w-4 h-4 text-green-600" /></div>;
+        return <div className="bg-green-100 p-2 rounded-lg"><Award className="w-4 h-4 text-proficient" /></div>;
       case "warning":
         return <div className="bg-yellow-100 p-2 rounded-lg"><AlertTriangle className="w-4 h-4 text-yellow-600" /></div>;
       default:
-        return <div className="bg-blue-100 p-2 rounded-lg"><Activity className="w-4 h-4 text-blue-600" /></div>;
+        return <div className="bg-blue-100 p-2 rounded-lg"><Activity className="w-4 h-4 text-evidence" /></div>;
     }
   };
 
@@ -40,10 +40,10 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
         </Alert>
       )}
 
-      <Card className="border border-green-200 rounded-2xl bg-card shadow-sm hover:shadow-md transition p-5">
+      <Card className="border border-proficient/20 rounded-2xl bg-card shadow-sm hover:shadow-md transition p-5">
         <div className="flex items-center gap-2 mb-4">
-          <div className="bg-green-500/10 p-2 rounded-lg">
-            <UserCheck className="w-5 h-5 text-green-600" />
+          <div className="bg-proficient/100/10 p-2 rounded-lg">
+            <UserCheck className="w-5 h-5 text-proficient" />
           </div>
           <div className="flex-1">
             <h3 className="text-base font-semibold text-foreground">Student Status Overview</h3>
@@ -52,20 +52,20 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
           {isLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 rounded-xl bg-green-50 border border-green-200">
+          <div className="p-3 rounded-xl bg-proficient/10 border border-proficient/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-green-700">{studentsByStatus.excellent}</p>
-                <p className="text-xs text-green-600 mt-0.5">Excellent (&ge;90%)</p>
+                <p className="text-2xl font-bold text-proficient">{studentsByStatus.excellent}</p>
+                <p className="text-xs text-proficient mt-0.5">Excellent (&ge;90%)</p>
               </div>
-              <Target className="w-8 h-8 text-green-500/30" />
+              <Target className="w-8 h-8 text-proficient/30" />
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+          <div className="p-3 rounded-xl bg-evidence/10 border border-evidence/20">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold text-blue-700">{studentsByStatus.onTrack}</p>
-                <p className="text-xs text-blue-600 mt-0.5">On Track (70-89%)</p>
+                <p className="text-xs text-evidence mt-0.5">On Track (70-89%)</p>
               </div>
               <TrendingUp className="w-8 h-8 text-blue-500/30" />
             </div>
@@ -79,11 +79,11 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
               <AlertTriangle className="w-8 h-8 text-yellow-500/30" />
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-red-50 border border-red-200">
+          <div className="p-3 rounded-xl bg-needs-focus/8 border border-needs-focus/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-red-700">{studentsByStatus.needsHelp}</p>
-                <p className="text-xs text-red-600 mt-0.5">Needs Help (&lt;50%)</p>
+                <p className="text-2xl font-bold text-needs-focus">{studentsByStatus.needsHelp}</p>
+                <p className="text-xs text-needs-focus mt-0.5">Needs Help (&lt;50%)</p>
               </div>
               <Clock className="w-8 h-8 text-red-500/30" />
             </div>
@@ -93,8 +93,8 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
 
       <Card className="border border-border rounded-2xl bg-card shadow-sm hover:shadow-md transition p-5">
         <div className="flex items-center gap-2 mb-4">
-          <div className="bg-primary/10 p-2 rounded-lg">
-            <TrendingUp className="w-5 h-5 text-primary" />
+          <div className="bg-ink/10 p-2 rounded-lg">
+            <TrendingUp className="w-5 h-5 text-ink" />
           </div>
           <div>
             <h3 className="text-base font-semibold text-foreground">Recent Activity</h3>
@@ -108,11 +108,11 @@ export default function AdminCourseInsights({ course }: AdminCourseInsightsProps
             </div>
           ) : (
             recentActivity.map((activity, idx) => (
-              <div key={`${activity.student}-${idx}`} className="flex items-start gap-3 p-3 rounded-xl bg-blue-50/50 hover:bg-blue-50 transition-colors border border-blue-100">
+              <div key={`${activity.student}-${idx}`} className="flex items-start gap-3 p-3 rounded-xl bg-evidence/10/50 hover:bg-evidence/10 transition-colors border border-blue-100">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-foreground">
-                    <span className="font-semibold text-primary">{activity.student}</span>{" "}
+                    <span className="font-semibold text-ink">{activity.student}</span>{" "}
                     <span className="text-muted-foreground">{activity.action}</span>
                   </p>
                   <p className="text-xs text-muted-foreground/70 mt-0.5">{activity.time}</p>

@@ -2,31 +2,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CourseCardSkeleton() {
   return (
-    <div className="rounded-xl border border-primary/10 overflow-hidden bg-card flex flex-col gap-4 pb-5">
-      {/* Thumbnail */}
-      <Skeleton className="h-32 w-full rounded-none" />
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-surface shadow-sm">
+      <Skeleton className="h-36 w-full rounded-none bg-ink/10" />
 
-      {/* Header */}
-      <div className="px-4 space-y-2">
-        <div className="flex justify-between items-start">
-          <div className="space-y-1.5 flex-1">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-1/2" />
-          </div>
-          <Skeleton className="h-8 w-8 rounded-md shrink-0 ml-2" />
+      <div className="flex flex-1 flex-col gap-4 p-5">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-3/4 bg-ink/10" />
+          <Skeleton className="h-3 w-1/2 bg-ink/8" />
         </div>
-      </div>
 
-      {/* Progress */}
-      <div className="px-4 space-y-1.5">
-        <Skeleton className="h-3 w-1/3" />
-        <Skeleton className="h-2 w-full rounded-full" />
-        <Skeleton className="h-3 w-1/4" />
-      </div>
+        <div className="rounded-xl border border-ink/10 bg-canvas/50 p-4 space-y-3">
+          <Skeleton className="h-3 w-1/3 bg-ink/8" />
+          <Skeleton className="h-1.5 w-full rounded-full bg-ink/10" />
+          <Skeleton className="h-3 w-2/5 bg-ink/8" />
+        </div>
 
-      {/* Button */}
-      <div className="px-4">
-        <Skeleton className="h-8 w-full rounded-md" />
+        <Skeleton className="mt-auto h-11 w-full rounded-xl bg-ink/10" />
       </div>
     </div>
   );

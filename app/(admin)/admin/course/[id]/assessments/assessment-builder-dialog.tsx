@@ -280,7 +280,7 @@ export function AssessmentBuilderDialog({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-red-600 hover:text-red-700"
+                    className="h-8 w-8 text-needs-focus hover:text-needs-focus"
                     onClick={() => removeQuestion(question.id)}
                   >
                     <Trash2 className="w-3 h-3" />
@@ -493,7 +493,7 @@ export function AssessmentBuilderDialog({
 
                   <div className="col-span-2 pt-4 border-t">
                     <div className="space-y-4">
-                      <Card className="border-2 border-blue-300 bg-blue-50">
+                      <Card className="border-2 border-blue-300 bg-evidence/10">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div>
@@ -523,7 +523,7 @@ export function AssessmentBuilderDialog({
                         </CardContent>
                       </Card>
 
-                      <Card className={`border-2 ${isEnabled ? 'border-green-500 bg-green-50' : 'border-border bg-muted/50'}`}>
+                      <Card className={`border-2 ${isEnabled ? 'border-green-500 bg-proficient/10' : 'border-border bg-muted/50'}`}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div>

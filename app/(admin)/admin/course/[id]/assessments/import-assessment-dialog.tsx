@@ -321,7 +321,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-start gap-2 mb-2">
-                      <Info className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <Info className="w-4 h-4 text-evidence mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">JSON Format Example</p>
                         <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
@@ -365,7 +365,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-start gap-2 mb-2">
-                      <Info className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <Info className="w-4 h-4 text-evidence mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">CSV Format Example</p>
                         <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
@@ -394,7 +394,7 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-start gap-2 mb-2">
-                      <Info className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <Info className="w-4 h-4 text-evidence mt-0.5" />
                       <div>
                         <p className="text-sm font-medium mb-1">Text Format Example</p>
                         <pre className="text-xs bg-muted/50 p-3 rounded overflow-x-auto">
@@ -412,12 +412,12 @@ Physics | Explain recursion. | | | | | (leave blank for incomplete)`;
                   variant={parseStatus === "success" ? "default" : "destructive"}
                   className={
                     parseStatus === "success"
-                      ? "bg-green-50 text-green-900 border-green-200"
+                      ? "bg-proficient/10 text-green-900 border-proficient/20"
                       : ""
                   }
                 >
                   {parseStatus === "success" ? (
-                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    <CheckCircle className="w-4 h-4 text-proficient" />
                   ) : (
                     <AlertCircle className="w-4 h-4" />
                   )}

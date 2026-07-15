@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
-import { motion } from "framer-motion";
+
 interface LoginFormProps {
   initialError?: string | null;
   onForgotPassword?: () => void;
@@ -92,123 +92,123 @@ export function LoginForm({ initialError = null, onForgotPassword }: LoginFormPr
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <Button
         type="button"
+        variant="outline"
         onClick={handleMicrosoftLogin}
         disabled={isBusy}
-        className="mb-2 flex h-12 w-full items-center justify-center gap-3 whitespace-normal border border-black/10 bg-[#FFFFFF] px-4 text-sm font-semibold text-black hover:bg-[#F3F3F3] sm:text-base"
+        className="mb-1 flex h-11 w-full items-center justify-center gap-3 border-ink/15 bg-surface text-ink hover:bg-ink/[0.04]"
       >
-        <Image src="/Microsoft.svg" alt="Microsoft Logo" width={20} height={20} />
-        <span>{isMicrosoftLoading ? "Connecting to Microsoft..." : "Sign In with Microsoft"}</span>
+        <Image src="/Microsoft.svg" alt="" width={20} height={20} aria-hidden="true" />
+        <span>
+          {isMicrosoftLoading ? "Connecting to Microsoft…" : "Sign in with Microsoft"}
+        </span>
       </Button>
-      <div className="relative my-5">
+
+      <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t" />
+          <div className="w-full border-t border-ink/10" />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
-            OR
-          </span>
+        <div className="relative flex justify-center text-xs">
+          <span className="bg-surface px-2 text-slate">or continue with email</span>
         </div>
       </div>
-      <div className="space-y-2">
-        {error &&
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-destructive/10 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive border border-destructive/20"
-          >
-            <AlertCircle className="h-4 w-4" />
-            <p>{error}</p>
-          </motion.div>
-        }
 
-        <Label htmlFor="email" className="text-sm font-medium">
-          Email Address
+      {error ? (
+        <div
+          role="alert"
+          className="flex items-start gap-2 rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
+        >
+          <AlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+          <p>{error}</p>
+        </div>
+      ) : null}
+
+      <div className="space-y-2">
+        <Label htmlFor="email" className="text-sm font-medium text-ink">
+          Email address
         </Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+          <Mail
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate"
+          />
           <Input
             id="email"
             type="email"
+            name="email"
             placeholder="you@example.com"
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="pl-10 h-11"
+            className="pl-10"
             required
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password" className="text-sm font-medium">
+        <div className="flex items-center justify-between gap-3">
+          <Label htmlFor="password" className="text-sm font-medium text-ink">
             Password
           </Label>
-          {onForgotPassword && (
+          {onForgotPassword ? (
             <button
               type="button"
               onClick={onForgotPassword}
-              className="text-xs text-primary hover:underline"
+              className="text-xs font-medium text-oxblood underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-oxblood/40 rounded"
             >
               Forgot password?
             </button>
-          )}
+          ) : null}
         </div>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+          <Lock
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate"
+          />
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
+            name="password"
+            placeholder="Enter your password…"
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="pl-10 pr-10 h-11"
+            className="pl-10 pr-12"
             required
           />
           <Button
             type="button"
             variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            size="icon"
+            className="absolute right-1 top-1/2 size-9 min-h-9 min-w-9 -translate-y-1/2"
+            aria-label={showPassword ? "Hide password" : "Show password"}
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff className="size-4 text-muted-foreground" />
+              <EyeOff aria-hidden="true" className="size-4 text-slate" />
             ) : (
-              <Eye className="size-4 text-muted-foreground" />
+              <Eye aria-hidden="true" className="size-4 text-slate" />
             )}
           </Button>
         </div>
       </div>
 
-      <Button
-        type="submit"
-        className="w-full h-11 text-base font-semibold mb-2"
-        disabled={isBusy}
-      >
-        {isLoading ? (
-          <div className="flex items-center gap-2">
-            <div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Signing in...
-          </div>
-        ) : (
-          "Sign In"
-        )}
+      <Button type="submit" className="w-full" disabled={isBusy}>
+        {isLoading ? "Signing in…" : "Sign In"}
       </Button>
 
       <Button
         type="button"
         variant="outline"
-        className="w-full h-11 gap-2"
+        className="w-full gap-2"
         disabled={isBusy}
         onClick={handleDemoStudentLogin}
       >
-        <GraduationCap className="size-4" />
-        Login as Student (Demo)
+        <GraduationCap aria-hidden="true" className="size-4" />
+        Try demo student account
       </Button>
     </form>
   );

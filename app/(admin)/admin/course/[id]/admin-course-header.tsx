@@ -27,7 +27,7 @@ export default function AdminCourseHeader({ course, courseId }: AdminCourseHeade
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <GraduationCap className="w-7 h-7 text-primary" /> {course.title}
+              <GraduationCap className="w-7 h-7 text-ink" /> {course.title}
             </h1>
             <Badge variant="secondary" className="text-xs">
               Admin View

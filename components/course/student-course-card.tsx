@@ -22,7 +22,7 @@ const statusStyles: Record<
   },
   needs_focus: {
     label: "Needs Focus",
-    className: "border-[#a0363d]/20 bg-[#a0363d]/8 text-[#7d252d]",
+    className: "border-needs-focus/20 bg-needs-focus/8 text-[#7d252d]",
   },
   building_confidence: {
     label: "Building Confidence",
@@ -79,7 +79,7 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
     .toUpperCase();
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#24334c]/10 bg-white shadow-[0_1px_2px_rgb(24_34_52/0.05)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-[#24334c]/20 hover:shadow-[0_16px_36px_rgb(24_34_52/0.12)] motion-reduce:transform-none motion-reduce:transition-none">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgb(24_34_52/0.05)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-[0_16px_36px_rgb(24_34_52/0.12)] motion-reduce:transform-none motion-reduce:transition-none">
       <div className="relative h-36 overflow-hidden">
         {course.thumbnail_url ? (
           <Image
@@ -110,7 +110,7 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
             aria-label={isPinned ? `Unpin ${course.title}` : `Pin ${course.title}`}
             aria-pressed={isPinned}
             onClick={() => toggle(course.id)}
-            className="ml-auto size-10 shrink-0 rounded-full border border-white/15 bg-[#14223a]/65 text-white shadow-sm backdrop-blur-md hover:bg-white hover:text-[#8e3039]"
+            className="ml-auto size-10 shrink-0 rounded-full border border-white/15 bg-ink/65 text-white shadow-sm backdrop-blur-md hover:bg-white hover:text-oxblood"
           >
             <Star
               aria-hidden="true"
@@ -123,11 +123,11 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-medium text-[#647087]">{getInstructorName(course)}</p>
-            <h2 className="mt-1.5 font-[family-name:var(--font-display)] text-[1.55rem] leading-[1.08] tracking-[-0.025em] text-[#18243a]">
+            <p className="text-xs font-medium text-slate">{getInstructorName(course)}</p>
+            <h2 className="mt-1.5 font-[family-name:var(--font-display)] text-[1.55rem] leading-[1.08] tracking-[-0.025em] text-ink">
               <Link
                 href={courseHref}
-                className="line-clamp-2 rounded-sm outline-none transition-colors hover:text-[#8e3039] focus-visible:ring-2 focus-visible:ring-[#8e3039]/50"
+                className="line-clamp-2 rounded-sm outline-none transition-colors hover:text-oxblood focus-visible:ring-2 focus-visible:ring-oxblood/50"
               >
                 {course.title}
               </Link>
@@ -143,12 +143,12 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
           </span>
         </div>
 
-        <div className="mt-5 border-y border-[#24334c]/8 py-4">
+        <div className="mt-5 border-y border-ink/8 py-4">
           {hasMastery ? (
             <>
               <div className="flex items-baseline justify-between gap-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#69758a]">Current Mastery</p>
-                <p className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#18243a]">
+                <p className="font-[family-name:var(--font-display)] text-2xl leading-none text-ink">
                   {course.study.masteryScore}%
                 </p>
               </div>
@@ -156,7 +156,7 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
                 value={course.study.masteryScore ?? 0}
                 aria-label={`${course.title} current mastery`}
                 aria-valuetext={`${course.study.masteryScore}% mastery`}
-                className="mt-2.5 h-1.5 bg-[#8e3039]/12 [&>[data-slot=progress-indicator]]:bg-[#8e3039]"
+                className="mt-2.5 h-1.5 bg-oxblood/12 [&>[data-slot=progress-indicator]]:bg-oxblood"
               />
               <p className="mt-2 text-xs leading-5 text-[#657187]">
                 {course.study.weakestSubject
@@ -166,11 +166,11 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
             </>
           ) : (
             <div className="flex gap-3">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#8e3039]/8 text-[#8e3039]">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-oxblood/8 text-oxblood">
                 <Sparkles aria-hidden="true" className="size-4" />
               </span>
               <div>
-                <p className="text-sm font-semibold text-[#18243a]">Build Your Baseline</p>
+                <p className="text-sm font-semibold text-ink">Build Your Baseline</p>
                 <p className="mt-0.5 text-xs leading-5 text-[#657187]">
                   Complete a diagnostic to unlock a personal study recommendation.
                 </p>
@@ -198,7 +198,7 @@ export function StudentCourseCard({ course }: { course: StudentCourseSummary }) 
           variant={course.study.status === "ended" ? "outline" : "default"}
           className={cn(
             "mt-5 h-11 w-full justify-between rounded-xl px-4 text-sm",
-            course.study.status !== "ended" && "bg-[#18243a] text-white hover:bg-[#293752]",
+            course.study.status !== "ended" && "bg-ink text-white hover:bg-ink-raised",
           )}
         >
           <Link href={courseHref}>

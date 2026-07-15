@@ -34,8 +34,8 @@ export function getTopicMastery(
       status: "needs_focus",
       label: "Needs Focus",
       detail: "Focus here next",
-      badgeClassName: "border-[#a0363d]/20 bg-[#8e3039]/8 text-[#8e3039]",
-      progressClassName: "bg-[#8e3039]",
+      badgeClassName: "border-needs-focus/20 bg-oxblood/8 text-oxblood",
+      progressClassName: "bg-oxblood",
     };
   }
 
