@@ -164,34 +164,6 @@ export async function fetchQuestionBankForAdminCourse(
   return body.questions ?? [];
 }
 
-export const loadQuestionBankForCourse = async (
-  supabase: SupabaseClient,
-  courseId: number,
-): Promise<QuestionBankEntry[]> => {
-  const { data: rows, error: rowsError } = await supabase
-    .from(QUESTION_BANK_TABLE)
-    .select(BANK_SELECT)
-    .eq("course_id", courseId)
-    .order("subject", { ascending: true })
-    .order("created_at", { ascending: false });
-
-  if (rowsError) throw rowsError;
-
-  let usageByKey = new Map<string, number>();
-  const { data: usageRows, error: usageError } = await supabase
-    .from("assessment_questions")
-    .select("subject, question_text, assessments!inner(course_id)")
-    .eq("assessments.course_id", courseId);
-
-  if (usageError) {
-    console.warn("[question-bank] Could not load usage counts:", usageError.message);
-  } else {
-    usageByKey = usageMapFromAssessmentQuestionRows((usageRows ?? []) as QuestionBankUsageRow[]);
-  }
-
-  return mapQuestionBankRowsToEntries((rows ?? []) as QuestionBankDbRow[], usageByKey);
-};
-
 export const syncQuestionBankQuestionsForCourse = async (
   supabase: SupabaseClient,
   courseId: number,

@@ -25,7 +25,6 @@ const createEmptyDetailedCourse = (courseId: number): DetailedCourse => ({
   weaknesses: [],
   suggestions: [],
   topics: [],
-  assessments: [],
   notes: [],
 });
 
@@ -71,7 +70,6 @@ export function useChatCourse(courseId: number) {
           description: topic.description ?? undefined,
           progress: 0,
         })),
-        assessments: [],
         notes: [],
       };
     },

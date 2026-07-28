@@ -295,7 +295,7 @@ export async function POST(request: NextRequest) {
             workerUrl: `${FASTAPI_URL}/chat/stream`,
           },
           hint:
-            "If the model runs on your PC: start Ollama + uvicorn, expose FastAPI with a tunnel if needed (see server/HOME_GPU_PROXY.md), then set FASTAPI_URL and TUTOR_API_KEY on the Next.js host.",
+            "If the model runs on your PC: start Ollama + uvicorn, expose FastAPI with a tunnel (e.g. Cloudflare Tunnel or ngrok), then set FASTAPI_URL and TUTOR_API_KEY on the Next.js host.",
         },
         { status: 503 },
       );

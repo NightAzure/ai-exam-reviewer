@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import type { Course } from "@/types/new_course";
+import type { CourseRecord } from "@/types/course";
 
 const fallbackThemes = [
   "from-[#16233b] via-[#253a5d] to-[#8a3039]",
@@ -37,7 +37,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-PH", {
   year: "numeric",
 });
 
-function getInstructorName(course: Course): string {
+function getInstructorName(course: CourseRecord): string {
   const instructor = course.instructor;
   if (!instructor) return "Unassigned";
   return (
@@ -46,7 +46,7 @@ function getInstructorName(course: Course): string {
   );
 }
 
-function getEnrollmentSummary(course: Course): string {
+function getEnrollmentSummary(course: CourseRecord): string {
   if (!course.is_active) {
     return "Paused courses stay hidden from new student joins until you reopen them.";
   }
@@ -59,7 +59,7 @@ function getEnrollmentSummary(course: Course): string {
   return "Students can join with the course code and begin reviewing right away.";
 }
 
-export function AdminCourseCard({ course }: { course: Course }) {
+export function AdminCourseCard({ course }: { course: CourseRecord }) {
   const overviewHref = `/admin/course/${course.id}`;
   const manageHref = `/admin/course/${course.id}/manage`;
   const membersHref = `/admin/course/${course.id}/manage?tab=members`;

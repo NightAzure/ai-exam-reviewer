@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { Course } from "@/types/new_course";
+import type { CourseRecord } from "@/types/course";
 import AdminCoursesHeader from "./admin-courses-header";
 import type { FilterOptions } from "./admin-courses-view";
 
@@ -24,7 +24,7 @@ export function AdminCourseLibrary({
   filters,
   setFilters,
 }: {
-  courses: Course[];
+  courses: CourseRecord[];
   filters: FilterOptions;
   setFilters: Dispatch<SetStateAction<FilterOptions>>;
 }) {

@@ -4,7 +4,6 @@ import { useCourseStore } from "@/stores/course-store";
 import { useAssessmentStore } from "@/stores/assessment-store";
 import { useAssessmentInit } from "@/hooks/use-assessment-init";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,7 +42,6 @@ import {
   BarChart3,
   ArrowLeft,
   Search,
-  Filter,
   Eye,
   Copy,
   MoreVertical,

@@ -1,4 +1,4 @@
-import type { Course } from "@/types/new_course";
+import type { CourseRecord } from "@/types/course";
 
 export type CourseStudyStatus =
   | "not_assessed"
@@ -27,7 +27,7 @@ export type CourseStudySummary = {
  * The learner-facing course experience intentionally excludes the join code.
  * A code is an enrollment credential, not course metadata for students.
  */
-export type StudentCoursePreview = Omit<Course, "code">;
+export type StudentCoursePreview = Omit<CourseRecord, "code">;
 
 export type StudentCourseSummary = StudentCoursePreview & {
   study: CourseStudySummary;
@@ -50,7 +50,7 @@ function hasStarted(date: string | undefined, now: Date): boolean {
   return !Number.isFinite(time) || time <= now.getTime();
 }
 
-export function isCourseEnded(course: StudentCoursePreview, now = new Date()): boolean {
+function isCourseEnded(course: StudentCoursePreview, now = new Date()): boolean {
   return !course.is_active || isPast(course.end_date, now);
 }
 

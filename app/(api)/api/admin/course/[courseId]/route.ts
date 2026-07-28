@@ -3,12 +3,6 @@ import { createClient } from "@/utils/supabase/server";
 import { supabase as adminSupabase } from "@/utils/supabase/admin";
 import { isValidThumbnailUrl } from "@/utils/validation/thumbnail";
 
-type TopicInput = {
-  id?: number;
-  name: string;
-  description?: string | null;
-};
-
 type CourseUpdatePayload = {
   title?: string;
   description?: string;
@@ -19,7 +13,6 @@ type CourseUpdatePayload = {
   startDate?: string | null;
   endDate?: string | null;
   enrollmentLimit?: number | null;
-  topics?: TopicInput[];
 };
 
 const requireCourseEditor = async (courseId: number) => {
@@ -101,42 +94,6 @@ const parseCourseId = async (params: Promise<{ courseId: string }>) => {
   }
 
   return parsed;
-};
-
-const syncTopics = async (courseId: number, topics: TopicInput[]) => {
-  const { data: existingTopics, error: existingTopicsError } = await adminSupabase
-    .from("topics")
-    .select("id")
-    .eq("course_id", courseId);
-
-  if (existingTopicsError) throw existingTopicsError;
-
-  const existingIds = new Set((existingTopics ?? []).map((topic) => topic.id));
-  const nextIds = new Set(topics.filter((topic) => typeof topic.id === "number").map((topic) => topic.id!));
-
-  const topicsToDelete = Array.from(existingIds).filter((id) => !nextIds.has(id));
-  if (topicsToDelete.length > 0) {
-    const { error } = await adminSupabase.from("topics").delete().in("id", topicsToDelete);
-    if (error) throw error;
-  }
-
-  for (const [index, topic] of topics.entries()) {
-    const payload = {
-      course_id: courseId,
-      name: topic.name.trim(),
-      description: topic.description?.trim() || null,
-      order_index: index,
-    };
-
-    if (typeof topic.id === "number" && existingIds.has(topic.id)) {
-      const { error } = await adminSupabase.from("topics").update(payload).eq("id", topic.id);
-      if (error) throw error;
-      continue;
-    }
-
-    const { error } = await adminSupabase.from("topics").insert(payload);
-    if (error) throw error;
-  }
 };
 
 export async function PATCH(

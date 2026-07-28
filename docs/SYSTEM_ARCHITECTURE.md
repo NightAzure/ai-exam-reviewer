@@ -584,7 +584,7 @@ GOOGLE_GENERATIVE_AI_API_KEY=...
 
 ### Vercel + Supabase + Home GPU
 
-This is the intended low-cost deployment pattern described by `server/HOME_GPU_PROXY.md`.
+This is the intended low-cost deployment pattern: Next.js on Vercel, Supabase in the cloud, and FastAPI + Ollama on a home GPU exposed via an HTTPS tunnel (Cloudflare Tunnel or ngrok).
 
 ```mermaid
 flowchart TD

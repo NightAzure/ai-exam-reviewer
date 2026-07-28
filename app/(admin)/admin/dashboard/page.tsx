@@ -112,6 +112,7 @@ const useOperationsOverview = () => true;
 
 export default function AdminDashboardPage() {
   const { analytics, error, isLoading } = useAdminDashboard();
+  const showOperationsOverview = useOperationsOverview();
 
   if (isLoading) {
     return (
@@ -169,7 +170,7 @@ export default function AdminDashboardPage() {
     );
   }
 
-  if (useOperationsOverview()) {
+  if (showOperationsOverview) {
     return <AdminDashboardOverview analytics={analytics} />;
   }
 

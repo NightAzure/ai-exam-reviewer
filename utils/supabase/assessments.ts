@@ -70,7 +70,7 @@ export const mapQuestionRow = (row: AssessmentQuestionRow): Question => ({
   subject: row.subject ?? undefined,
 });
 
-export const mapAssessmentRow = (
+const mapAssessmentRow = (
   assessment: AssessmentRow,
   questions: Question[],
   randomSubjectSelections: RandomSubjectSelection[],

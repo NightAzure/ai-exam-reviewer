@@ -17,7 +17,7 @@ interface MembersTabProps {
 
 export function MembersTab({ courseId }: MembersTabProps) {
   const [activeTab, setActiveTab] = useState("list");
-  const { members, isLoading, isMutating, error, addMembers, removeMember, updateMemberRole } =
+  const { members, isLoading, isMutating, addMembers, removeMember, updateMemberRole } =
     useCourseMembers(courseId);
   const { count: pendingCount } = useEnrollmentRequests(courseId);
 

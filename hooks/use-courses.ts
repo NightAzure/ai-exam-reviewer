@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
-import { Course } from '@/types/new_course';
+import { CourseRecord } from '@/types/course';
 export function useCourses() {
     const supabase = createClient();
     return useSWR('courses', async () => {
@@ -19,6 +19,6 @@ export function useCourses() {
 
         if (error) throw error;
 
-        return data as Course[];
+        return data as CourseRecord[];
     });
 }
